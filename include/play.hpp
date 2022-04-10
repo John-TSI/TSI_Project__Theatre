@@ -12,13 +12,11 @@ class Play : public Performance
     private:
         string genre;
         int numActors = 0;
-        vector<Actor> actorRoster = {};
-    
-    protected:
-        Play(int); 
+        vector<Actor> actorRoster = {}; 
 
     public:
         Play();
+        Play(int);
         string GetGenre();
         void SetGenre(string);
         int GetNumActors();

@@ -16,11 +16,9 @@ class Musical : public Performance
         int numMusicians = 0;
         vector<Musician> musicianRoster;
 
-    protected:
-        Musical(int);
-
     public:
         Musical();
+        Musical(int);
         string GetStyle();
         void SetStyle(string);
         int GetNumSingers();

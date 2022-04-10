@@ -1,6 +1,9 @@
 
+#include<iostream>
 #include<algorithm>
 #include"../include/sysManager.hpp"
+
+using std::cout; using std::endl;
 
 
 // --- constructors ---
@@ -9,18 +12,23 @@ SystemManager::SystemManager() {}
 
 // --- getters/setters ---
 int SystemManager::GetActorCount() { return actorCount; }
-void SystemManager::SetActorCount(int input) { actorCount = input; }
+int SystemManager::GetSingerCount() { return singerCount; }
+int SystemManager::GetMusicianCount() { return musicianCount; }
+int SystemManager::GetHallCount() { return hallCount; }
+int SystemManager::GetPlayCount() { return playCount; }
+int SystemManager::GetMusicalCount() { return musicalCount; }
 vector<Actor> SystemManager::GetActorList() { return actorList; }
+vector<Singer> SystemManager::GetSingerList() { return singerList; }
+vector<Musician> SystemManager::GetMusicianList() { return musicianList; }
+vector<PerformanceHall> SystemManager::GetPerfHallList() { return perfHallList; }
+vector<Play> SystemManager::GetPlayList() { return playList; }
+vector<Musical> SystemManager::GetMusicalList() { return musicalList; }
 
 
-// --- other methods ---
-/* void SystemManager::AddActor(Actor a)
-{
-    actorList.push_back(a);
-} */
+// --- add/remove ---
 void SystemManager::AddActor(vector<Actor>& aList)
 {
-    aList.push_back(Actor(GetActorCount()));
+    aList.push_back(Actor(GetActorCount() ) );
     actorCount++;
 }
 
@@ -31,9 +39,10 @@ void SystemManager::RmActor(int idNum, vector<Actor>& aList)
     ), end(aList));
 }
 
-void SystemManager::AddSinger(Singer s)
+void SystemManager::AddSinger(vector<Singer>& sList)
 {
-    singerList.push_back(s);
+    sList.push_back(Singer(GetSingerCount() ) );
+    singerCount++;
 }
 
 void SystemManager::RmSinger(int idNum, vector<Singer>& sList)
@@ -43,9 +52,10 @@ void SystemManager::RmSinger(int idNum, vector<Singer>& sList)
     ), end(sList));
 }
 
-void SystemManager::AddMusician(Musician m)
+void SystemManager::AddMusician(vector<Musician>& mList)
 {
-    musicianList.push_back(m);
+    mList.push_back(Musician(GetMusicianCount() ) );
+    musicianCount++;
 }
 
 void SystemManager::RmMusician(int idNum, vector<Musician>& mList)
@@ -55,9 +65,10 @@ void SystemManager::RmMusician(int idNum, vector<Musician>& mList)
     ), end(mList));
 }
 
-void SystemManager::AddPerfHall(PerformanceHall pH)
+void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList)
 {
-    perfHallList.push_back(pH);
+    pHList.push_back(PerformanceHall(GetHallCount() ) );
+    hallCount++;
 }
 
 void SystemManager::RmPerfHall(int hallNum, vector<PerformanceHall>& pHList)
@@ -67,9 +78,10 @@ void SystemManager::RmPerfHall(int hallNum, vector<PerformanceHall>& pHList)
     ), end(pHList));
 }
 
-void SystemManager::AddPlay(Play p)
+void SystemManager::AddPlay(vector<Play>& pList)
 {
-    playList.push_back(p);
+    pList.push_back((GetPlayCount() ) );
+    playCount++;
 }
 
 void SystemManager::RmPlay(int perfID, vector<Play>& pList)
@@ -79,9 +91,10 @@ void SystemManager::RmPlay(int perfID, vector<Play>& pList)
     ), end(pList));
 }
 
-void SystemManager::AddMusical(Musical m)
+void SystemManager::AddMusical(vector<Musical>& mList)
 {
-    musicalList.push_back(m);
+    mList.push_back(Musical(GetMusicalCount() ) );
+    musicalCount++;
 }
 
 void SystemManager::RmMusical(int perfID, vector<Musical>& mList)
@@ -89,4 +102,49 @@ void SystemManager::RmMusical(int perfID, vector<Musical>& mList)
     mList.erase(std::remove_if(begin(mList), end(mList), 
         [perfID](Musical& m) { return m.GetPerfID() == perfID; }
     ), end(mList));
+}
+
+// --- book/schedule ---
+void SystemManager::BookActor(int idNum, int perfID)
+{
+    vector<Actor> aList = GetActorList();
+    auto a_it = std::find_if(aList.begin(), aList.end(), [idNum](Actor& a) {return a.GetIDNum() == idNum;});
+    Actor actor = *a_it;
+
+    vector<Play> pList = GetPlayList();
+    auto p_it = std::find_if(pList.begin(), pList.end(), [perfID](Play& p) {return p.GetPerfID() == perfID;});
+    Play play = *p_it;
+
+    play.GetActorRoster().push_back(actor);
+}
+
+// --- utility ---
+void SystemManager::PrintActors(vector<Actor> vec)
+{
+    for(Actor a : vec) { cout << a.GetIDNum() << " "; }
+}
+
+void SystemManager::PrintSingers(vector<Singer> vec)
+{
+    for(Singer s : vec) { cout << s.GetIDNum() << " "; }
+}
+
+void SystemManager::PrintMusicians(vector<Musician> vec)
+{
+    for(Musician m : vec) { cout << m.GetIDNum() << " "; }
+}
+
+void SystemManager::PrintHalls(vector<PerformanceHall> vec)
+{
+    for(PerformanceHall hall : vec) { cout << hall.GetHallNum() << " "; }
+}
+
+void SystemManager::PrintPlays(vector<Play> vec)
+{
+    for(Play p : vec) { cout << p.GetPerfID() << " "; }
+}
+
+void SystemManager::PrintMusicals(vector<Musical> vec)
+{
+    for(Musical m : vec) { cout << m.GetPerfID() << " "; }
 }

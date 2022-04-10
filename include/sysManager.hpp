@@ -17,6 +17,11 @@ class SystemManager
 {
     private:
         int actorCount = 0;
+        int singerCount = 0;
+        int musicianCount = 0;
+        int hallCount = 0;
+        int playCount = 0;
+        int musicalCount = 0;
 
         vector<Actor> actorList;
         vector<Singer> singerList;
@@ -29,24 +34,44 @@ class SystemManager
     public:
         SystemManager();
 
+        // --- getters/setters ---
         int GetActorCount();
-        void SetActorCount(int);
+        int GetSingerCount();
+        int GetMusicianCount();
+        int GetHallCount();
+        int GetPlayCount();
+        int GetMusicalCount();
         vector<Actor> GetActorList();
+        vector<Singer> GetSingerList();
+        vector<Musician> GetMusicianList();
+        vector<PerformanceHall> GetPerfHallList();
+        vector<Play> GetPlayList();
+        vector<Musical> GetMusicalList();
 
-        //void AddActor(Actor);
+        // --- add/remove ---
         void AddActor(vector<Actor>&);
         void RmActor(int, vector<Actor>&);
-        void AddSinger(Singer);
+        void AddSinger(vector<Singer>&);
         void RmSinger(int, vector<Singer>&);
-        void AddMusician(Musician);
+        void AddMusician(vector<Musician>&);
         void RmMusician(int, vector<Musician>&);
-        void AddPerfHall(PerformanceHall);
+        void AddPerfHall(vector<PerformanceHall>&);
         void RmPerfHall(int, vector<PerformanceHall>&);
-        void AddPlay(Play);
+        void AddPlay(vector<Play>&);
         void RmPlay(int, vector<Play>&);
-        void AddMusical(Musical);
+        void AddMusical(vector<Musical>&);
         void RmMusical(int, vector<Musical>&);
 
+        // --- book/schedule ---
+        void BookActor(int, int);
+
+        // --- utility ---
+        void PrintActors(vector<Actor>);
+        void PrintSingers(vector<Singer>);
+        void PrintMusicians(vector<Musician>);
+        void PrintHalls(vector<PerformanceHall>);
+        void PrintPlays(vector<Play>);
+        void PrintMusicals(vector<Musical>);
 
 };
 

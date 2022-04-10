@@ -16,12 +16,10 @@ class PerformanceHall
         bool scheduled = false;
         Performance scheduledPerformance;
         bool stagePrepared = false;
-    
-    protected:
-        PerformanceHall(int);
 
     public:
         PerformanceHall();
+        PerformanceHall(int);
         int GetHallNum();
         void SetHallNum(int);
         int GetCapacity();

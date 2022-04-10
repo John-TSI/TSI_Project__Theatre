@@ -14,46 +14,39 @@ using std::cout; using std::cin; using std::endl;
 
 // ------ TO DO ------
 // - remove default constructors? (require instantiate with ID number)
-// - add remaining getters/setters to sysManager
 
 
 int main()
 {	system("cls");
 
 	SystemManager SM;
-/* 	Actor A1(13);
-	Actor A2(14);
 
-	SM.AddActor(A1);
-	SM.AddActor(A2);
+ 	vector<Actor> actorList = SM.GetActorList();
+	 vector<Play> playList = SM.GetPlayList();
 
-	vector<Actor> actorList = SM.GetActorList();
- 	for(Actor a : actorList)
-	{
-		cout << a.GetIDNum() << " " << endl;
-	}
-
-	SM.RmActor(13, actorList);
-	for(Actor a : actorList)
-	{
-		cout << a.GetIDNum() << " " << endl;
-	} */
-
-
-	vector<Actor> actorList = SM.GetActorList();
 	SM.AddActor(actorList);
 	SM.AddActor(actorList);
+	SM.PrintActors(actorList);
 
- 	for(Actor a : actorList)
-	{
-		cout << a.GetIDNum() << " " << endl;
-	}
+/* 	SM.RmActor(0, actorList);
+	cout << endl;
+	SM.PrintActors(actorList); */
 
-	SM.RmActor(0, actorList);
-	for(Actor a : actorList)
+	SM.AddPlay(playList);
+ 	for(Play p : playList)
 	{
-		cout << a.GetIDNum() << " " << endl;
-	}
+		vector<Actor> newRoster = p.GetActorRoster();
+		newRoster.push_back(Actor(12));
+		p.SetActorRoster(newRoster);
+/* 		p.SetNumActors(p.GetNumActors() + 1);
+		cout << p.GetNumActors() << " "; */
+		vector<Actor> actors = p.GetActorRoster();
+		for(Actor a : actors)
+		{
+			cout << a.GetIDNum() << " ";
+		}
+	} 
+
  
 	return 0;
 }
