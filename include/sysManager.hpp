@@ -69,7 +69,8 @@ class SystemManager
         Musical FindMusical(int, vector<Musical>&);
 
         // --- assign/schedule ---
-        void AssignActor(Actor, Play&);
+        //void AssignActor(Actor, Play&);
+        void AssignActor(Actor, vector<Actor>&);
 
         // --- utility ---
         void PrintActors(vector<Actor>);

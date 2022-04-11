@@ -176,10 +176,14 @@ Musical SystemManager::FindMusical(int perfID, vector<Musical>& mList)
     p.CastActor(a, roster);
 } */
 
-void SystemManager::AssignActor(Actor a, Play& p)
+/* void SystemManager::AssignActor(Actor a, Play& p)
 {
     vector<Actor> roster = p.GetActorRoster();
     p.CastActor(a, roster);
+} */
+void SystemManager::AssignActor(Actor a, vector<Actor>& aList)
+{
+    aList.push_back(a);
 }
 
 
