@@ -50,13 +50,49 @@ int main()
 	//p1.CastActor(a2, actors);
 	//p1.PrintActors(actors);
 
-	cout << "\n------" << endl;
+/* 	cout << "\n------" << endl;
 	SM.AssignActor(a4, actors0);
-	p1.PrintActors(actors0);
+	p0.PrintActors(actors0);
 	cout << "\n------" << endl;
 	SM.AssignActor(a2,actors1);
 	SM.AssignActor(a3,actors1);
-	p1.PrintActors(actors1);
+	p1.PrintActors(actors1); */
+
+/* 	cout << p0.GetNumActors();
+	cout << endl;
+	SM.AssignActor(a4, actors0);
+	p0.PrintActors(actors0);
+	p0.SetNumActors(p0.GetNumActors() + 1);
+	cout << endl;
+	cout << p0.GetNumActors(); */
+
+/* 	cout << p0.GetNumActors();
+	cout << endl;
+	p0.CastActor(a4, actors0);
+	p0.PrintActors(actors0);
+	cout << endl;
+	cout << p0.GetNumActors(); */
+
+	cout << p0.GetNumActors();
+	cout << endl;
+	SM.AssignActor(a4, actors0, p0);
+	SM.AssignActor(a3, actors0, p0);
+	p0.PrintActors(p0.GetActorRoster());
+	cout << endl;
+	cout << p0.GetNumActors();
+
+
+/* 	auto RetActors = [&](int idNum, int perfID)
+	{
+		Actor a = SM.FindActor(idNum, actorList);
+		Play p = SM.FindPlay(perfID, playList);
+		vector<Actor> actors = p.GetActorRoster();
+		return actors;
+	}; 
+	cout << "\n------" << endl;
+	vector<Actor> actors = RetActors(4,0);
+	SM.AssignActor(4, actors);
+	p0.PrintActors(actors0); */
 
 
 	return 0;

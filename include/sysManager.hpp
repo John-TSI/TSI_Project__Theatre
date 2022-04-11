@@ -51,28 +51,29 @@ class SystemManager
         // --- add/remove ---
         void AddActor(vector<Actor>&);
         void RmActor(int, vector<Actor>&);
-        Actor FindActor(int, vector<Actor>&);
         void AddSinger(vector<Singer>&);
         void RmSinger(int, vector<Singer>&);
-        Singer FindSinger(int, vector<Singer>&);
         void AddMusician(vector<Musician>&);
         void RmMusician(int, vector<Musician>&);
-        Musician FindMusician(int, vector<Musician>&);
         void AddPerfHall(vector<PerformanceHall>&);
         void RmPerfHall(int, vector<PerformanceHall>&);
-        PerformanceHall FindPerfHall(int, vector<PerformanceHall>&);
         void AddPlay(vector<Play>&);
         void RmPlay(int, vector<Play>&);
-        Play FindPlay(int, vector<Play>&);
         void AddMusical(vector<Musical>&);
         void RmMusical(int, vector<Musical>&);
-        Musical FindMusical(int, vector<Musical>&);
 
         // --- assign/schedule ---
-        //void AssignActor(Actor, Play&);
-        void AssignActor(Actor, vector<Actor>&);
+        void AssignActor(Actor, vector<Actor>&, Play&);
+        // this one works
+        //void AssignActor(Actor, vector<Actor>&);
 
         // --- utility ---
+        Actor FindActor(int, vector<Actor>&);
+        Singer FindSinger(int, vector<Singer>&);
+        Musician FindMusician(int, vector<Musician>&);
+        PerformanceHall FindPerfHall(int, vector<PerformanceHall>&);
+        Play FindPlay(int, vector<Play>&);
+        Musical FindMusical(int, vector<Musical>&);
         void PrintActors(vector<Actor>);
         void PrintSingers(vector<Singer>);
         void PrintMusicians(vector<Musician>);

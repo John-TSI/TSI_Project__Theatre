@@ -26,4 +26,5 @@ void Play::PrintActors(vector<Actor> aList)
 void Play::CastActor(Actor a, vector<Actor>& actorRoster)
 {
     actorRoster.push_back(a);
+    numActors++;
 } 

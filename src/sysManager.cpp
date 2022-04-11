@@ -39,13 +39,6 @@ void SystemManager::RmActor(int idNum, vector<Actor>& aList)
     ), end(aList));
 }
 
-Actor SystemManager::FindActor(int idNum, vector<Actor>& aList)
-{
-    auto a_it = std::find_if(aList.begin(), aList.end(), [idNum](Actor& a) {return a.GetIDNum() == idNum;});
-    Actor actor = *a_it;
-    return actor;
-}
-
 void SystemManager::AddSinger(vector<Singer>& sList)
 {
     sList.push_back(Singer(GetSingerCount() ) );
@@ -57,13 +50,6 @@ void SystemManager::RmSinger(int idNum, vector<Singer>& sList)
     sList.erase(std::remove_if(begin(sList), end(sList), 
         [idNum](Singer& s) { return s.GetIDNum() == idNum; }
     ), end(sList));
-}
-
-Singer SystemManager::FindSinger(int idNum, vector<Singer>& sList)
-{
-    auto s_it = std::find_if(sList.begin(), sList.end(), [idNum](Singer& s) {return s.GetIDNum() == idNum;});
-    Singer singer = *s_it;
-    return singer;
 }
 
 void SystemManager::AddMusician(vector<Musician>& mList)
@@ -79,13 +65,6 @@ void SystemManager::RmMusician(int idNum, vector<Musician>& mList)
     ), end(mList));
 }
 
-Musician SystemManager::FindMusician(int idNum, vector<Musician>& mList)
-{
-    auto m_it = std::find_if(mList.begin(), mList.end(), [idNum](Musician& m) {return m.GetIDNum() == idNum;});
-    Musician musician = *m_it;
-    return musician;
-}
-
 void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList)
 {
     pHList.push_back(PerformanceHall(GetHallCount() ) );
@@ -97,13 +76,6 @@ void SystemManager::RmPerfHall(int hallNum, vector<PerformanceHall>& pHList)
     pHList.erase(std::remove_if(begin(pHList), end(pHList), 
         [hallNum](PerformanceHall& pH) { return pH.GetHallNum() == hallNum; }
     ), end(pHList));
-}
-
-PerformanceHall SystemManager::FindPerfHall(int hallNum, vector<PerformanceHall>& pHList)
-{
-    auto pH_it = std::find_if(pHList.begin(), pHList.end(), [hallNum](PerformanceHall& pH) {return pH.GetHallNum() == hallNum;});
-    PerformanceHall hall = *pH_it;
-    return hall;
 }
 
 void SystemManager::AddPlay(vector<Play>& pList)
@@ -119,13 +91,6 @@ void SystemManager::RmPlay(int perfID, vector<Play>& pList)
     ), end(pList));
 }
 
-Play SystemManager::FindPlay(int perfID, vector<Play>& pList)
-{
-    auto p_it = std::find_if(pList.begin(), pList.end(), [perfID](Play& p) {return p.GetPerfID() == perfID;});
-    Play play = *p_it;
-    return play;
-}
-
 void SystemManager::AddMusical(vector<Musical>& mList)
 {
     mList.push_back(Musical(GetMusicalCount() ) );
@@ -139,33 +104,9 @@ void SystemManager::RmMusical(int perfID, vector<Musical>& mList)
     ), end(mList));
 }
 
-Musical SystemManager::FindMusical(int perfID, vector<Musical>& mList)
-{
-    auto m_it = std::find_if(mList.begin(), mList.end(), [perfID](Musical& m) {return m.GetPerfID() == perfID;});
-    Musical musical = *m_it;
-    return musical;
-}
-
 
 // --- assign/schedule ---
-//void SystemManager::BookActor(int idNum, vector<Actor>& aList, int perfID, vector<Play>& pList)
-/* {
-    vector<Actor> aList = GetActorList();
-    auto a_it = std::find_if(aList.begin(), aList.end(), [idNum](Actor& a) {return a.GetIDNum() == idNum;});
-    Actor actor = *a_it;
 
-    vector<Play> pList = GetPlayList();
-    auto p_it = std::find_if(pList.begin(), pList.end(), [perfID](Play& p) {return p.GetPerfID() == perfID;});
-    Play play = *p_it;
-
-    play.GetActorRoster().push_back(actor);
-} */
-/* {
-    Actor actor = FindActor(idNum, aList);
-    Play play = FindPlay(perfID, pList);
-    vector<Actor> roster = play.GetActorRoster();
-    roster.push_back(actor);
-} */
 
 /* void SystemManager::AssignActor(int idNum, int perfID)
 {
@@ -176,18 +117,65 @@ Musical SystemManager::FindMusical(int perfID, vector<Musical>& mList)
     p.CastActor(a, roster);
 } */
 
-/* void SystemManager::AssignActor(Actor a, Play& p)
+
+void SystemManager::AssignActor(Actor a, vector<Actor>& va, Play& p)
 {
-    vector<Actor> roster = p.GetActorRoster();
-    p.CastActor(a, roster);
-} */
-void SystemManager::AssignActor(Actor a, vector<Actor>& aList)
+    //vector<Actor> roster = p.GetActorRoster();
+    //roster.push_back(a);
+    va.push_back(a);
+    p.SetActorRoster(va);
+    p.SetNumActors(p.GetNumActors() + 1);
+}
+// this one works
+/* void SystemManager::AssignActor(Actor a, vector<Actor>& aList)
 {
     aList.push_back(a);
-}
+} */ 
 
 
 // --- utility ---
+Actor SystemManager::FindActor(int idNum, vector<Actor>& aList)
+{
+    auto a_it = std::find_if(aList.begin(), aList.end(), [idNum](Actor& a) {return a.GetIDNum() == idNum;});
+    Actor actor = *a_it;
+    return actor;
+}
+
+Singer SystemManager::FindSinger(int idNum, vector<Singer>& sList)
+{
+    auto s_it = std::find_if(sList.begin(), sList.end(), [idNum](Singer& s) {return s.GetIDNum() == idNum;});
+    Singer singer = *s_it;
+    return singer;
+}
+
+Musician SystemManager::FindMusician(int idNum, vector<Musician>& mList)
+{
+    auto m_it = std::find_if(mList.begin(), mList.end(), [idNum](Musician& m) {return m.GetIDNum() == idNum;});
+    Musician musician = *m_it;
+    return musician;
+}
+
+PerformanceHall SystemManager::FindPerfHall(int hallNum, vector<PerformanceHall>& pHList)
+{
+    auto pH_it = std::find_if(pHList.begin(), pHList.end(), [hallNum](PerformanceHall& pH) {return pH.GetHallNum() == hallNum;});
+    PerformanceHall hall = *pH_it;
+    return hall;
+}
+
+Play SystemManager::FindPlay(int perfID, vector<Play>& pList)
+{
+    auto p_it = std::find_if(pList.begin(), pList.end(), [perfID](Play& p) {return p.GetPerfID() == perfID;});
+    Play play = *p_it;
+    return play;
+}
+
+Musical SystemManager::FindMusical(int perfID, vector<Musical>& mList)
+{
+    auto m_it = std::find_if(mList.begin(), mList.end(), [perfID](Musical& m) {return m.GetPerfID() == perfID;});
+    Musical musical = *m_it;
+    return musical;
+}
+
 void SystemManager::PrintActors(vector<Actor> vec)
 {
     for(Actor a : vec) { cout << a.GetIDNum() << " "; }
