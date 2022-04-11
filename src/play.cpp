@@ -1,4 +1,7 @@
+#include<iostream>
 #include"../include/play.hpp"
+
+using std::cout; using std::endl;
 
 
 // --- constructors ---
@@ -13,3 +16,14 @@ int Play::GetNumActors() { return numActors; }
 void Play::SetNumActors(int input) { numActors = input; }
 vector<Actor> Play::GetActorRoster() { return actorRoster; }
 void Play::SetActorRoster(vector<Actor> input) { actorRoster = input; }
+
+
+// --- other methods ---
+void Play::PrintActors(vector<Actor> aList)
+{
+    for(Actor a : aList) { cout << a.GetIDNum() << " "; }
+}
+void Play::CastActor(Actor a, vector<Actor>& actorRoster)
+{
+    actorRoster.push_back(a);
+} 

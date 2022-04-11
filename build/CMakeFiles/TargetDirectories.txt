@@ -1,3 +1,0 @@
-C:/Users/johnr/Desktop/code/Theatre/build/CMakeFiles/Theatre.dir
-C:/Users/johnr/Desktop/code/Theatre/build/CMakeFiles/edit_cache.dir
-C:/Users/johnr/Desktop/code/Theatre/build/CMakeFiles/rebuild_cache.dir

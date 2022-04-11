@@ -23,6 +23,9 @@ class Play : public Performance
         void SetNumActors(int);
         vector<Actor> GetActorRoster();
         void SetActorRoster(vector<Actor>);
+
+        void PrintActors(vector<Actor>);
+        void CastActor(Actor, vector<Actor>&);
 };
 
 #endif
