@@ -294,3 +294,13 @@ float SystemManager::CalculatePerfProfit(PerformanceHall h)
     float perfCost = p.GetPerfCost(); 
     return totalSales - perfCost;
 }
+
+float SystemManager::CalculateTotalProfit(vector<PerformanceHall> hList)
+{
+    float totalProfit = 0.0f;
+    for(PerformanceHall h : hList)
+    {
+        totalProfit += CalculatePerfProfit(h);
+    }
+    return totalProfit;
+}

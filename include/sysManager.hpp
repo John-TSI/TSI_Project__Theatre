@@ -86,7 +86,6 @@ class SystemManager
         bool AllPerfsReady(vector<PerformanceHall>&);
 
 
-
         // --- utility ---
         Actor* FindActor(int, vector<Actor>&);
         Singer* FindSinger(int, vector<Singer>&);
