@@ -19,6 +19,9 @@ using std::cout; using std::cin; using std::endl;
 // - performance.hpp remove vector<Performer> attribute / methods ?
 
 // --- prototypes ---
+int GetMenuRequest();
+int GetMenu1Request();
+int GetMenu2Request();
 
 
 int main()
@@ -135,8 +138,10 @@ int main()
 	SM.CheckHallsStatus(perfHallList);
 	cout << endl;
 	cout << SM.AllPerfsReady(perfHallList) << endl;
-	cout << SM.CalculatePerfProfit(*h33) << endl;
+	cout << SM.CalcPerfProfit(*h33) << endl;
+	cout << SM.CalcTotalProfit(perfHallList)  << endl;
 
+	cout << GetMenuRequest();
 
 
 /* 	auto RetActors = [&](int idNum, int perfID)
@@ -156,3 +161,41 @@ int main()
 }
 
 // --- definitions ---
+int GetMenuRequest()
+{
+	int req = -1;
+	cout << "\nSelect a menu option:" << endl;
+	cout << "-------------------------" << endl;
+	cout << "1 ....... Add/Remove" << endl;
+	cout << "2 ....... Assign/Schedule" << endl;
+	cout << "3 ....... Check/Verify" << endl;
+	cout << "4 ....... Utility" << endl;
+	cout << "0 ....... Exit the program" << endl;
+	cout << "--------------------------" << endl;
+	cout << "> ";
+	cin >> req;
+	return req;
+}
+
+int GetMenu1Request()
+{
+	int req = -1;
+	cout << "\nSelect an operation:" << endl;
+	cout << "---------------------------------------------------" << endl;
+	cout << "1 ....... Add a Performer to the System" << endl;
+	cout << "2 ....... Remove a Performer from the System" << endl;
+	cout << "3 ....... Add a Performance to the System" << endl;
+	cout << "4 ....... Remove a Performance from the System" << endl;
+	cout << "5 ....... Add a Performance Hall to the System" << endl;
+	cout << "6 ....... Remove a Performance Hall from the System" << endl;
+	cout << "0 ....... Return to the previous menu" << endl;
+	cout << "---------------------------------------------------" << endl;
+	cout << "> ";
+	cin >> req;
+	return req;
+}
+
+int GetMenu2Request()
+{
+	
+}

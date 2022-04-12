@@ -11,12 +11,14 @@ using std::string; using std::vector;
 class Actor : public Performer
 {
     private:
+        string genre; // test attribute, remove 
         vector<string> genres = {};
 
     public:
         // --- constructors ---
         Actor();
         Actor(int);
+        Actor(int,string);
 
         // --- getters/setters ---
         vector<string> GetGenres();

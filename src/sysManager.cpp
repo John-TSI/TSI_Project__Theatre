@@ -127,7 +127,7 @@ void SystemManager::AssignActor(Actor& a, vector<Actor>& va, Play& p)
     va.push_back(a);
     p.SetActorRoster(va);
     p.SetNumActors(p.GetNumActors() + 1);
-    // modify attributes of p inherited from Performance
+    // modify attributes inherited from Performance
     p.SetNumPerformers(p.GetNumPerformers() + 1);
     p.SetPerfCost(p.GetPerfCost() + a.GetSalary());
     //p.SetPerformerRoster(p.GetPerformerRoster().push_back(a));
@@ -286,7 +286,7 @@ void SystemManager::PrintMusicals(vector<Musical> vec)
     for(Musical m : vec) { cout << m.GetPerfID() << " "; }
 }
 
-float SystemManager::CalculatePerfProfit(PerformanceHall h)
+float SystemManager::CalcPerfProfit(PerformanceHall h)
 {
     if(!h.GetBooked()) { cout << "No scheduled performance in this hall!" << endl; return 0.0f; }
     Performance p = h.GetScheduledPerf();
@@ -295,12 +295,12 @@ float SystemManager::CalculatePerfProfit(PerformanceHall h)
     return totalSales - perfCost;
 }
 
-float SystemManager::CalculateTotalProfit(vector<PerformanceHall> hList)
+float SystemManager::CalcTotalProfit(vector<PerformanceHall> hList)
 {
     float totalProfit = 0.0f;
     for(PerformanceHall h : hList)
     {
-        totalProfit += CalculatePerfProfit(h);
+        totalProfit += CalcPerfProfit(h);
     }
     return totalProfit;
 }
