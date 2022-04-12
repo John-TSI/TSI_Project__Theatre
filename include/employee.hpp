@@ -10,7 +10,7 @@ class Employee
     private:
         string name = "Employee";
         int idNum = 0;
-        float salary = 100.0f;
+        float salary = 120.0f;
 
     protected: // allow derived classes to initialise Employee.idNum
         Employee(int);

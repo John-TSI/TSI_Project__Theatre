@@ -2,8 +2,11 @@
 #define PERFORMANCE_HPP
 
 #include<string>
+#include<vector>
+#include"performer.hpp"
 
-using std::string;
+using std::string; 
+using std::vector;
 
 
 class Performance
@@ -13,8 +16,11 @@ class Performance
         int perfID = 0;
         bool scheduled = false;
         int hallNum = 0;
-        float ticketPrice = 20.0f;
-        int ticketsSold = 100;
+        float ticketPrice = 12.0f;
+        int ticketsSold = 80;
+        int numPerformers = 0;
+        float perfCost = 0.0f;
+        //vector<Performer> performerRoster = {};
         bool fullyCast = false;
 
     protected:
@@ -34,6 +40,12 @@ class Performance
         void SetTicketPrice(float);
         int GetTicketsSold();
         void SetTicketsSold(int);
+        int GetNumPerformers();
+        void SetNumPerformers(int);
+        float GetPerfCost();
+        void SetPerfCost(float);
+        //vector<Performer> GetPerformerRoster();
+        //void SetPerformerRoster(vector<Performer>);
         bool GetFullyCast();
         void SetFullyCast(bool);
 

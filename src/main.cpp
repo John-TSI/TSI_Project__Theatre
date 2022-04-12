@@ -15,6 +15,9 @@ using std::cout; using std::cin; using std::endl;
 // ------ TO DO ------
 // - remove default constructors? (require instantiate with ID number)
 // - change Find methods to return pointers?
+// - verify schedPerf.ticketSold <= hall.capacity
+// - performance.hpp remove vector<Performer> attribute / methods ?
+// - define SystemManager::CalculateTotalProfit()
 
 // --- prototypes ---
 
@@ -120,12 +123,14 @@ int main()
 	cout << endl;
 	PerformanceHall* h33 = SM.FindPerfHall(33, perfHallList);
 	SM.AssignActor(*a4, actors2, *p2);
+	SM.AssignActor(*a3, actors2, *p2); // optional extra actor
 	SM.SchedulePlay(*p2, *h33);
 	SM.ScheduleMusical(*m0, *h0);
 	cout << endl;
 	SM.CheckHallsStatus(perfHallList);
 	cout << endl;
-	cout << SM.AllPerfsReady(perfHallList);
+	cout << SM.AllPerfsReady(perfHallList) << endl;
+	cout << SM.CalculatePerfProfit(*h33) << endl;
 
 
 

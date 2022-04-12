@@ -103,7 +103,7 @@ class SystemManager
         void PrintMusicals(vector<Musical>);
 
         float CalculatePerfProfit(PerformanceHall);
-
+        float CalculateTotalProfit(vector<PerformanceHall>);
 };
 
 #endif

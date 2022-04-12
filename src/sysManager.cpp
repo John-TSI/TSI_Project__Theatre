@@ -112,7 +112,6 @@ void SystemManager::RmMusical(int perfID, vector<Musical>& mList)
 
 // --- assign/schedule ---
 
-
 /* void SystemManager::AssignActor(int idNum, int perfID)
 {
     Actor a = FindActor(idNum, actorList);
@@ -128,6 +127,10 @@ void SystemManager::AssignActor(Actor& a, vector<Actor>& va, Play& p)
     va.push_back(a);
     p.SetActorRoster(va);
     p.SetNumActors(p.GetNumActors() + 1);
+    // modify attributes of p inherited from Performance
+    p.SetNumPerformers(p.GetNumPerformers() + 1);
+    p.SetPerfCost(p.GetPerfCost() + a.GetSalary());
+    //p.SetPerformerRoster(p.GetPerformerRoster().push_back(a));
     if(p.GetNumActors() >= p.GetReqNumActors())
     {
         p.SetFullyCast(true);
@@ -140,6 +143,9 @@ void SystemManager::AssignSinger(Singer& s, vector<Singer>& vs, Musical& mu)
     vs.push_back(s);
     mu.SetSingerRoster(vs);
     mu.SetNumSingers(mu.GetNumSingers() + 1);
+    // modify attributes of mu inherited from Performance
+    mu.SetNumPerformers(mu.GetNumPerformers() + 1);
+    mu.SetPerfCost(mu.GetPerfCost() + s.GetSalary());
     if((mu.GetNumSingers() >= mu.GetReqNumSingers()) && (mu.GetNumMusicians() >= mu.GetReqNumMusicians()))
     {
         mu.SetFullyCast(true);
@@ -152,6 +158,9 @@ void SystemManager::AssignMusician(Musician& m, vector<Musician>& vm, Musical& m
     vm.push_back(m);
     mu.SetMusicianRoster(vm);
     mu.SetNumMusicians(mu.GetNumMusicians() + 1);
+    // modify attributes of mu inherited from Performance
+    mu.SetNumPerformers(mu.GetNumPerformers() + 1);
+    mu.SetPerfCost(mu.GetPerfCost() + m.GetSalary());
     if((mu.GetNumSingers() >= mu.GetReqNumSingers()) && (mu.GetNumMusicians() >= mu.GetReqNumMusicians()))
     {
         mu.SetFullyCast(true);
@@ -211,12 +220,6 @@ bool SystemManager::AllPerfsReady(vector<PerformanceHall>& hList)
 
 
 // --- utility ---
-/* Actor SystemManager::FindActor(int idNum, vector<Actor>& aList)
-{
-    auto a_it = std::find_if(aList.begin(), aList.end(), [idNum](Actor& a) {return a.GetIDNum() == idNum;});
-    Actor actor = *a_it;
-    return actor;
-} */
 Actor* SystemManager::FindActor(int idNum, vector<Actor>& aList)
 {
     auto a_it = std::find_if(aList.begin(), aList.end(), [idNum](Actor& a) {return a.GetIDNum() == idNum;});
@@ -285,9 +288,9 @@ void SystemManager::PrintMusicals(vector<Musical> vec)
 
 float SystemManager::CalculatePerfProfit(PerformanceHall h)
 {
+    if(!h.GetBooked()) { cout << "No scheduled performance in this hall!" << endl; return 0.0f; }
     Performance p = h.GetScheduledPerf();
     float totalSales = (p.GetTicketPrice())*(p.GetTicketsSold()); 
-    float perfCost = 0.0f;
-    //for(p.) 
+    float perfCost = p.GetPerfCost(); 
     return totalSales - perfCost;
 }
