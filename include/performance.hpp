@@ -11,9 +11,10 @@ class Performance
     private:
         string name = "Performance";
         int perfID = 0;
+        bool scheduled = false;
         int hallNum = 0;
-        float ticketPrice = 0.0f;
-        int ticketsSold = 0;
+        float ticketPrice = 20.0f;
+        int ticketsSold = 100;
         bool fullyCast = false;
 
     protected:
@@ -25,6 +26,8 @@ class Performance
         void SetName(string);
         int GetPerfID();
         void SetPerfID(int);
+        bool GetScheduled();
+        void SetScheduled(bool);
         int GetHallNum();
         void SetHallNum(int);
         float GetTicketPrice();

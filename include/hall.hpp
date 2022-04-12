@@ -12,8 +12,8 @@ class PerformanceHall
     private:
         string name = "Performance Hall";
         int hallNum = 0;
-        int capacity = 0;
-        bool scheduled = false;
+        int capacity = 100;
+        bool booked = false;
         Performance scheduledPerformance;
         bool stagePrepared = false;
 
@@ -24,12 +24,14 @@ class PerformanceHall
         void SetHallNum(int);
         int GetCapacity();
         void SetCapacity(int);
-        bool GetScheduled();
-        void SetScheduled(bool);
+        bool GetBooked();
+        void SetBooked(bool);
         Performance GetScheduledPerf();
         void SetScheduledPerf(Performance);
         bool GetStagePrepared();
         void SetStagePrepared(bool);
+
+        void PrintPerformance(Performance);
 };
 
 #endif

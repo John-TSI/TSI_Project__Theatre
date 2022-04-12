@@ -22,6 +22,7 @@ class SystemManager
         int hallCount = 0;
         int playCount = 0;
         int musicalCount = 0;
+        //bool allPerfsReady = true;
 
         vector<Actor> actorList;
         vector<Singer> singerList;
@@ -30,6 +31,7 @@ class SystemManager
         vector<PerformanceHall> perfHallList;
         vector<Play> playList;
         vector<Musical> musicalList;
+
 
     public:
         SystemManager();
@@ -41,12 +43,13 @@ class SystemManager
         int GetHallCount();
         int GetPlayCount();
         int GetMusicalCount();
-        vector<Actor> GetActorList();
-        vector<Singer> GetSingerList();
-        vector<Musician> GetMusicianList();
-        vector<PerformanceHall> GetPerfHallList();
-        vector<Play> GetPlayList();
-        vector<Musical> GetMusicalList();
+        vector<Actor>& GetActorList();
+        vector<Singer>& GetSingerList();
+        vector<Musician>& GetMusicianList();
+        vector<PerformanceHall>& GetPerfHallList();
+        vector<Play>& GetPlayList();
+        vector<Musical>& GetMusicalList();
+
 
         // --- add/remove ---
         void AddActor(vector<Actor>&);
@@ -62,24 +65,44 @@ class SystemManager
         void AddMusical(vector<Musical>&);
         void RmMusical(int, vector<Musical>&);
 
+
         // --- assign/schedule ---
-        void AssignActor(Actor, vector<Actor>&, Play&);
-        // this one works
-        //void AssignActor(Actor, vector<Actor>&);
+        void AssignActor(Actor&, vector<Actor>&, Play&);
+        void AssignSinger(Singer&, vector<Singer>&, Musical&);
+        void AssignMusician(Musician&, vector<Musician>&, Musical&);
+
+        void SchedulePlay(Play&, PerformanceHall&);
+        void ScheduleMusical(Musical&, PerformanceHall&);
+
+
+        // --- verifications ---
+        // are these four needed?
+        bool IsFullyCast(Play&);
+        bool IsFullyCast(Musical&);
+        bool IsBooked(PerformanceHall&);
+        bool StageIsPrepared(PerformanceHall&);
+
+        void CheckHallsStatus(vector<PerformanceHall>&);
+        bool AllPerfsReady(vector<PerformanceHall>&);
+
+
 
         // --- utility ---
-        Actor FindActor(int, vector<Actor>&);
-        Singer FindSinger(int, vector<Singer>&);
-        Musician FindMusician(int, vector<Musician>&);
-        PerformanceHall FindPerfHall(int, vector<PerformanceHall>&);
-        Play FindPlay(int, vector<Play>&);
-        Musical FindMusical(int, vector<Musical>&);
+        Actor* FindActor(int, vector<Actor>&);
+        Singer* FindSinger(int, vector<Singer>&);
+        Musician* FindMusician(int, vector<Musician>&);
+        PerformanceHall* FindPerfHall(int, vector<PerformanceHall>&);
+        Play* FindPlay(int, vector<Play>&);
+        Musical* FindMusical(int, vector<Musical>&);
+
         void PrintActors(vector<Actor>);
         void PrintSingers(vector<Singer>);
         void PrintMusicians(vector<Musician>);
         void PrintHalls(vector<PerformanceHall>);
         void PrintPlays(vector<Play>);
         void PrintMusicals(vector<Musical>);
+
+        float CalculatePerfProfit(PerformanceHall);
 
 };
 

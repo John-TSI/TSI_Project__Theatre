@@ -12,6 +12,7 @@ class Play : public Performance
     private:
         string genre;
         int numActors = 0;
+        int reqNumActors = 1;
         vector<Actor> actorRoster = {}; 
 
     public:
@@ -21,6 +22,8 @@ class Play : public Performance
         void SetGenre(string);
         int GetNumActors();
         void SetNumActors(int);
+        int GetReqNumActors();
+        void SetReqNumActors(int);
         vector<Actor> GetActorRoster();
         void SetActorRoster(vector<Actor>);
 

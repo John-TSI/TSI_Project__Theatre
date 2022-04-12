@@ -10,14 +10,14 @@ class Performer : public Employee
      protected: // allow derived classes to instantiate Employee.idNum
         Performer(int); 
     private:
-        bool booked = false;
+        bool assigned = false;
         bool costumed = false;
 
     public:
         Performer();
 
-        bool GetBooked();
-        void SetBooked(bool);
+        bool GetAssigned();
+        void SetAssigned(bool);
         bool GetCostumed();
         void SetCostumed(bool);
 };

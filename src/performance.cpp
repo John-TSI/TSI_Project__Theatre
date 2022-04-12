@@ -10,6 +10,8 @@ string Performance::GetName() { return name; }
 void Performance::SetName(string input) { name = input; }
 int Performance::GetPerfID() { return perfID; }
 void Performance::SetPerfID(int input) { perfID = input; }
+bool Performance::GetScheduled() { return scheduled; }
+void Performance::SetScheduled(bool input) { scheduled = input; }
 int Performance::GetHallNum() { return hallNum; }
 void Performance::SetHallNum(int input) { hallNum = input; }
 float Performance::GetTicketPrice() { return ticketPrice; }

@@ -6,7 +6,7 @@ Performer::Performer(){}
 Performer::Performer(int idNum) : Employee(idNum) {}
 
 // --- getters/setters ---
-bool Performer::GetBooked() { return booked; }
-void Performer::SetBooked(bool input) { booked = input; }
+bool Performer::GetAssigned() { return assigned; }
+void Performer::SetAssigned(bool input) { assigned = input; }
 bool Performer::GetCostumed() { return costumed; }
 void Performer::SetCostumed(bool input) { costumed = input; }
