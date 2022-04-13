@@ -19,7 +19,7 @@ class SystemManager
         int actorCount = 0, actorIDcount = 0;
         int singerCount = 0, singerIDcount = 0;
         int musicianCount = 0, musicianIDcount = 0;
-        int hallCount = 0, hallIDcount = 0;
+        int hallCount = 0, hallNumCount = 0;
         int playCount = 0, playIDcount = 0;
         int musicalCount = 0, musicalIDcount = 0;
         //bool allPerfsReady = true;

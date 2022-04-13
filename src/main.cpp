@@ -23,11 +23,13 @@ using std::cout; using std::cin; using std::endl;
 // ------ PROTOTYPES (get user requests) ------
 void Introduction();
 int GetMainMenuRequest();
+
 int GetMenu1Request();
 // --- menu1 ---
 int GetPerformerToAdd();
 int GetPerformerToRm();
 int GetPerformanceToAdd();
+int GetPerformanceToRm();
 
 int GetMenu2Request();
 int GetMenu3Request();
@@ -37,6 +39,9 @@ int GetMenu4Request();
 int GetActorID();
 int GetSingerID();
 int GetMusicianID();
+int GetPlayID();
+int GetMusicalID();
+int GetHallNum();
 
 
 
@@ -346,6 +351,59 @@ int main()
 						}
 						case 4: // selected Remove Performance
 						{
+							int reqRP = -1;
+							while(reqRP != 0)
+							{
+								reqRP = GetPerformanceToRm(); // open Menu to Remove Performance (2+1 cases)
+								switch(reqRP)
+								{
+									case 1: // selected Remove Play
+									{
+										int id = GetPlayID();
+										if(!SM.VerifiedPlayID(id, playList))
+										{
+											cout << "\nThe specified Play is not currently listed." << endl;
+											cout << "Currently listed Play IDs: { ";
+											SM.PrintPlays(playList); 
+											cout << "}\nCheck your input and try again.\n" << endl;
+											break;
+										}
+										else
+										{
+											SM.RmPlay(id, playList);
+											cout << "\nThe Play has been removed." << endl;
+											cout << "System currently has " << SM.GetPlayCount() << " listed Plays.\n";
+										}
+										break;
+									}
+									case 2: // selected Remove Musical
+									{
+										int id = GetMusicalID();
+										if(!SM.VerifiedMusicalID(id, musicalList))
+										{
+											cout << "\nThe specified Musical is not currently listed." << endl;
+											cout << "Currently listed Musical IDs: { ";
+											SM.PrintMusicals(musicalList); 
+											cout << "}\nCheck your input and try again.\n" << endl;
+											break;
+										}
+										else
+										{
+											SM.RmMusical(id, musicalList);
+											cout << "\nThe Musical has been removed." << endl;
+											cout << "System currently has " << SM.GetMusicalCount() << " listed Musicals.\n";
+										}
+										break;
+									}
+									case 0:
+									{
+										reqRP = 0;
+										break;
+									}
+									default:
+										cout << "\nInvalid input, please review the input options and try again." << endl;					
+								}
+							}
 							break;
 						}
 						case 5: // selected Add a Performance Hall
@@ -357,6 +415,21 @@ int main()
 						}
 						case 6: // selected Remove a Performance Hall
 						{
+							int num = GetHallNum();
+							if(!SM.VerifiedHallNum(num, perfHallList))
+							{
+								cout << "\nThe specified Performance Hall is not currently listed." << endl;
+								cout << "Currently listed Performance Hall numbers: { ";
+								SM.PrintHalls(perfHallList); 
+								cout << "}\nCheck your input and try again.\n" << endl;
+								break;
+							}
+							else
+							{
+								SM.RmPerfHall(num, perfHallList);
+								cout << "\nThe Performance Hall has been removed." << endl;
+								cout << "System currently has " << SM.GetHallCount() << " listed Performance Halls.\n";
+							}
 							break;
 						}
 						case 0:
@@ -580,6 +653,27 @@ int GetPerformanceToAdd()
 	return req;
 }
 
+int GetPerformanceToRm()
+{
+	int req = -1;
+	cout << "\nSelect a Performance to remove:" << endl;
+	cout << "--------------------------------------" << endl;
+	cout << "1 ....... Remove a Play from the System" << endl;
+	cout << "2 ....... Remove a Musical from the System" << endl;
+	cout << "0 ....... Return to the previous menu" << endl;
+	cout << "--------------------------------------" << endl;
+	cout << "> ";
+	cin >> req;
+	if(cin.fail())
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		req = -1;
+		return req;
+	}
+	return req;
+}
+
 // ------------
 
 int GetMenu2Request()
@@ -688,6 +782,54 @@ int GetMusicianID()
 {
 	int req = -1;
 	cout << "\nEnter the ID number of the Musician to be removed:" << endl;
+	cout << "> ";
+	cin >> req;
+	if(cin.fail())
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		req = -1;
+		return req;
+	}
+	return req;
+}
+
+int GetPlayID()
+{
+	int req = -1;
+	cout << "\nEnter the performance ID number of the Play to be removed:" << endl;
+	cout << "> ";
+	cin >> req;
+	if(cin.fail())
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		req = -1;
+		return req;
+	}
+	return req;
+}
+
+int GetMusicalID()
+{
+	int req = -1;
+	cout << "\nEnter the performance ID number of the Musical to be removed:" << endl;
+	cout << "> ";
+	cin >> req;
+	if(cin.fail())
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		req = -1;
+		return req;
+	}
+	return req;
+}
+
+int GetHallNum()
+{
+	int req = -1;
+	cout << "\nEnter the hall number of the Performance Hall to be removed:" << endl;
 	cout << "> ";
 	cin >> req;
 	if(cin.fail())

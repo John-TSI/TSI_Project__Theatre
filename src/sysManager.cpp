@@ -78,8 +78,8 @@ void SystemManager::RmMusician(int idNum, vector<Musician>& mList)
 
 void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList)
 {
-    pHList.push_back(PerformanceHall(hallIDcount) );
-    hallIDcount++;
+    pHList.push_back(PerformanceHall(hallNumCount) );
+    hallNumCount++;
     hallCount++;
 }
 
