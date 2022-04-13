@@ -16,12 +16,12 @@ using std::string; using std::vector;
 class SystemManager
 {
     private:
-        int actorCount = 0;
-        int singerCount = 0;
-        int musicianCount = 0;
-        int hallCount = 0;
-        int playCount = 0;
-        int musicalCount = 0;
+        int actorCount = 0, actorIDcount = 0;
+        int singerCount = 0, singerIDcount = 0;
+        int musicianCount = 0, musicianIDcount = 0;
+        int hallCount = 0, hallIDcount = 0;
+        int playCount = 0, playIDcount = 0;
+        int musicalCount = 0, musicalIDcount = 0;
         //bool allPerfsReady = true;
 
         vector<Actor> actorList;
@@ -37,6 +37,7 @@ class SystemManager
         SystemManager();
 
         // --- getters/setters ---
+        // are these necessary?
         int GetActorCount();
         int GetSingerCount();
         int GetMusicianCount();
@@ -76,14 +77,21 @@ class SystemManager
 
 
         // --- verifications ---
-        // are these four needed?
         bool IsFullyCast(Play&);
         bool IsFullyCast(Musical&);
         bool IsBooked(PerformanceHall&);
-        bool StageIsPrepared(PerformanceHall&);
+        //bool StageIsPrepared(PerformanceHall&);
 
         void CheckHallsStatus(vector<PerformanceHall>&);
         bool AllPerfsReady(vector<PerformanceHall>&);
+
+        // ID verifiers
+        bool VerifiedActorID(int, vector<Actor>);
+        bool VerifiedSingerID(int, vector<Singer>);
+        bool VerifiedMusicianID(int, vector<Musician>);
+        bool VerifiedPlayID(int, vector<Play>);
+        bool VerifiedMusicalID(int, vector<Musical>);
+        bool VerifiedHallNum(int, vector<PerformanceHall>);
 
 
         // --- utility ---
@@ -94,6 +102,7 @@ class SystemManager
         Play* FindPlay(int, vector<Play>&);
         Musical* FindMusical(int, vector<Musical>&);
 
+        // ID printers
         void PrintActors(vector<Actor>);
         void PrintSingers(vector<Singer>);
         void PrintMusicians(vector<Musician>);
@@ -101,6 +110,7 @@ class SystemManager
         void PrintPlays(vector<Play>);
         void PrintMusicals(vector<Musical>);
 
+        // calculators
         float CalcPerfProfit(PerformanceHall);
         float CalcTotalProfit(vector<PerformanceHall>);
 };
