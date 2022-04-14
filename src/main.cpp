@@ -2,6 +2,7 @@
 #include<limits>
 #include<string>
 #include<vector>
+#include<algorithm>
 #include"../include/actor.hpp"
 #include"../include/singer.hpp"
 #include"../include/musician.hpp"
@@ -18,10 +19,15 @@ using std::cout; using std::cin; using std::endl;
 // - verify schedPerf.ticketSold <= hall.capacity
 // - performance.hpp remove vector<Performer> attribute / methods ?
 // - implement a user guide option in one of the menus
+// - implement unassign/unschedule in menu2
+// - modify assignment functions: show only unassigned objects
+// - modify unassignment functions: show only assigned objects
+// - do not allow an assigned object to be assigned
+// - move Unassign Actor in menu2 to be option below Assign Actor
 
 
 // ------ PROTOTYPES (get user requests) ------
-void Introduction();
+void Welcome();
 int GetMainMenuRequest();
 
 int GetMenu1Request();
@@ -32,6 +38,8 @@ int GetPerformanceToAdd();
 int GetPerformanceToRm();
 
 int GetMenu2Request();
+// ---menu2 ---
+
 int GetMenu3Request();
 int GetMenu4Request();
 
@@ -43,9 +51,11 @@ int GetIDRequest();
 int main()
 {	system("cls");
 
+
 	SystemManager SM; // instantiate the SystemManager
 
-	// create references of SystemManager's lists
+
+	// create references of SystemManager's object lists
  	vector<Actor> actorList = SM.GetActorList();
 	vector<Singer> singerList = SM.GetSingerList();
 	vector<Musician> musicianList = SM.GetMusicianList();
@@ -54,133 +64,8 @@ int main()
 	vector<PerformanceHall> perfHallList = SM.GetPerfHallList();
 
 
-	// --- TESTING ---
-	// add some objects to the SystemManager's lists
-/* 	SM.AddActor(actorList);
-	SM.AddActor(actorList);
-	SM.AddActor(actorList);
-	SM.AddActor(actorList);
-	SM.AddActor(actorList);
-
-	SM.AddSinger(singerList);
-
-	SM.AddMusician(musicianList);
-
-	SM.AddPlay(playList);
-	SM.AddPlay(playList);
-	SM.AddPlay(playList);   
-
-	SM.AddMusical(musicalList);
-
-	SM.AddPerfHall(perfHallList);
-	SM.AddPerfHall(perfHallList);
-
-
-	// find and assign using SM methods
-	Actor* a2 = SM.FindActor(2, actorList);
-	Actor* a3 = SM.FindActor(3, actorList);
-	Actor* a4 = SM.FindActor(4, actorList); 
-	Singer* s0 = SM.FindSinger(0, singerList);
-	Musician* m0 = SM.FindMusician(0, musicianList);
-
-	Play* p0 = SM.FindPlay(0, playList);
-	Play* p1 = SM.FindPlay(1, playList);
-	Play* p2 = SM.FindPlay(2, playList);
-	Musical* mu0 = SM.FindMusical(0, musicalList);
-
-	vector<Actor> actors0 = p0->GetActorRoster();
-	vector<Actor> actors1 = p1->GetActorRoster();
-	vector<Actor> actors2 = p2->GetActorRoster();
-	vector<Singer> singers0 = mu0->GetSingerRoster();
-	vector<Musician> musicians0 = mu0->GetMusicianRoster();
-
-	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
-	PerformanceHall* h1 = SM.FindPerfHall(1, perfHallList); */
-
-
-
-
-	// checking result of AssignActor()
-/*  	cout << p0->GetNumActors() << endl;
-	cout << SM.IsFullyCast(*p0) << endl;
-	SM.AssignActor(*a4, actors0, *p0);
-	SM.AssignActor(*a3, actors0, *p0);
-	p0->PrintActors(p0->GetActorRoster());
-	cout << endl;
-	cout << p0->GetNumActors() << endl;
-	cout << SM.IsFullyCast(*p0);
-	cout << "\n------" << endl; */ 
-
-	// checking result of AssignSinger()
-/* 	cout << m0.GetNumSingers() << endl;
-	SM.AssignSinger(s0, singers0, m0);
-	m0.PrintSingers(m0.GetSingerRoster());
-	cout << endl;
-	cout << m0.GetNumSingers() << endl;
-	cout << s0.GetAssigned() << endl; */
-
-	// checking result of SchedulePlay()
-/* 	h0.PrintPerformance(h1.GetScheduledPerf() );
-	cout << endl;
-	cout << p2.GetScheduled() << endl;
-	cout << p2.GetHallNum() << endl;
-	cout << h1.GetBooked();
-	cout << "\n------" << endl;
-	SM.SchedulePlay(p2, h1);
-	h1.PrintPerformance(h1.GetScheduledPerf() );
-	cout << endl;
-	cout << p2.GetScheduled() << endl;
-	cout << p2.GetHallNum() << endl;
-	cout << h1.GetBooked(); */
-
-// checking assigning performers to performance and perf to a hall
-/* 	cout << h1->GetHallNum() << endl;
-	h1->SetHallNum(33);
-	//cout << SM.FindPerfHall(33,perfHallList)->GetHallNum();
-	cout << h1->GetHallNum();
-	cout << endl;
-	SM.PrintHalls(perfHallList);
-	//SM.RmPerfHall(0, perfHallList);
-	cout << endl;
-	SM.PrintHalls(perfHallList);
-	cout << endl;
-	PerformanceHall* h33 = SM.FindPerfHall(33, perfHallList);
-
-	SM.AssignActor(*a4, actors2, *p2);
-	SM.AssignActor(*a3, actors2, *p2); // optional extra actor
-	SM.AssignSinger(*s0, singers0, *mu0);
-	SM.AssignMusician(*m0, musicians0, *mu0);
-
-	SM.SchedulePlay(*p2, *h33);
-	SM.ScheduleMusical(*mu0, *h0);
-	cout << endl;
-	SM.CheckHallsStatus(perfHallList);
-	cout << endl;
-	cout << SM.AllPerfsReady(perfHallList) << endl;
-	cout << SM.CalcPerfProfit(*h33) << endl;
-	cout << SM.CalcTotalProfit(perfHallList)  << endl; */
-
-	//cout << GetMenuRequest();
-
-
-/* 	auto RetActors = [&](int idNum, int perfID)
-	{
-		Actor a = SM.FindActor(idNum, actorList);
-		Play p = SM.FindPlay(perfID, playList);
-		vector<Actor> actors = p.GetActorRoster();
-		return actors;
-	}; 
-	cout << "\n------" << endl;
-	vector<Actor> actors = RetActors(4,0);
-	SM.AssignActor(4, actors);
-	p0.PrintActors(actors0); */
-
-
-	// --- END TESTING ---
-
-
 	// ------ BEGIN USER INTERACTIVITY ------
-	Introduction();
+	Welcome();
 	int mainReq = -1;
 	while(mainReq != 0)
 	{
@@ -256,12 +141,9 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										else
-										{
-											SM.RmActor(id, actorList);
-											cout << "\nThe Actor has been removed." << endl;
-											cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
-										}
+										SM.RmActor(id, actorList);
+										cout << "\nThe Actor has been removed." << endl;
+										cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
 										break;
 									}
 									case 2: // selected Remove Singer
@@ -276,13 +158,10 @@ int main()
 											cout << "\nThe specified Singer is not currently listed." << endl;
 											cout << "Check your input and try again.\n" << endl;
 											break;
-										}
-										else
-										{
-											SM.RmSinger(id, singerList);
-											cout << "\nThe Singer has been removed." << endl;
-											cout << "System currently has " << SM.GetSingerCount() << " listed Singers.\n";
-										}
+										}										
+										SM.RmSinger(id, singerList);
+										cout << "\nThe Singer has been removed." << endl;
+										cout << "System currently has " << SM.GetSingerCount() << " listed Singers.\n";
 										break;
 									}
 									case 3: // selected Remove Musician
@@ -298,12 +177,9 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										else
-										{
-											SM.RmMusician(id, musicianList);
-											cout << "\nThe Musician has been removed." << endl;
-											cout << "System currently has " << SM.GetMusicianCount() << " listed Musicians.\n";
-										}
+										SM.RmMusician(id, musicianList);
+										cout << "\nThe Musician has been removed." << endl;
+										cout << "System currently has " << SM.GetMusicianCount() << " listed Musicians.\n";
 										break;
 									}
 									case 0:
@@ -371,12 +247,9 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										else
-										{
-											SM.RmPlay(id, playList);
-											cout << "\nThe Play has been removed." << endl;
-											cout << "System currently has " << SM.GetPlayCount() << " listed Plays.\n";
-										}
+										SM.RmPlay(id, playList);
+										cout << "\nThe Play has been removed." << endl;
+										cout << "System currently has " << SM.GetPlayCount() << " listed Plays.\n";
 										break;
 									}
 									case 2: // selected Remove Musical
@@ -392,12 +265,9 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										else
-										{
-											SM.RmMusical(id, musicalList);
-											cout << "\nThe Musical has been removed." << endl;
-											cout << "System currently has " << SM.GetMusicalCount() << " listed Musicals.\n";
-										}
+										SM.RmMusical(id, musicalList);
+										cout << "\nThe Musical has been removed." << endl;
+										cout << "System currently has " << SM.GetMusicalCount() << " listed Musicals.\n";
 										break;
 									}
 									case 0:
@@ -431,12 +301,9 @@ int main()
 								cout << "Check your input and try again.\n" << endl;
 								break;
 							}
-							else
-							{
-								SM.RmPerfHall(num, perfHallList);
-								cout << "\nThe Performance Hall has been removed." << endl;
-								cout << "System currently has " << SM.GetHallCount() << " listed Performance Halls.\n";
-							}
+							SM.RmPerfHall(num, perfHallList);
+							cout << "\nThe Performance Hall has been removed." << endl;
+							cout << "System currently has " << SM.GetHallCount() << " listed Performance Halls.\n";
 							break;
 						}
 						case 0:
@@ -451,17 +318,208 @@ int main()
 				break;
 			}
 
+
 			case 2: // selected Menu2 : Assign/Schedule
 			{
 				int req2 = -1;
 				while(req2 != 0)
 				{
 					req2 = GetMenu2Request();
-					// insert switch here
-					cout << req2 << endl;
+					switch(req2)
+					{
+						case 1: // selected Assign an Actor to a Play
+						{
+							cout << "\nCurrently listed Actor IDs: { ";
+							SM.PrintActors(actorList); 
+							cout << "}" << endl;
+							cout << "Enter the ID number of the Actor to be assigned:" << endl;
+							int idA = GetIDRequest();
+							if(!SM.VerifiedActorID(idA, actorList))
+							{
+								cout << "\nThe specified Actor is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}														
+							cout << "\nCurrently listed Play performance IDs: { ";
+							SM.PrintPlays(playList); 
+							cout << "}" << endl;
+							cout << "Enter the performance ID of the Play to be assigned to:" << endl;
+							int idP = GetIDRequest();
+							if(!SM.VerifiedPlayID(idP, playList))
+							{
+								cout << "\nThe specified Play is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}													
+							Actor* a = SM.FindActor(idA, actorList);
+							Play* p = SM.FindPlay(idP, playList);
+							vector<Actor> aList = p->GetActorRoster();
+							SM.AssignActor(*a, aList, *p);
+							cout << "\nThe Actor has been assigned to the Play." << endl;
+							//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
+							break;
+						}
+						case 2: // selected Assign a Singer to a Musical
+						{
+							cout << "\nCurrently listed Singer IDs: { ";
+							SM.PrintSingers(singerList); 
+							cout << "}" << endl;
+							cout << "Enter the ID number of the Singer to be assigned:" << endl;
+							int idS = GetIDRequest();
+							if(!SM.VerifiedSingerID(idS, singerList))
+							{
+								cout << "\nThe specified Singer is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}							
+							cout << "\nCurrently listed Musical performance IDs: { ";
+							SM.PrintMusicals(musicalList); 
+							cout << "}" << endl;
+							cout << "Enter the performance ID of the Musical to be assigned to:" << endl;
+							int idMu = GetIDRequest();
+							if(!SM.VerifiedMusicalID(idMu, musicalList))
+							{
+								cout << "\nThe specified Musical is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}													
+							Singer* s = SM.FindSinger(idS, singerList);
+							Musical* mu = SM.FindMusical(idMu, musicalList);
+							vector<Singer> sList = mu->GetSingerRoster();
+							SM.AssignSinger(*s, sList, *mu);
+							cout << "\nThe Singer has been assigned to the Musical." << endl;
+							//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
+							break;
+						}
+						case 3: // selected Assign a Musician to a Musical
+						{
+							cout << "\nCurrently listed Musician IDs: { ";
+							SM.PrintMusicians(musicianList); 
+							cout << "}" << endl;
+							cout << "Enter the ID number of the Musician to be assigned:" << endl;
+							int idM = GetIDRequest();
+							if(!SM.VerifiedMusicianID(idM, musicianList))
+							{
+								cout << "\nThe specified Musician is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}														
+							cout << "\nCurrently listed Musical performance IDs: { ";
+							SM.PrintMusicals(musicalList); 
+							cout << "}" << endl;
+							cout << "Enter the performance ID of the Musical to be assigned to:" << endl;
+							int idMu = GetIDRequest();
+							if(!SM.VerifiedMusicalID(idMu, musicalList))
+							{
+								cout << "\nThe specified Musical is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}														
+							Musician* m = SM.FindMusician(idM, musicianList);
+							Musical* mu = SM.FindMusical(idMu, musicalList);
+							vector<Musician> mList = mu->GetMusicianRoster();
+							SM.AssignMusician(*m, mList, *mu);
+							cout << "\nThe Musician has been assigned to the Musical." << endl;
+							//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
+							break;
+						}
+						case 4: // selected Schedule a Play in a Performance Hall
+						{
+							cout << "\nCurrently listed Play performance IDs: { ";
+							SM.PrintPlays(playList); 
+							cout << "}" << endl;
+							cout << "Enter the performance ID of the Play to be scheduled:" << endl;
+							int idP = GetIDRequest();
+							if(!SM.VerifiedPlayID(idP, playList))
+							{
+								cout << "\nThe specified Play is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}														
+							cout << "\nCurrently listed Performance Hall numbers: { ";
+							SM.PrintHalls(perfHallList); 
+							cout << "}" << endl;
+							cout << "Enter the number of the Performance Hall to be booked:" << endl;
+							int num = GetIDRequest();
+							if(!SM.VerifiedHallNum(num, perfHallList))
+							{
+								cout << "\nThe specified Performance Hall is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}												
+							Play* p = SM.FindPlay(idP, playList);
+							PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
+							SM.SchedulePerformance(*p, *h); // changed from SchedulePlay()
+							cout << "\nThe Play has been scheduled in the Performance Hall." << endl;
+							//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
+							break;
+						}
+						case 5: // selected Schedule a Musical in a Performance Hall
+						{
+							cout << "\nCurrently listed Musical performance IDs: { ";
+							SM.PrintMusicals(musicalList); 
+							cout << "}" << endl;
+							cout << "Enter the performance ID of the Musical to be scheduled:" << endl;
+							int idMu = GetIDRequest();
+							if(!SM.VerifiedMusicalID(idMu, musicalList))
+							{
+								cout << "\nThe specified Musical is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}													
+							cout << "\nCurrently listed Performance Hall numbers: { ";
+							SM.PrintHalls(perfHallList); 
+							cout << "}" << endl;
+							cout << "Enter the number of the Performance Hall to be booked:" << endl;
+							int num = GetIDRequest();
+							if(!SM.VerifiedHallNum(num, perfHallList))
+							{
+								cout << "\nThe specified Performance Hall is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}														
+							Musical* mu = SM.FindMusical(idMu, musicalList);
+							PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
+							SM.SchedulePerformance(*mu, *h);
+							cout << "\nThe Musical has been scheduled in the Performance Hall." << endl;
+							//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
+							break;
+						}
+						case 6: // selected Unassign an Actor
+						{
+							cout << "\nCurrently listed Actor IDs: { ";
+							SM.PrintActors(actorList); 
+							cout << "}" << endl;
+							cout << "Enter the ID of the Actor to be unassigned:" << endl;
+							int idA = GetIDRequest();
+							if(!SM.VerifiedActorID(idA, actorList))
+							{
+								cout << "\nThe specified Actor is not currently listed." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}
+							Actor* a = SM.FindActor(idA, actorList);
+							int idP = a->GetInPerfID();
+							if(idP == -1)
+							{
+								cout << "\nThe specified Actor is not currently assigned to a Play." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}
+							Play* p = SM.FindPlay(idP, playList);
+							vector<Actor>& aList = p->GetActorRoster();
+							SM.UnassignActor(*a, aList, *p); // this call will incorrectly decrement the SM actorCount attribute...
+							SM.SetActorCount(SM.GetActorCount() + 1); // ...so increment it here to correct
+							cout << "\nThe Actor has been removed from the Play roster." << endl;
+							//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";						
+							break;
+						}
+						
+					}
 				}
 				break;
 			}
+
 
 			case 3: //  selected Menu3 : Check/Verify
 			{
@@ -475,6 +533,7 @@ int main()
 				break;
 			}
 
+
 			case 4: // selected Menu4 : Utility
 			{
 				int req4 = -1;
@@ -486,6 +545,7 @@ int main()
 				}
 				break;
 			}
+
 
 			case 0:
 			{
@@ -505,29 +565,29 @@ int main()
 	
 	cout << endl;
 	Actor* a0 = SM.FindActor(0, actorList);
-	Actor* a1 = SM.FindActor(1, actorList);
-	Actor* a2 = SM.FindActor(2, actorList);
+/* 	Actor* a1 = SM.FindActor(1, actorList);
+	Actor* a2 = SM.FindActor(2, actorList); */
 	cout << "Listed Actors: ";
 	SM.PrintActors(actorList);
 
-/* 	cout << endl;
+ 	cout << endl;
 	Play* p0 = SM.FindPlay(0, playList);
-	Musical* mu0 = SM.FindMusical(0, musicalList);
+	//Musical* mu0 = SM.FindMusical(0, musicalList);
 	cout << "Listed Plays: ";
 	SM.PrintPlays(playList);
-	cout << endl;
-	cout << "Listed Musicals: ";
-	SM.PrintMusicals(musicalList);
 
 	cout << endl;
-	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
-	cout << "Listed Halls: ";
-	SM.PrintHalls(perfHallList); */
-
-	cout << endl;
-	cout << SM.VerifiedActorID(1, actorList) << endl;
-	cout << SM.VerifiedActorID(21, actorList) << endl;
-
+	SM.PrintActors(p0->GetActorRoster());
+ 	cout << endl;
+/* 	cout << SM.GetActorCount() << endl;
+	cout << SM.FindActor(1, actorList)->GetIsAssigned() << endl;
+	cout << SM.FindActor(1, actorList)->GetInPerfID() << endl;
+	cout << SM.FindActor(2, actorList)->GetIsAssigned() << endl;
+	cout << SM.FindActor(2, actorList)->GetInPerfID() << endl; */
+	cout << SM.FindPlay(0, playList)->GetIsScheduled() << endl;
+	cout << SM.FindPlay(1, playList)->GetIsScheduled() << endl;
+	cout << SM.FindPerfHall(0, perfHallList)->GetScheduledPerf().GetIsFullyCast() << endl;
+	cout << SM.FindPerfHall(1, perfHallList)->GetIsBooked() << endl;
 
 
 	// --- END TESTING ---
@@ -539,7 +599,7 @@ int main()
 
 
 // ------ DEFINITIONS ------
-void Introduction()
+void Welcome()
 {
 	cout << "()()()()()()()()()()()()()()()()" << endl;
 	cout << "() Welcome to THEATRE MANAGER ()" << endl;
@@ -550,13 +610,13 @@ int GetMainMenuRequest()
 {
 	int req = -1;
 	cout << "\nSelect a menu option:" << endl;
-	cout << "-------------------------" << endl;
+	cout << "---------------------------------------------" << endl;
 	cout << "1 ....... Add/Remove" << endl;
-	cout << "2 ....... Assign/Schedule" << endl;
+	cout << "2 ....... Assign/Unassign/Schedule/Unschedule" << endl;
 	cout << "3 ....... Check/Verify" << endl;
 	cout << "4 ....... Utility" << endl;
 	cout << "0 ....... Exit the program" << endl;
-	cout << "--------------------------" << endl;
+	cout << "---------------------------------------------" << endl;
 	cout << "> ";
 	cin >> req;
 	if(cin.fail())
@@ -587,7 +647,7 @@ int GetMenu1Request()
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}
@@ -610,7 +670,7 @@ int GetPerformerToAdd()
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}
@@ -632,7 +692,7 @@ int GetPerformerToRm()
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}
@@ -653,7 +713,7 @@ int GetPerformanceToAdd()
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}
@@ -674,7 +734,7 @@ int GetPerformanceToRm()
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}
@@ -683,29 +743,37 @@ int GetPerformanceToRm()
 
 // ------------
 
+
 int GetMenu2Request()
 {
 	int req = -1;
 	cout << "\nSelect an operation:" << endl;
-	cout << "-------------------------------------------------------" << endl;
+	cout << "--------------------------------------------------" << endl;
 	cout << "1 ....... Assign an Actor to a Play" << endl;
 	cout << "2 ....... Assign a Singer to a Musical" << endl;
 	cout << "3 ....... Assign a Musician to a Musical" << endl;
 	cout << "4 ....... Schedule a Play in a Performance Hall" << endl;
-	cout << "5 ....... Schedule a Musical Hall in a Performance Hall" << endl;
+	cout << "5 ....... Schedule a Musical in a Performance Hall" << endl;
+	cout << "6 ....... Unassign an Actor" << endl;
 	cout << "0 ....... Return to the previous menu" << endl;
-	cout << "-------------------------------------------------------" << endl;
+	cout << "--------------------------------------------------" << endl;
 	cout << "> ";
 	cin >> req;
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}
 	return req;
 } 
+
+// --- MENU2 ---
+
+
+// ------------
+
 
 int GetMenu3Request()
 {
@@ -724,7 +792,7 @@ int GetMenu3Request()
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}
@@ -745,7 +813,7 @@ int GetMenu4Request()
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}
@@ -761,7 +829,7 @@ int GetIDRequest()
 	if(cin.fail())
 	{
 		cin.clear();
-		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignores rest of user input
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		req = -1;
 		return req;
 	}

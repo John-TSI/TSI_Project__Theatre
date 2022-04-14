@@ -37,13 +37,19 @@ class SystemManager
         SystemManager();
 
         // --- getters/setters ---
-        // are these necessary?
         int GetActorCount();
+        void SetActorCount(int);
         int GetSingerCount();
+        void SetSingerCount(int);
         int GetMusicianCount();
+        void SetMusicianCount(int);
         int GetHallCount();
+        void SetHallCount(int);
         int GetPlayCount();
+        void SetPlayCount(int);
         int GetMusicalCount();
+        void SetMusicalCount(int);
+        // setters not required for vector attributes below
         vector<Actor>& GetActorList();
         vector<Singer>& GetSingerList();
         vector<Musician>& GetMusicianList();
@@ -67,13 +73,19 @@ class SystemManager
         void RmMusical(int, vector<Musical>&);
 
 
-        // --- assign/schedule ---
+        // --- (un)assign/(un)schedule ---
         void AssignActor(Actor&, vector<Actor>&, Play&);
+        void UnassignActor(Actor&, vector<Actor>&, Play&);
         void AssignSinger(Singer&, vector<Singer>&, Musical&);
+        void UnassignSinger(Singer&, vector<Singer>&, Musical&);
         void AssignMusician(Musician&, vector<Musician>&, Musical&);
-
-        void SchedulePlay(Play&, PerformanceHall&);
+        void UnassignMusician(Musician&, vector<Musician>&, Musical&);
+/*         void SchedulePlay(Play&, PerformanceHall&);
+        void UnschedulePlay(Play&, PerformanceHall&); 
         void ScheduleMusical(Musical&, PerformanceHall&);
+        void UnscheduleMusical(Musical&, PerformanceHall&); */
+        void SchedulePerformance(Performance&, PerformanceHall&);
+        void UnschedulePerformance(Performance&, PerformanceHall&);
 
 
         // --- verifications ---

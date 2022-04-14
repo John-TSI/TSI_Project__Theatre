@@ -10,16 +10,19 @@ class Performer : public Employee
      protected: // allow derived classes to instantiate Employee.idNum
         Performer(int); 
     private:
-        bool assigned = false;
-        bool costumed = false;
+        bool isAssigned = false;
+        int inPerfID = -1;
+        //bool costumed = false;
 
     public:
         Performer();
 
-        bool GetAssigned();
-        void SetAssigned(bool);
-        bool GetCostumed();
-        void SetCostumed(bool);
+        bool GetIsAssigned();
+        void SetIsAssigned(bool);
+        int GetInPerfID();
+        void SetInPerfID(int);
+        //bool GetCostumed();
+        //void SetCostumed(bool);
 };
 
 #endif

@@ -14,14 +14,14 @@ class Performance
     private:
         string name = "Performance";
         int perfID = 0;
-        bool scheduled = false;
-        int hallNum = 0;
+        bool isScheduled = false;
+        int inHallNum = -1;
         float ticketPrice = 12.0f;
         int ticketsSold = 80;
         int numPerformers = 0;
         float perfCost = 0.0f;
         //vector<Performer> performerRoster = {};
-        bool fullyCast = false;
+        bool isFullyCast = false;
 
     protected:
         Performance(int); // allow derived classes to initialise Performance.perfID
@@ -32,10 +32,10 @@ class Performance
         void SetName(string);
         int GetPerfID();
         void SetPerfID(int);
-        bool GetScheduled();
-        void SetScheduled(bool);
-        int GetHallNum();
-        void SetHallNum(int);
+        bool GetIsScheduled();
+        void SetIsScheduled(bool);
+        int GetInHallNum();
+        void SetInHallNum(int);
         float GetTicketPrice();
         void SetTicketPrice(float);
         int GetTicketsSold();
@@ -46,8 +46,8 @@ class Performance
         void SetPerfCost(float);
         //vector<Performer> GetPerformerRoster();
         //void SetPerformerRoster(vector<Performer>);
-        bool GetFullyCast();
-        void SetFullyCast(bool);
+        bool GetIsFullyCast();
+        void SetIsFullyCast(bool);
 
 };
 

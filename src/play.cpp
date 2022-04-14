@@ -16,7 +16,7 @@ int Play::GetNumActors() { return numActors; }
 void Play::SetNumActors(int input) { numActors = input; }
 int Play::GetReqNumActors() { return reqNumActors; }
 void Play::SetReqNumActors(int input) { reqNumActors = input; }
-vector<Actor> Play::GetActorRoster() { return actorRoster; }
+vector<Actor>& Play::GetActorRoster() { return actorRoster; } // remove &?
 void Play::SetActorRoster(vector<Actor> input) { actorRoster = input; }
 
 

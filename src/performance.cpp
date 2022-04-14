@@ -10,10 +10,10 @@ string Performance::GetName() { return name; }
 void Performance::SetName(string input) { name = input; }
 int Performance::GetPerfID() { return perfID; }
 void Performance::SetPerfID(int input) { perfID = input; }
-bool Performance::GetScheduled() { return scheduled; }
-void Performance::SetScheduled(bool input) { scheduled = input; }
-int Performance::GetHallNum() { return hallNum; }
-void Performance::SetHallNum(int input) { hallNum = input; }
+bool Performance::GetIsScheduled() { return isScheduled; }
+void Performance::SetIsScheduled(bool input) { isScheduled = input; }
+int Performance::GetInHallNum() { return inHallNum; }
+void Performance::SetInHallNum(int input) { inHallNum = input; }
 float Performance::GetTicketPrice() { return ticketPrice; }
 void Performance::SetTicketPrice(float input) { ticketPrice = input; }
 int Performance::GetTicketsSold() { return ticketsSold; }
@@ -24,5 +24,5 @@ float Performance::GetPerfCost() { return perfCost; }
 void Performance::SetPerfCost(float input) { perfCost = input; }
 //vector<Performer> Performance::GetPerformerRoster() { return performerRoster; }
 //void Performance::SetPerformerRoster(vector<Performer> input) { performerRoster = input; }
-bool Performance::GetFullyCast() { return fullyCast; }
-void Performance::SetFullyCast(bool input) { fullyCast = input; }
+bool Performance::GetIsFullyCast() { return isFullyCast; }
+void Performance::SetIsFullyCast(bool input) { isFullyCast = input; }
