@@ -17,12 +17,13 @@ int SystemManager::GetSingerCount() { return singerCount; }
 void SystemManager::SetSingerCount(int input) { singerCount = input; }
 int SystemManager::GetMusicianCount() { return musicianCount; }
 void SystemManager::SetMusicianCount(int input) { musicianCount = input; }
-int SystemManager::GetHallCount() { return hallCount; }
-void SystemManager::SetHallCount(int input) {hallCount = input; }
 int SystemManager::GetPlayCount() { return playCount; }
 void SystemManager::SetPlayCount(int input) { playCount = input; }
 int SystemManager::GetMusicalCount() { return musicalCount; }
 void SystemManager::SetMusicalCount(int input) { musicalCount = input; }
+int SystemManager::GetHallCount() { return hallCount; }
+void SystemManager::SetHallCount(int input) {hallCount = input; }
+
 vector<Actor>& SystemManager::GetActorList() { return actorList; }
 vector<Singer>& SystemManager::GetSingerList() { return singerList; }
 vector<Musician>& SystemManager::GetMusicianList() { return musicianList; }
@@ -44,10 +45,6 @@ void SystemManager::RmActor(int idNum, vector<Actor>& aList)
     aList.erase(std::remove_if(begin(aList), end(aList), 
         [idNum](Actor& a) { return a.GetIDNum() == idNum; }
     ), end(aList));
-    // -- check whether to modify SystemManager attribute -- // not functioning as intended
-/*     vector<Actor>* pInputList = &aList;
-    vector<Actor>* pSMactorList = &actorList;
-    if(*pInputList == *pSMactorList) { actorCount--; } */
     actorCount--;
 }
 
@@ -81,21 +78,6 @@ void SystemManager::RmMusician(int idNum, vector<Musician>& mList)
     musicianCount--;
 }
 
-void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList)
-{
-    pHList.push_back(PerformanceHall(hallNumCount) );
-    hallNumCount++;
-    hallCount++;
-}
-
-void SystemManager::RmPerfHall(int hallNum, vector<PerformanceHall>& pHList)
-{
-    pHList.erase(std::remove_if(begin(pHList), end(pHList), 
-        [hallNum](PerformanceHall& pH) { return pH.GetHallNum() == hallNum; }
-    ), end(pHList));
-    hallCount--;
-}
-
 void SystemManager::AddPlay(vector<Play>& pList)
 {
     pList.push_back((playIDcount) );
@@ -124,6 +106,21 @@ void SystemManager::RmMusical(int perfID, vector<Musical>& mList)
         [perfID](Musical& m) { return m.GetPerfID() == perfID; }
     ), end(mList));
     musicalCount--;
+}
+
+void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList)
+{
+    pHList.push_back(PerformanceHall(hallNumCount) );
+    hallNumCount++;
+    hallCount++;
+}
+
+void SystemManager::RmPerfHall(int hallNum, vector<PerformanceHall>& pHList)
+{
+    pHList.erase(std::remove_if(begin(pHList), end(pHList), 
+        [hallNum](PerformanceHall& pH) { return pH.GetHallNum() == hallNum; }
+    ), end(pHList));
+    hallCount--;
 }
 
 
@@ -373,12 +370,6 @@ Musician* SystemManager::FindMusician(int idNum, vector<Musician>& mList)
     return &*m_it;
 }
 
-PerformanceHall* SystemManager::FindPerfHall(int hallNum, vector<PerformanceHall>& pHList)
-{
-    auto pH_it = std::find_if(pHList.begin(), pHList.end(), [hallNum](PerformanceHall& pH) {return pH.GetHallNum() == hallNum;});
-    return &*pH_it;
-}
-
 Play* SystemManager::FindPlay(int perfID, vector<Play>& pList)
 {
     auto p_it = std::find_if(pList.begin(), pList.end(), [perfID](Play& p) {return p.GetPerfID() == perfID;});
@@ -390,6 +381,13 @@ Musical* SystemManager::FindMusical(int perfID, vector<Musical>& mList)
     auto m_it = std::find_if(mList.begin(), mList.end(), [perfID](Musical& m) {return m.GetPerfID() == perfID;});
     return &*m_it;
 }
+
+PerformanceHall* SystemManager::FindPerfHall(int hallNum, vector<PerformanceHall>& pHList)
+{
+    auto pH_it = std::find_if(pHList.begin(), pHList.end(), [hallNum](PerformanceHall& pH) {return pH.GetHallNum() == hallNum;});
+    return &*pH_it;
+}
+
 
 // ID printers
 void SystemManager::PrintActors(vector<Actor> vec)
@@ -431,20 +429,45 @@ void SystemManager::PrintUnassignedMusicians(vector<Musician> vec)
     for(Musician m : vec) { if(!m.GetIsAssigned() ) { cout << m.GetIDNum() << " "; } }
 }
 
-void SystemManager::PrintHalls(vector<PerformanceHall> vec)
-{
-    for(PerformanceHall hall : vec) { cout << hall.GetHallNum() << " "; }
-}
-
 void SystemManager::PrintPlays(vector<Play> vec)
 {
     for(Play p : vec) { cout << p.GetPerfID() << " "; }
+}
+void SystemManager::PrintScheduledPlays(vector<Play> vec)
+{
+    for(Play p : vec) { if(p.GetIsScheduled() ) { cout << p.GetPerfID() << " "; } }
+}
+void SystemManager::PrintUnscheduledPlays(vector<Play> vec)
+{
+    for(Play p : vec) { if(!p.GetIsScheduled() ) { cout << p.GetPerfID() << " "; } }
 }
 
 void SystemManager::PrintMusicals(vector<Musical> vec)
 {
     for(Musical m : vec) { cout << m.GetPerfID() << " "; }
 }
+void SystemManager::PrintScheduledMusicals(vector<Musical> vec)
+{
+    for(Musical mu : vec) { if(mu.GetIsScheduled() ) { cout << mu.GetPerfID() << " "; } }
+}
+void SystemManager::PrintUnscheduledMusicals(vector<Musical> vec)
+{
+    for(Musical mu : vec) { if(!mu.GetIsScheduled() ) { cout << mu.GetPerfID() << " "; } }
+}
+
+void SystemManager::PrintHalls(vector<PerformanceHall> vec)
+{
+    for(PerformanceHall hall : vec) { cout << hall.GetHallNum() << " "; }
+}
+void SystemManager::PrintBookedHalls(vector<PerformanceHall> vec)
+{
+    for(PerformanceHall h : vec) { if(h.GetIsBooked() ) { cout << h.GetHallNum() << " "; } }
+}
+void SystemManager::PrintAvailableHalls(vector<PerformanceHall> vec)
+{
+    for(PerformanceHall h : vec) { if(!h.GetIsBooked() ) { cout << h.GetHallNum() << " "; } }
+}
+
 
 // calculators
 float SystemManager::CalcPerfProfit(PerformanceHall h)
