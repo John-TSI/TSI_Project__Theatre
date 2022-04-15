@@ -80,10 +80,6 @@ class SystemManager
         void UnassignSinger(Singer&, vector<Singer>&, Musical&);
         void AssignMusician(Musician&, vector<Musician>&, Musical&);
         void UnassignMusician(Musician&, vector<Musician>&, Musical&);
-/*         void SchedulePlay(Play&, PerformanceHall&);
-        void UnschedulePlay(Play&, PerformanceHall&); 
-        void ScheduleMusical(Musical&, PerformanceHall&);
-        void UnscheduleMusical(Musical&, PerformanceHall&); */
         void SchedulePerformance(Performance&, PerformanceHall&);
         void UnschedulePerformance(Performance&, PerformanceHall&);
 
@@ -107,6 +103,7 @@ class SystemManager
 
 
         // --- utility ---
+        // finders
         Actor* FindActor(int, vector<Actor>&);
         Singer* FindSinger(int, vector<Singer>&);
         Musician* FindMusician(int, vector<Musician>&);
@@ -115,9 +112,16 @@ class SystemManager
         Musical* FindMusical(int, vector<Musical>&);
 
         // ID printers
+        // void PrintPerformers(auto);
         void PrintActors(vector<Actor>);
+        void PrintAssignedActors(vector<Actor>);
+        void PrintUnassignedActors(vector<Actor>);
         void PrintSingers(vector<Singer>);
+        void PrintAssignedSingers(vector<Singer>);
+        void PrintUnassignedSingers(vector<Singer>);
         void PrintMusicians(vector<Musician>);
+        void PrintAssignedMusicians(vector<Musician>);
+        void PrintUnassignedMusicians(vector<Musician>);
         void PrintHalls(vector<PerformanceHall>);
         void PrintPlays(vector<Play>);
         void PrintMusicals(vector<Musical>);

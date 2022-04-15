@@ -27,7 +27,7 @@ class Musical : public Performance
         void SetNumSingers(int);
         int GetReqNumSingers();
         void SetReqNumSingers(int);
-        vector<Singer> GetSingerRoster();
+        vector<Singer>& GetSingerRoster();
         void SetSingerRoster(vector<Singer>);
         vector<string> GetRequiredInstruments();
         void SetRequiredInstruments(vector<string>);
@@ -35,7 +35,7 @@ class Musical : public Performance
         void SetNumMusicians(int);
         int GetReqNumMusicians();
         void SetReqNumMusicians(int);
-        vector<Musician> GetMusicianRoster();
+        vector<Musician>& GetMusicianRoster();
         void SetMusicianRoster(vector<Musician>);
 
         void PrintSingers(vector<Singer>);

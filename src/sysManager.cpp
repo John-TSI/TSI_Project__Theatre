@@ -395,16 +395,40 @@ Musical* SystemManager::FindMusical(int perfID, vector<Musical>& mList)
 void SystemManager::PrintActors(vector<Actor> vec)
 {
     for(Actor a : vec) { cout << a.GetIDNum() << " "; }
+} 
+void SystemManager::PrintAssignedActors(vector<Actor> vec)
+{
+    for(Actor a : vec) { if(a.GetIsAssigned() ) { cout << a.GetIDNum() << " "; } }
+}
+void SystemManager::PrintUnassignedActors(vector<Actor> vec)
+{
+    for(Actor a : vec) { if(!a.GetIsAssigned() ) { cout << a.GetIDNum() << " "; } }
 }
 
 void SystemManager::PrintSingers(vector<Singer> vec)
 {
     for(Singer s : vec) { cout << s.GetIDNum() << " "; }
 }
+void SystemManager::PrintAssignedSingers(vector<Singer> vec)
+{
+    for(Singer s : vec) { if(s.GetIsAssigned() ) { cout << s.GetIDNum() << " "; } }
+}
+void SystemManager::PrintUnassignedSingers(vector<Singer> vec)
+{
+    for(Singer s : vec) { if(!s.GetIsAssigned() ) { cout << s.GetIDNum() << " "; } }
+}
 
 void SystemManager::PrintMusicians(vector<Musician> vec)
 {
     for(Musician m : vec) { cout << m.GetIDNum() << " "; }
+}
+void SystemManager::PrintAssignedMusicians(vector<Musician> vec)
+{
+    for(Musician m : vec) { if(m.GetIsAssigned() ) { cout << m.GetIDNum() << " "; } }
+}
+void SystemManager::PrintUnassignedMusicians(vector<Musician> vec)
+{
+    for(Musician m : vec) { if(!m.GetIsAssigned() ) { cout << m.GetIDNum() << " "; } }
 }
 
 void SystemManager::PrintHalls(vector<PerformanceHall> vec)
