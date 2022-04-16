@@ -20,7 +20,9 @@ using std::cout; using std::cin; using std::endl;
 // - implement a user guide option in one of the menus
 // - create constructors to allow initialisation of salary, ticket price
 // - implement utility functions to print relevant attributes of performers/performances
-// implement an UnassignAll() function to unassign all performers in a performance?
+// - implement an UnassignAll() function to unassign all performers in a performance?
+// - include a graphical frame around each printed menu?
+// - move as much as possible to inside func defs in SM.cpp 
 
 
 // ------ PROTOTYPES (get user requests) ------
@@ -46,6 +48,8 @@ int GetMenu4Request();
 
 // --- misc ---
 int GetIDRequest();
+void WarningInvalidInput();
+void WarningUnlistedActor(); void WarningUnlistedSinger(); void WarningUnlistedMusician(); void WarningUnlistedPlay(); void WarningUnlistedMusical(); void WarningUnlistedHall();
 
 
 
@@ -92,22 +96,16 @@ int main()
 									case 1: // selected Add a Actor
 									{
 										SM.AddActor(actorList);
-										cout << "\nAn Actor has been added." << endl;
-										cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
 										break;
 									}
 									case 2: // selected Add a Singer
 									{
 										SM.AddSinger(singerList);
-										cout << "\nA Singer has been added." << endl;
-										cout << "System currently has " << SM.GetSingerCount() << " listed Singers.\n";
 										break;
 									}
 									case 3: // selected Add a Musician
 									{
 										SM.AddMusician(musicianList);
-										cout << "\nA Musician has been added." << endl;
-										cout << "System currently has " << SM.GetMusicianCount() << " listed Musicians.\n";
 										break;
 									}
 									case 0:
@@ -131,38 +129,48 @@ int main()
 								{
 									case 1: // selected Remove a Actor
 									{
+										// output info to User
 										cout << "\nCurrently listed Actor IDs: { ";
 										SM.PrintActors(actorList); 
 										cout << "}" << endl;
+
+										// get User Actor request
 										cout << "Enter the ID number of the Actor to be removed:" << endl;
-										int id = GetIDRequest();
-										if(!SM.VerifiedActorID(id, actorList))
+										int idA = GetIDRequest();
+										
+										// break if user input is of invalid type
+										if(idA == -1) { WarningInvalidInput(); break; }
+
+										if(!SM.VerifiedActorID(idA, actorList)) // break if Actor not listed on SystemManager
 										{
 											cout << "\nThe specified Actor is not currently listed." << endl;
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.RmActor(id, actorList);
-										cout << "\nThe Actor has been removed." << endl;
-										cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
+										SM.RmActor(idA, actorList);
 										break;
 									}
 									case 2: // selected Remove a Singer
 									{
+										// output info to User
 										cout << "\nCurrently listed Singer IDs: { ";
 										SM.PrintSingers(singerList); 
 										cout << "}" << endl;
+
+										// get User Singer request
 										cout << "Enter the ID number of the Singer to be removed:" << endl;
-										int id = GetIDRequest();
-										if(!SM.VerifiedSingerID(id, singerList))
+										int idS = GetIDRequest();
+
+										// break if user input is of invalid type
+										if(idS == -1) { WarningInvalidInput(); break; }
+
+										if(!SM.VerifiedSingerID(idS, singerList))  // break if Singer not listed on SystemManager
 										{
 											cout << "\nThe specified Singer is not currently listed." << endl;
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}										
-										SM.RmSinger(id, singerList);
-										cout << "\nThe Singer has been removed." << endl;
-										cout << "System currently has " << SM.GetSingerCount() << " listed Singers.\n";
+										SM.RmSinger(idS, singerList);
 										break;
 									}
 									case 3: // selected Remove a Musician
@@ -171,16 +179,18 @@ int main()
 										SM.PrintMusicians(musicianList); 
 										cout << "}" << endl;
 										cout << "Enter the ID number of the Musician to be removed:" << endl;
-										int id = GetIDRequest();
-										if(!SM.VerifiedMusicianID(id, musicianList))
+										int idM = GetIDRequest();
+
+										// break if user input is of invalid type
+										if(idM == -1) { WarningInvalidInput(); break; }
+
+										if(!SM.VerifiedMusicianID(idM, musicianList))  // break if Musician not listed on SystemManager
 										{
 											cout << "\nThe specified Musician is not currently listed." << endl;
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.RmMusician(id, musicianList);
-										cout << "\nThe Musician has been removed." << endl;
-										cout << "System currently has " << SM.GetMusicianCount() << " listed Musicians.\n";
+										SM.RmMusician(idM, musicianList);
 										break;
 									}
 									case 0:
@@ -189,7 +199,7 @@ int main()
 										break;
 									}
 									default:
-										cout << "\nInvalid input, please review the input options and try again." << endl;					
+										WarningInvalidInput();					
 								}
 							}
 							break;
@@ -205,15 +215,11 @@ int main()
 									case 1: // selected Add a Play
 									{
 										SM.AddPlay(playList);
-										cout << "\nA Play has been added." << endl;
-										cout << "System currently has " << SM.GetPlayCount() << " listed Plays.\n";
 										break;
 									}
 									case 2: // selected Add a Musical
 									{
 										SM.AddMusical(musicalList);
-										cout << "\nA Musical has been added." << endl;
-										cout << "System currently has " << SM.GetMusicalCount() << " listed Musicals.\n";
 										break;
 									}
 									case 0:
@@ -222,7 +228,7 @@ int main()
 										break;
 									}
 									default:
-										cout << "\nInvalid input, please review the input options and try again." << endl;					
+										WarningInvalidInput();					
 								}
 							}
 							break;
@@ -237,38 +243,48 @@ int main()
 								{
 									case 1: // selected a Remove Play
 									{
+										// output info to User
 										cout << "\nCurrently listed Play performance IDs: { ";
 										SM.PrintPlays(playList); 
 										cout << "}" << endl;
+
+										// get User Play request
 										cout << "Enter the performance ID of the Play to be removed:" << endl;
-										int id = GetIDRequest();
-										if(!SM.VerifiedPlayID(id, playList))
+										int idP = GetIDRequest();
+
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										if(!SM.VerifiedPlayID(idP, playList)) // break if Play not listed on SystemManager
 										{
 											cout << "\nThe specified Play is not currently listed." << endl;
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.RmPlay(id, playList);
-										cout << "\nThe Play has been removed." << endl;
-										cout << "System currently has " << SM.GetPlayCount() << " listed Plays.\n";
+										SM.RmPlay(idP, playList);
 										break;
 									}
 									case 2: // selected a Remove Musical
 									{
+										// output info to User
 										cout << "\nCurrently listed Musical performance IDs: { ";
 										SM.PrintMusicals(musicalList); 
 										cout << "}" << endl;
 										cout << "Enter the performance ID of the Musical to be removed:" << endl;
-										int id = GetIDRequest();
-										if(!SM.VerifiedMusicalID(id, musicalList))
+
+										// get User Musical request
+										int idP = GetIDRequest();
+
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										if(!SM.VerifiedMusicalID(idP, musicalList))  // break if Musical not listed on SystemManager
 										{
 											cout << "\nThe specified Musical is not currently listed." << endl;
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.RmMusical(id, musicalList);
-										cout << "\nThe Musical has been removed." << endl;
-										cout << "System currently has " << SM.GetMusicalCount() << " listed Musicals.\n";
+										SM.RmMusical(idP, musicalList);
 										break;
 									}
 									case 0:
@@ -277,7 +293,7 @@ int main()
 										break;
 									}
 									default:
-										cout << "\nInvalid input, please review the input options and try again." << endl;					
+										WarningInvalidInput();					
 								}
 							}
 							break;
@@ -285,26 +301,29 @@ int main()
 						case 5: // selected Add a Performance Hall to the SystemManager
 						{
 							SM.AddPerfHall(perfHallList);
-							cout << "\nA Performance Hall has been added." << endl;
-							cout << "System currently has " << SM.GetHallCount() << " listed Performance Halls.\n";
 							break;
 						}
 						case 6: // selected Remove a Performance Hall from the SystemManager
 						{
+							// output info to User
 							cout << "\nCurrently listed Performance Hall numbers: { ";
 							SM.PrintHalls(perfHallList); 
 							cout << "}" << endl;
+
+							// get User Hall request
 							cout << "Enter the number of the Performance Hall to be removed:" << endl;
 							int num = GetIDRequest();
-							if(!SM.VerifiedHallNum(num, perfHallList))
+
+							// break if user input is of invalid type
+							if(num == -1) { WarningInvalidInput(); break; }
+
+							if(!SM.VerifiedHallNum(num, perfHallList))  // break if Performance Hall not listed on SystemManager
 							{
 								cout << "\nThe specified Performance Hall is not currently listed." << endl;
 								cout << "Check your input and try again.\n" << endl;
 								break;
 							}
 							SM.RmPerfHall(num, perfHallList);
-							cout << "\nThe Performance Hall has been removed." << endl;
-							cout << "System currently has " << SM.GetHallCount() << " listed Performance Halls.\n";
 							break;
 						}
 						case 0:
@@ -313,7 +332,7 @@ int main()
 							break;
 						}
 						default:
-							cout << "\nInvalid input, please review the input options and try again." << endl;					
+							WarningInvalidInput();					
 					}
 				}
 				break;
@@ -349,17 +368,13 @@ int main()
 										// get User Actor request
 										cout << "Enter the ID number of the Actor to be assigned:" << endl;
 										int idA = GetIDRequest();
-										if(idA == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedActorID(idA, actorList)) // break if Actor not listed on SystemManager
-										{
-											cout << "\nThe specified Actor is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idA == -1) { WarningInvalidInput(); break; }
+
+										// break if Actor not listed on SystemManager
+										if(!SM.VerifiedActorID(idA, actorList)) { WarningUnlistedActor(); break; }
+
 										Actor* a = SM.FindActor(idA, actorList);
 										int inPerfID = a->GetInPerfID();	
 										if(inPerfID != -1) // break if Actor is already assigned to a Play
@@ -375,22 +390,16 @@ int main()
 										cout << "}" << endl;
 										cout << "Enter the performance ID of the Play to be assigned to:" << endl;
 										int idP = GetIDRequest();
-										if(idP == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedPlayID(idP, playList)) // break if Play is not listed on SystemManager
-										{
-											cout << "\nThe specified Play is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										// break if Play not listed on SystemManager
+										if(!SM.VerifiedPlayID(idP, playList)) { WarningUnlistedPlay(); break; }
+
 										Play* p = SM.FindPlay(idP, playList);
 										vector<Actor> aList = p->GetActorRoster();
 										SM.AssignActor(*a, aList, *p);
-										cout << "\nThe Actor has been assigned to the Play." << endl;
-										//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
 										break;
 									}
 									case 2: // selected Assign a Singer to Musical
@@ -406,17 +415,13 @@ int main()
 										// get User Singer request
 										cout << "Enter the ID number of the Singer to be assigned:" << endl;
 										int idS = GetIDRequest();
-										if(idS == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedSingerID(idS, singerList)) // break if Singer not listed on SystemManager
-										{
-											cout << "\nThe specified Singer is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idS == -1) { WarningInvalidInput(); break; }
+
+										// break if Singer not listed on SystemManager
+										if(!SM.VerifiedSingerID(idS, singerList)) { WarningUnlistedSinger(); break; }
+
 										Singer* s = SM.FindSinger(idS, singerList);
 										int inPerfID = s->GetInPerfID();	
 										if(inPerfID != -1) // break if Singer is already assigned to a Musical
@@ -432,22 +437,16 @@ int main()
 										cout << "}" << endl;
 										cout << "Enter the performance ID of the Musical to be assigned to:" << endl;
 										int idMu = GetIDRequest();
-										if(idMu == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedMusicalID(idMu, musicalList)) // break if Musical is not listed on SystemManager
-										{
-											cout << "\nThe specified Musical is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idMu == -1) { WarningInvalidInput(); break; }
+
+										// break if Musical not listed on SystemManager
+										if(!SM.VerifiedMusicalID(idMu, musicalList)) { WarningUnlistedMusical(); break; }
+
 										Musical* mu = SM.FindMusical(idMu, musicalList);
 										vector<Singer> sList = mu->GetSingerRoster();
 										SM.AssignSinger(*s, sList, *mu);
-										cout << "\nThe Singer has been assigned to the Musical." << endl;
-										//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
 										break;
 									}
 									case 3: // selected Assign a Musician to a Musical
@@ -463,17 +462,13 @@ int main()
 										// get User Musician request
 										cout << "Enter the ID number of the Musician to be assigned:" << endl;
 										int idM = GetIDRequest();
-										if(idM == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedMusicianID(idM, musicianList)) // break if Musician not listed on SystemManager
-										{
-											cout << "\nThe specified Musician is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idM == -1) { WarningInvalidInput(); break; }
+
+										// break if Musician not listed on SystemManager
+										if(!SM.VerifiedMusicianID(idM, musicianList)) { WarningUnlistedMusician(); break; }
+
 										Musician* m = SM.FindMusician(idM, musicianList);
 										int inPerfID = m->GetInPerfID();	
 										if(inPerfID != -1) // break if Musician is already assigned to a Musical
@@ -489,22 +484,16 @@ int main()
 										cout << "}" << endl;
 										cout << "Enter the performance ID of the Musical to be assigned to:" << endl;
 										int idMu = GetIDRequest();
-										if(idMu == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedMusicalID(idMu, musicalList)) // break if Musical is not listed on SystemManager
-										{
-											cout << "\nThe specified Musical is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idMu == -1) { WarningInvalidInput(); break; }
+
+										// break if Musical not listed on SystemManager
+										if(!SM.VerifiedMusicalID(idMu, musicalList)) { WarningUnlistedMusical(); break; }
+
 										Musical* mu = SM.FindMusical(idMu, musicalList);
 										vector<Musician> mList = mu->GetMusicianRoster();
 										SM.AssignMusician(*m, mList, *mu);
-										cout << "\nThe Musician has been assigned to the Musical." << endl;
-										//cout << "System currently has " << SM.GetActorCount() << " listed Actors.\n";
 										break;
 									}
 									case 0:
@@ -513,7 +502,7 @@ int main()
 										break;
 									}
 									default:
-										cout << "\nInvalid input, please review the input options and try again." << endl;					
+										WarningInvalidInput();					
 								}
 							}
 							break;
@@ -539,17 +528,13 @@ int main()
 										// get User Actor request
 										cout << "Enter the ID number of the Actor to be unassigned:" << endl;
 										int idA = GetIDRequest();
-										if(idA == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedActorID(idA, actorList)) // break if Actor not listed on SystemManager
-										{
-											cout << "\nThe specified Actor is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idA == -1) { WarningInvalidInput(); break; }
+
+										// break if Actor not listed on SystemManager
+										if(!SM.VerifiedActorID(idA, actorList)) { WarningUnlistedActor(); break; }
+
 										Actor* a = SM.FindActor(idA, actorList);
 										int idP = a->GetInPerfID();	
 										if(idP == -1) // break if Actor is not assigned to a Play
@@ -561,8 +546,7 @@ int main()
 										Play* p = SM.FindPlay(idP, playList);
 										vector<Actor>& aList = p->GetActorRoster();
 										SM.UnassignActor(*a, aList, *p); // this call will incorrectly decrement the SM actorCount attribute...
-										SM.SetActorCount(SM.GetActorCount() + 1); // ...so increment it here to correct
-										cout << "\nThe Actor has been removed from the Play roster." << endl;						
+										SM.SetActorCount(SM.GetActorCount() + 1); // ...so increment it here to correct					
 										break;
 									}
 									case 2: // selected Unassign a Singer from a Musical
@@ -578,17 +562,13 @@ int main()
 										// get User Singer request
 										cout << "Enter the ID number of the Singer to be unassigned:" << endl;
 										int idS = GetIDRequest();
-										if(idS == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedSingerID(idS, singerList)) // break if Singer not listed on SystemManager
-										{
-											cout << "\nThe specified Singer is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idS == -1) { WarningInvalidInput(); break; }
+
+										// break if Singer not listed on SystemManager
+										if(!SM.VerifiedSingerID(idS, singerList)) { WarningUnlistedSinger(); break; }
+
 										Singer* s = SM.FindSinger(idS, singerList);
 										int idP = s->GetInPerfID();	
 										if(idP == -1) // break if Singer is not assigned to a Musical
@@ -600,8 +580,7 @@ int main()
 										Musical* mu = SM.FindMusical(idP, musicalList);
 										vector<Singer>& sList = mu->GetSingerRoster();
 										SM.UnassignSinger(*s, sList, *mu); // this call will incorrectly decrement the SM singerCount attribute...
-										SM.SetSingerCount(SM.GetSingerCount() + 1); // ...so increment it here to correct
-										cout << "\nThe Singer has been removed from the Musical roster." << endl;						
+										SM.SetSingerCount(SM.GetSingerCount() + 1); // ...so increment it here to correct						
 										break;
 									}
 									case 3: // selected Unassign a Musician from a Musical
@@ -617,17 +596,13 @@ int main()
 										// get User Musician request
 										cout << "Enter the ID number of the Musician to be unassigned:" << endl;
 										int idM = GetIDRequest();
-										if(idM == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedMusicianID(idM, musicianList)) // break if Musician not listed on SystemManager
-										{
-											cout << "\nThe specified Musician is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idM == -1) { WarningInvalidInput(); break; }
+
+										// break if Musician not listed on SystemManager
+										if(!SM.VerifiedMusicianID(idM, musicianList)) { WarningUnlistedMusician(); break; }
+
 										Musician* m = SM.FindMusician(idM, musicianList);
 										int idP = m->GetInPerfID();	
 										if(idP == -1) // break if Musician is not assigned to a Musical
@@ -639,8 +614,7 @@ int main()
 										Musical* mu = SM.FindMusical(idP, musicalList);
 										vector<Musician>& mList = mu->GetMusicianRoster();
 										SM.UnassignMusician(*m, mList, *mu); // this call will incorrectly decrement the SM musicianCount attribute...
-										SM.SetMusicianCount(SM.GetMusicianCount() + 1); // ...so increment it here to correct
-										cout << "\nThe Musician has been removed from the Musical roster." << endl;						
+										SM.SetMusicianCount(SM.GetMusicianCount() + 1); // ...so increment it here to correct					
 										break;
 									}
 									case 0:
@@ -649,7 +623,7 @@ int main()
 										break;
 									}
 									default:
-										cout << "\nInvalid input, please review the input options and try again." << endl;					
+										WarningInvalidInput();					
 								}
 							}
 							break;
@@ -676,17 +650,13 @@ int main()
 										// get User Play request
 										cout << "Enter the performance ID of the Play to be scheduled:" << endl;
 										int idP = GetIDRequest();
-										if(idP == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedPlayID(idP, playList)) // break if Play not listed on SystemManager
-										{
-											cout << "\nThe specified Play is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										// break if Play not listed on SystemManager
+										if(!SM.VerifiedPlayID(idP, playList)) { WarningUnlistedPlay(); break; }
+
 										Play* p = SM.FindPlay(idP, playList);
 										int inHallNum = p->GetInHallNum();	
 										if(inHallNum != -1) // break if Play is already scheduled
@@ -707,17 +677,13 @@ int main()
 										// get User Hall request
 										cout << "Enter the number of the Performance Hall to be booked:" << endl;
 										int num = GetIDRequest();
-										if(num == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedHallNum(num, perfHallList)) // break if Performance Hall is not listed on SystemManager
-										{
-											cout << "\nThe specified Performance Hall is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(num == -1) { WarningInvalidInput(); break; }
+
+										// break if Performance Hall not listed on SystemManager
+										if(!SM.VerifiedHallNum(num, perfHallList)) { WarningUnlistedHall(); break; }
+
 										PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
 										if(h->GetIsBooked()) // break if Performance Hall is already booked
 										{
@@ -743,17 +709,13 @@ int main()
 										// get User Musical request
 										cout << "Enter the performance ID of the Musical to be scheduled:" << endl;
 										int idP = GetIDRequest();
-										if(idP == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedMusicalID(idP, musicalList)) // break if Musical not listed on SystemManager
-										{
-											cout << "\nThe specified Musical is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										// break if Musical not listed on SystemManager
+										if(!SM.VerifiedMusicalID(idP, musicalList)) { WarningUnlistedMusical(); break; }
+
 										Musical* mu = SM.FindMusical(idP, musicalList);
 										int inHallNum = mu->GetInHallNum();	
 										if(inHallNum != -1) // break if Musical is already scheduled
@@ -774,17 +736,13 @@ int main()
 										// get User Hall request
 										cout << "Enter the number of the Performance Hall to be booked:" << endl;
 										int num = GetIDRequest();
-										if(num == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedHallNum(num, perfHallList)) // break if Performance Hall is not listed on SystemManager
-										{
-											cout << "\nThe specified Performance Hall is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(num == -1) { WarningInvalidInput(); break; }
+
+										// break if Performance Hall not listed on SystemManager
+										if(!SM.VerifiedHallNum(num, perfHallList)) { WarningUnlistedHall(); break; }
+
 										PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
 										if(h->GetIsBooked()) // break if Performance Hall is already booked
 										{
@@ -829,17 +787,13 @@ int main()
 										// get User Play request
 										cout << "Enter the performance ID of the Play to be unassigned:" << endl;
 										int idP = GetIDRequest();
-										if(idP == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedPlayID(idP, playList)) // break if Play not listed on SystemManager
-										{
-											cout << "\nThe specified Play is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										// break if Play not listed on SystemManager
+										if(!SM.VerifiedPlayID(idP, playList)) { WarningUnlistedPlay(); break; }
+
 										Play* p = SM.FindPlay(idP, playList);
 										int num = p->GetInHallNum();	
 										if(num == -1) // break if Play is not already scheduled
@@ -866,17 +820,13 @@ int main()
 										// get User Musical request
 										cout << "Enter the performance ID of the Musical to be unassigned:" << endl;
 										int idP = GetIDRequest();
-										if(idP == -1) // break if user input is of invalid type
-										{
-											cout << "\nInvalid input, please review the input options and try again." << endl;
-											break;
-										}
-										if(!SM.VerifiedMusicalID(idP, musicalList)) // break if Musical not listed on SystemManager
-										{
-											cout << "\nThe specified Musical is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										// break if Musical not listed on SystemManager
+										if(!SM.VerifiedMusicalID(idP, musicalList)) { WarningUnlistedMusical(); break; }
+
 										Musical* mu = SM.FindMusical(idP, musicalList);
 										int num = mu->GetInHallNum();	
 										if(num == -1) // break if Musical is not already scheduled
@@ -896,7 +846,7 @@ int main()
 										break;
 									}
 									default:
-										cout << "\nInvalid input, please review the input options and try again." << endl;					
+										WarningInvalidInput();					
 								}
 							}
 							break;
@@ -907,7 +857,7 @@ int main()
 							break;
 						}
 						default:
-							cout << "\nInvalid input, please review the input options and try again." << endl;								
+							WarningInvalidInput();								
 					}
 				}
 				break;
@@ -1314,3 +1264,12 @@ int GetIDRequest()
 	}
 	return req;
 }
+
+void WarningInvalidInput() { cout << "\nInvalid input, please review the input options and try again." << endl; }
+
+void WarningUnlistedActor() { cout << "\nThe specified Actor is not currently listed.\nCheck your input and try again.\n" << endl; }
+void WarningUnlistedSinger() { cout << "\nThe specified Singer is not currently listed.\nCheck your input and try again.\n" << endl; }
+void WarningUnlistedMusician() { cout << "\nThe specified Musician is not currently listed.\nCheck your input and try again.\n" << endl; }
+void WarningUnlistedPlay() { cout << "\nThe specified Play is not currently listed.\nCheck your input and try again.\n" << endl; }
+void WarningUnlistedMusical() { cout << "\nThe specified Musical is not currently listed.\nCheck your input and try again.\n" << endl; }
+void WarningUnlistedHall() { cout << "\nThe specified Performance Hall is not currently listed.\nCheck your input and try again.\n" << endl; }

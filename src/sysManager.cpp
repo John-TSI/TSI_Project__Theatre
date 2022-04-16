@@ -38,6 +38,8 @@ void SystemManager::AddActor(vector<Actor>& aList)
     aList.push_back(Actor(actorIDcount) );
     actorIDcount++;
     actorCount++;
+    cout << "\nAn Actor has been added." << endl;
+    cout << "System currently has " << GetActorCount() << " listed Actors.\n";
 }
 
 void SystemManager::RmActor(int idNum, vector<Actor>& aList)
@@ -46,6 +48,8 @@ void SystemManager::RmActor(int idNum, vector<Actor>& aList)
         [idNum](Actor& a) { return a.GetIDNum() == idNum; }
     ), end(aList));
     actorCount--;
+    cout << "\nThe Actor has been removed." << endl;
+    cout << "System currently has " << GetActorCount() << " listed Actors.\n";
 }
 
 void SystemManager::AddSinger(vector<Singer>& sList)
@@ -53,6 +57,8 @@ void SystemManager::AddSinger(vector<Singer>& sList)
     sList.push_back(Singer(singerIDcount) );
     singerIDcount++;
     singerCount++;
+    cout << "\nA Singer has been added." << endl;
+    cout << "System currently has " << GetSingerCount() << " listed Singers.\n";
 }
 
 void SystemManager::RmSinger(int idNum, vector<Singer>& sList)
@@ -61,6 +67,8 @@ void SystemManager::RmSinger(int idNum, vector<Singer>& sList)
         [idNum](Singer& s) { return s.GetIDNum() == idNum; }
     ), end(sList));
     singerCount--;
+    cout << "\nThe Singer has been removed." << endl;
+    cout << "System currently has " << GetSingerCount() << " listed Singers.\n";
 }
 
 void SystemManager::AddMusician(vector<Musician>& mList)
@@ -68,6 +76,8 @@ void SystemManager::AddMusician(vector<Musician>& mList)
     mList.push_back(Musician(musicianIDcount) );
     musicianIDcount++;
     musicianCount++;
+    cout << "\nA Musician has been added." << endl;
+    cout << "System currently has " << GetMusicianCount() << " listed Musicians.\n";
 }
 
 void SystemManager::RmMusician(int idNum, vector<Musician>& mList)
@@ -76,6 +86,8 @@ void SystemManager::RmMusician(int idNum, vector<Musician>& mList)
         [idNum](Musician& m) { return m.GetIDNum() == idNum; }
     ), end(mList));
     musicianCount--;
+    cout << "\nThe Musician has been removed." << endl;
+    cout << "System currently has " << GetMusicianCount() << " listed Musicians.\n";
 }
 
 void SystemManager::AddPlay(vector<Play>& pList)
@@ -83,6 +95,8 @@ void SystemManager::AddPlay(vector<Play>& pList)
     pList.push_back((playIDcount) );
     playIDcount++;
     playCount++;
+    cout << "\nA Play has been added." << endl;
+    cout << "System currently has " << GetPlayCount() << " listed Plays.\n";
 }
 
 void SystemManager::RmPlay(int perfID, vector<Play>& pList)
@@ -91,6 +105,8 @@ void SystemManager::RmPlay(int perfID, vector<Play>& pList)
         [perfID](Play& p) { return p.GetPerfID() == perfID; }
     ), end(pList));
     playCount--;
+    cout << "\nThe Play has been removed." << endl;
+    cout << "System currently has " << GetPlayCount() << " listed Plays.\n";
 }
 
 void SystemManager::AddMusical(vector<Musical>& mList)
@@ -98,6 +114,8 @@ void SystemManager::AddMusical(vector<Musical>& mList)
     mList.push_back(Musical(musicalIDcount) );
     musicalIDcount++;
     musicalCount++;
+    cout << "\nA Musical has been added." << endl;
+    cout << "System currently has " << GetMusicalCount() << " listed Musicals.\n";
 }
 
 void SystemManager::RmMusical(int perfID, vector<Musical>& mList)
@@ -106,6 +124,8 @@ void SystemManager::RmMusical(int perfID, vector<Musical>& mList)
         [perfID](Musical& m) { return m.GetPerfID() == perfID; }
     ), end(mList));
     musicalCount--;
+    cout << "\nThe Musical has been removed." << endl;
+    cout << "System currently has " << GetMusicalCount() << " listed Musicals.\n";
 }
 
 void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList)
@@ -113,6 +133,8 @@ void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList)
     pHList.push_back(PerformanceHall(hallNumCount) );
     hallNumCount++;
     hallCount++;
+    cout << "\nA Performance Hall has been added." << endl;
+    cout << "System currently has " << GetHallCount() << " listed Performance Halls.\n";
 }
 
 void SystemManager::RmPerfHall(int hallNum, vector<PerformanceHall>& pHList)
@@ -121,6 +143,8 @@ void SystemManager::RmPerfHall(int hallNum, vector<PerformanceHall>& pHList)
         [hallNum](PerformanceHall& pH) { return pH.GetHallNum() == hallNum; }
     ), end(pHList));
     hallCount--;
+    cout << "\nThe Performance Hall has been removed." << endl;
+    cout << "System currently has " << GetHallCount() << " listed Performance Halls.\n";
 }
 
 
@@ -139,11 +163,8 @@ void SystemManager::AssignActor(Actor& a, vector<Actor>& va, Play& p)
     // -- modify Play attributes inherited from Performance --
     p.SetNumPerformers(p.GetNumPerformers() + 1);
     p.SetPerfCost(p.GetPerfCost() + a.GetSalary());
-    //p.SetPerformerRoster(p.GetPerformerRoster().push_back(a));
-    if(p.GetNumActors() >= p.GetReqNumActors())
-    {
-        p.SetIsFullyCast(true);
-    }
+    if(p.GetNumActors() >= p.GetReqNumActors()) { p.SetIsFullyCast(true); }
+    cout << "\nThe Actor has been assigned to the Play." << endl;
 }
 
 void SystemManager::UnassignActor(Actor& a, vector<Actor>& va, Play& p)
@@ -160,6 +181,7 @@ void SystemManager::UnassignActor(Actor& a, vector<Actor>& va, Play& p)
     p.SetNumPerformers(p.GetNumPerformers() - 1);
     p.SetPerfCost(p.GetPerfCost() - a.GetSalary());
     (p.GetNumActors() >= p.GetReqNumActors()) ? p.SetIsFullyCast(true) : p.SetIsFullyCast(false);
+    cout << "\nThe Actor has been removed from the Play roster." << endl;
 }
 
 void SystemManager::AssignSinger(Singer& s, vector<Singer>& vs, Musical& mu)
@@ -180,6 +202,7 @@ void SystemManager::AssignSinger(Singer& s, vector<Singer>& vs, Musical& mu)
     {
         mu.SetIsFullyCast(true);
     }
+    cout << "\nThe Singer has been assigned to the Musical." << endl;
 }
 
 void SystemManager::UnassignSinger(Singer& s, vector<Singer>& vs, Musical& mu)
@@ -196,6 +219,7 @@ void SystemManager::UnassignSinger(Singer& s, vector<Singer>& vs, Musical& mu)
     mu.SetNumPerformers(mu.GetNumPerformers() - 1);
     mu.SetPerfCost(mu.GetPerfCost() - s.GetSalary());
     ((mu.GetNumSingers() >= mu.GetReqNumSingers()) && (mu.GetNumMusicians() >= mu.GetReqNumMusicians())) ? mu.SetIsFullyCast(true) : mu.SetIsFullyCast(false);
+    cout << "\nThe Singer has been removed from the Musical roster." << endl;	
 }
 
 void SystemManager::AssignMusician(Musician& m, vector<Musician>& vm, Musical& mu)
@@ -216,6 +240,7 @@ void SystemManager::AssignMusician(Musician& m, vector<Musician>& vm, Musical& m
     {
         mu.SetIsFullyCast(true);
     }
+    cout << "\nThe Musician has been assigned to the Musical." << endl;
 }
 
 void SystemManager::UnassignMusician(Musician& m, vector<Musician>& vm, Musical& mu)
@@ -232,6 +257,7 @@ void SystemManager::UnassignMusician(Musician& m, vector<Musician>& vm, Musical&
     mu.SetNumPerformers(mu.GetNumPerformers() - 1);
     mu.SetPerfCost(mu.GetPerfCost() - m.GetSalary());
     ((mu.GetNumSingers() >= mu.GetReqNumSingers()) && (mu.GetNumMusicians() >= mu.GetReqNumMusicians())) ? mu.SetIsFullyCast(true) : mu.SetIsFullyCast(false);
+    cout << "\nThe Musician has been removed from the Musical roster." << endl;	
 }
 
 void SystemManager::SchedulePerformance(Performance& p, PerformanceHall& h) // remove?
