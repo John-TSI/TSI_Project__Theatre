@@ -51,9 +51,7 @@ void SystemManager::RmActor(int idNum, vector<Actor>& aList, bool unassigning)
     }
     else
     {
-        aList.erase(std::remove_if(begin(aList), end(aList), 
-            [idNum](Actor& a) { return a.GetIDNum() == idNum; }
-        ), end(aList));
+        aList.erase(std::remove_if(begin(aList), end(aList), [idNum](Actor& a) { return a.GetIDNum() == idNum; }), end(aList));
         if(!unassigning)
         {
             actorCount--;
@@ -150,13 +148,36 @@ void SystemManager::AddPlay(vector<Play>& pList)
 }
 
 void SystemManager::RmPlay(int perfID, vector<Play>& pList)
-{
-    pList.erase(std::remove_if(begin(pList), end(pList), 
-        [perfID](Play& p) { return p.GetPerfID() == perfID; }
-    ), end(pList));
-    playCount--;
-    cout << "\nThe Play has been removed." << endl;
-    cout << "System currently has " << GetPlayCount() << " listed Plays.\n";
+{   
+    Play* p = FindPlay(perfID, pList); 
+    if(p->GetNumActors() > 0)
+    {
+        // unassign actors
+/*         vector<Actor>& aList = p->GetActorRoster();
+        for(Actor& a : aList) 
+        { 
+            //UnassignActor(a, aList, *p);
+            int idNum = a.GetIDNum();
+            vector<Actor>& aList = GetActorList();
+            Actor* a_sys = FindActor(idNum, aList);
+            a_sys->SetIsAssigned(false);
+            a_sys->SetInPerfID(-1); 
+        } */
+        cout << "\nThe specified Play currently has " << p->GetNumActors() << " Actor(s) assigned to it." << endl;
+        cout << "Unassign all Performers from the Play before removing it from the System." << endl;
+    }
+    else if(p->GetIsScheduled())
+    {
+        cout << "\nThe specified Play is currently scheduled in a Performance Hall." << endl;
+        cout << "Unschedule the Play before removing it from the System." << endl;
+    }
+    else
+    {
+        pList.erase(std::remove_if(begin(pList), end(pList), [perfID](Play& p) { return p.GetPerfID() == perfID; }), end(pList));
+        playCount--;
+        cout << "\nThe Play has been removed." << endl;
+        cout << "System currently has " << GetPlayCount() << " listed Plays.\n";
+    }
 }
 
 void SystemManager::AddMusical(vector<Musical>& mList)
@@ -310,7 +331,7 @@ void SystemManager::UnassignMusician(Musician& m, vector<Musician>& vm, Musical&
     cout << "\nThe Musician has been removed from the Musical roster." << endl;	
 }
 
-void SystemManager::SchedulePerformance(Performance& p, PerformanceHall& h)
+/* void SystemManager::SchedulePerformance(Performance& p, PerformanceHall& h)
 {
     // -- modify Performance attributes --
     p.SetIsScheduled(true);
@@ -319,9 +340,9 @@ void SystemManager::SchedulePerformance(Performance& p, PerformanceHall& h)
     // -- modify Performance Hall attributes --
     h.SetIsBooked(true);
     h.SetScheduledPerf(p);
-}
+} */
 
-void SystemManager::UnschedulePerformance(Performance& p, PerformanceHall& h)
+/* void SystemManager::UnschedulePerformance(Performance& p, PerformanceHall& h)
 {
     // -- modify Performance --
     p.SetIsScheduled(false);
@@ -329,6 +350,56 @@ void SystemManager::UnschedulePerformance(Performance& p, PerformanceHall& h)
 
     // -- modify Performance Hall attributes --
     h.SetIsBooked(false);
+} */
+
+void SystemManager::SchedulePlay(Play& p, PerformanceHall& h)
+{
+    // -- modify Play attributes inherited from Performance --
+    p.SetIsScheduled(true);
+    p.SetInHallNum(h.GetHallNum());
+
+    // -- modify Performance Hall attributes --
+    h.SetIsBooked(true);
+    h.SetScheduledPlay(p);
+
+    cout << "\nThe Play has been scheduled in the Performance Hall." << endl;
+}
+
+void SystemManager::UnschedulePlay(Play& p, PerformanceHall& h)
+{
+    // -- modify Play attributes inherited from Performance --
+    p.SetIsScheduled(false);
+    p.SetInHallNum(-1);
+
+    // -- modify Performance Hall attributes --
+    h.SetIsBooked(false);
+
+    cout << "\nThe Play has been unscheduled." << endl;
+}
+
+void SystemManager::ScheduleMusical(Musical& mu, PerformanceHall& h)
+{
+    // -- modify Musical attributes inherited from Performance --
+    mu.SetIsScheduled(true);
+    mu.SetInHallNum(h.GetHallNum());
+
+    // -- modify Performance Hall attributes --
+    h.SetIsBooked(true);
+    h.SetScheduledMusical(mu);
+
+    cout << "\nThe Musical has been scheduled in the Performance Hall." << endl;
+}
+
+void SystemManager::UnscheduleMusical(Musical& mu, PerformanceHall& h)
+{
+    // -- modify Musical attributes inherited from Performance --
+    mu.SetIsScheduled(false);
+    mu.SetInHallNum(-1);
+
+    // -- modify Performance Hall attributes --
+    h.SetIsBooked(false);
+
+    cout << "\nThe Musical has been unscheduled." << endl;
 }
 
 

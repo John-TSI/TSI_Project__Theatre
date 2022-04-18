@@ -81,8 +81,14 @@ class SystemManager
         void UnassignSinger(Singer&, vector<Singer>&, Musical&);
         void AssignMusician(Musician&, vector<Musician>&, Musical&);
         void UnassignMusician(Musician&, vector<Musician>&, Musical&);
-        void SchedulePerformance(Performance&, PerformanceHall&);
-        void UnschedulePerformance(Performance&, PerformanceHall&);
+        //void SchedulePerformance(Performance&, PerformanceHall&);
+        //void UnschedulePerformance(Performance&, PerformanceHall&);
+        // test methods
+        void SchedulePlay(Play&, PerformanceHall&);
+        void UnschedulePlay(Play&, PerformanceHall&);
+        void ScheduleMusical(Musical&, PerformanceHall&);
+        void UnscheduleMusical(Musical&, PerformanceHall&);
+        // end test
 
 
         // --- verifications ---

@@ -155,10 +155,10 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										//SM.RmActor(idA, actorList, false);
+										SM.RmActor(idA, actorList, false);
 
 										// TEST stuff, uncomment the above line when done
-										Actor* a = SM.FindActor(idA, actorList);
+/* 										Actor* a = SM.FindActor(idA, actorList);
 										if(a->GetIsAssigned())
 										{
 											a->SetIsAssigned(false);
@@ -167,7 +167,7 @@ int main()
 											vector<Actor> aList_play = p->GetActorRoster();
 											SM.UnassignActor(*a, aList_play, *p);
 										}
-										SM.RmActor(idA, actorList, false);
+										SM.RmActor(idA, actorList, false); */
 										break;
 									}
 									case 2: // selected Remove a Singer
@@ -709,8 +709,9 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.SchedulePerformance(*p, *h);
-										cout << "\nThe Play has been scheduled in the Performance Hall." << endl;
+										//SM.SchedulePerformance(*p, *h);
+										//cout << "\nThe Play has been scheduled in the Performance Hall." << endl;
+										SM.SchedulePlay(*p, *h); // test
 										break;
 									}
 									case 2: // selected Schedule a Musical in a Performance Hall
@@ -768,8 +769,9 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.SchedulePerformance(*mu, *h);
-										cout << "\nThe Musical has been scheduled in the Performance Hall." << endl;
+										//SM.SchedulePerformance(*mu, *h);
+										//cout << "\nThe Musical has been scheduled in the Performance Hall." << endl;
+										SM.ScheduleMusical(*mu, *h);
 										break;
 									}
 									case 0:
@@ -820,8 +822,9 @@ int main()
 											break;
 										}
 										PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
-										SM.UnschedulePerformance(*p, *h);
-										cout << "\nThe Play has been unscheduled." << endl;										
+										//SM.UnschedulePerformance(*p, *h);
+										//cout << "\nThe Play has been unscheduled." << endl;
+										SM.UnschedulePlay(*p, *h);										
 										break;
 									}
 									case 2: // selected Unschedule a Musical
@@ -853,8 +856,9 @@ int main()
 											break;
 										}
 										PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
-										SM.UnschedulePerformance(*mu, *h);
-										cout << "\nThe Musical has been unscheduled." << endl;										
+										//SM.UnschedulePerformance(*mu, *h);
+										//cout << "\nThe Musical has been unscheduled." << endl;
+										SM.UnscheduleMusical(*mu, *h);										
 										break;
 									}
 									case 0:
@@ -1046,9 +1050,9 @@ int main()
 
 	// --- TESTING ---
 	
-/* 	cout << endl;
+	cout << endl;
 	Actor* a0 = SM.FindActor(0, actorList);
-	cout << a0->GetIsAssigned() << endl; */
+	cout << a0->GetIsAssigned() << endl;
 	//SM.ModifyActorSalary(0, actorList, 72.5);
 	//cout << a0->GetSalary() << endl;
 
@@ -1060,13 +1064,13 @@ int main()
  	cout << "Listed Plays: ";
 	SM.PrintPlays(playList);
 
- 	cout << endl;
+ /* 	cout << endl;
 	Play* p0 = SM.FindPlay(0, playList);
-	cout << p0->GetNumActors();
+	cout << p0->GetNumActors(); */
 
-	cout << endl;
+/* 	cout << endl;
 	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
-	//Play pl = h0->GetScheduledPerf();
+	Play pl = h0->GetScheduledPlay().GetNumActors(); */
 
 
 	// --- END TESTING ---

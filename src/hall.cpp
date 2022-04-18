@@ -17,6 +17,12 @@ bool PerformanceHall::GetIsBooked() { return isBooked; }
 void PerformanceHall::SetIsBooked(bool input) { isBooked = input; }
 Performance PerformanceHall::GetScheduledPerf() { return scheduledPerformance; }
 void PerformanceHall::SetScheduledPerf(Performance input) { scheduledPerformance = input; }
+// test
+Play& PerformanceHall::GetScheduledPlay() { return scheduledPlay; }
+void PerformanceHall::SetScheduledPlay(Play& input) { scheduledPlay = input; }
+Musical& PerformanceHall::GetScheduledMusical() { return scheduledMusical; }
+void PerformanceHall::SetScheduledMusical(Musical& input) { scheduledMusical = input; }
+// end test
 bool PerformanceHall::GetStageIsPrepared() {return stageIsPrepared; }
 void PerformanceHall::SetStageIsPrepared(bool input) { stageIsPrepared = input; }
 

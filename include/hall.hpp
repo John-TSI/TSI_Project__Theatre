@@ -3,6 +3,9 @@
 
 #include<string>
 #include"../include/performance.hpp"
+// test includes
+#include"../include/play.hpp"
+#include"../include/musical.hpp"
 
 using std::string;
 
@@ -15,6 +18,10 @@ class PerformanceHall
         int capacity = 100;
         bool isBooked = false;
         Performance scheduledPerformance;
+        //test attributes
+        Play scheduledPlay;
+        Musical scheduledMusical;
+        // end test
         bool stageIsPrepared = false;
 
     public:
@@ -28,6 +35,12 @@ class PerformanceHall
         void SetIsBooked(bool);
         Performance GetScheduledPerf();
         void SetScheduledPerf(Performance);
+        // test methods
+        Play& GetScheduledPlay();
+        void SetScheduledPlay(Play&);
+        Musical& GetScheduledMusical();
+        void SetScheduledMusical(Musical&);
+        // end test
         bool GetStageIsPrepared();
         void SetStageIsPrepared(bool);
 
