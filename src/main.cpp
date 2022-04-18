@@ -16,13 +16,17 @@ using std::cout; using std::cin; using std::endl;
 
 // ------ TO DO ------
 // - verify schedPerf.ticketSold <= hall.capacity
-// - performance.hpp remove vector<Performer> attribute / methods ?
 // - implement a user guide option in one of the menus
 // - create constructors to allow initialisation of salary, ticket price
 // - implement utility functions to print relevant attributes of performers/performances
 // - implement an UnassignAll() function to unassign all performers in a performance?
 // - include a graphical frame around each printed menu?
-// - move as much as possible to inside func defs in SM.cpp 
+// - give user option to back out instead of forcing ID/num input
+// - menu4 idea: modify performer salary / performance ticket prices using Setters() (in progress)
+// BUG: assigning performers to a scheduled performance / modifying salary doesn't update profit calculation.
+//	QUICK FIX: don't allow assigning/modifying until performance has been unscheduled ?
+// BUG: removing a performance from the system should unassign all performers
+// QUICK FIX: don't allow performance removal until all performers unassigned (need an UnassignAll() func) 
 
 
 // ------ PROTOTYPES (get user requests) ------
@@ -36,7 +40,7 @@ int GetPerformerToRm();
 int GetPerformanceToAdd();
 int GetPerformanceToRm();
 
-// ---menu2 ---
+// --- menu2 ---
 int GetMenu2Request();
 int GetPerformerToAssign();
 int GetPerformerToUnassign();
@@ -44,7 +48,11 @@ int GetPerformanceToSchedule();
 int GetPerformanceToUnschedule();
 
 int GetMenu3Request();
+
+// --- menu4 ---
 int GetMenu4Request();
+int GetPerformerSalaryToModify();
+float GetNewSalary();
 
 // --- misc ---
 int GetIDRequest();
@@ -127,7 +135,7 @@ int main()
 								reqRP = GetPerformerToRm(); // open Menu to Remove a Performer (3+1 cases)
 								switch(reqRP)
 								{
-									case 1: // selected Remove a Actor
+									case 1: // selected Remove an Actor
 									{
 										// output info to User
 										cout << "\nCurrently listed Actor IDs: { ";
@@ -147,7 +155,19 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.RmActor(idA, actorList);
+										//SM.RmActor(idA, actorList, false);
+
+										// TEST stuff, uncomment the above line when done
+										Actor* a = SM.FindActor(idA, actorList);
+										if(a->GetIsAssigned())
+										{
+											a->SetIsAssigned(false);
+											int perfID = a->GetInPerfID();
+											Play* p = SM.FindPlay(perfID, playList);
+											vector<Actor> aList_play = p->GetActorRoster();
+											SM.UnassignActor(*a, aList_play, *p);
+										}
+										SM.RmActor(idA, actorList, false);
 										break;
 									}
 									case 2: // selected Remove a Singer
@@ -170,7 +190,7 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}										
-										SM.RmSinger(idS, singerList);
+										SM.RmSinger(idS, singerList, false);
 										break;
 									}
 									case 3: // selected Remove a Musician
@@ -190,7 +210,7 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.RmMusician(idM, musicianList);
+										SM.RmMusician(idM, musicianList, false);
 										break;
 									}
 									case 0:
@@ -545,8 +565,7 @@ int main()
 										}
 										Play* p = SM.FindPlay(idP, playList);
 										vector<Actor>& aList = p->GetActorRoster();
-										SM.UnassignActor(*a, aList, *p); // this call will incorrectly decrement the SM actorCount attribute...
-										SM.SetActorCount(SM.GetActorCount() + 1); // ...so increment it here to correct					
+										SM.UnassignActor(*a, aList, *p);				
 										break;
 									}
 									case 2: // selected Unassign a Singer from a Musical
@@ -579,8 +598,7 @@ int main()
 										}
 										Musical* mu = SM.FindMusical(idP, musicalList);
 										vector<Singer>& sList = mu->GetSingerRoster();
-										SM.UnassignSinger(*s, sList, *mu); // this call will incorrectly decrement the SM singerCount attribute...
-										SM.SetSingerCount(SM.GetSingerCount() + 1); // ...so increment it here to correct						
+										SM.UnassignSinger(*s, sList, *mu);						
 										break;
 									}
 									case 3: // selected Unassign a Musician from a Musical
@@ -613,8 +631,7 @@ int main()
 										}
 										Musical* mu = SM.FindMusical(idP, musicalList);
 										vector<Musician>& mList = mu->GetMusicianRoster();
-										SM.UnassignMusician(*m, mList, *mu); // this call will incorrectly decrement the SM musicianCount attribute...
-										SM.SetMusicianCount(SM.GetMusicianCount() + 1); // ...so increment it here to correct					
+										SM.UnassignMusician(*m, mList, *mu);				
 										break;
 									}
 									case 0:
@@ -882,9 +899,132 @@ int main()
 				int req4 = -1;
 				while(req4 != 0)
 				{
-					req4 = GetMenu4Request();
-					// insert switch here
-					cout << req4 << endl;
+					req4 = GetMenu4Request(); // open Menu4 (2+1 cases)
+					switch(req4)
+					{
+						case 1: // selected Modify Performer salary
+						{
+							int reqMP = -1;
+							while(reqMP != 0)
+							{
+								reqMP = GetPerformerSalaryToModify(); // open Menu to modify salary of a Performer (3+1 cases)
+								switch(reqMP)
+								{
+									case 1: // selected modify salary of a Actor
+									{
+										// output info to User
+										cout << "\nCurrently listed Actor IDs: { ";
+										SM.PrintActors(actorList); 
+										cout << "}" << endl;
+
+										// get User Actor request
+										cout << "Enter the ID number of the Actor to be modified:" << endl;
+										int idA = GetIDRequest();
+										
+										// break if user input is of invalid type
+										if(idA == -1) { WarningInvalidInput(); break; }
+
+										if(!SM.VerifiedActorID(idA, actorList)) // break if Actor not listed on SystemManager
+										{
+											cout << "\nThe specified Actor is not currently listed." << endl;
+											cout << "Check your input and try again.\n" << endl;
+											break;
+										}
+										Actor* a = SM.FindActor(idA, actorList);
+
+										// get User salary request
+										float newSalary = GetNewSalary();
+
+										// break if user input is invalid
+										if(newSalary == -1.0f) { WarningInvalidInput(); break; }
+
+										//SM.ModifyActorSalary(idA, actorList, newSalary);
+										SM.ModifyActorSalary(*a, newSalary);
+										break;
+									}
+									case 2: // selected modify salary of a Singer
+									{
+										break;
+									}
+									case 3: // selected modify salary of a Musician
+									{
+										break;
+									}
+									case 0:
+									{
+										reqMP = 0;
+										break;
+									}
+									default:
+										WarningInvalidInput();					
+								}
+							}
+							break;
+						}
+						case 2: // selected Modify Performance ticket price
+						{
+							break;
+						}
+						case 3: // selected Calculate profit of a scheduled Performance
+						{
+							// output info to User
+							cout << "\nCurrently listed Performance Hall numbers: { ";
+							SM.PrintHalls(perfHallList); 
+							cout << "}" << endl;
+							cout << "Currently booked Performance Hall numbers: { ";
+							SM.PrintBookedHalls(perfHallList); 
+							cout << "}" << endl;
+
+							// get User Hall request
+							cout << "Enter the number of the Performance Hall to compute its expected profit:" << endl;
+							int num = GetIDRequest();
+
+							// break if user input is of invalid type
+							if(num == -1) { WarningInvalidInput(); break; }
+
+							// break if Performance Hall not listed on SystemManager
+							if(!SM.VerifiedHallNum(num, perfHallList)) { WarningUnlistedHall(); break; }
+
+							PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
+							if(!h->GetIsBooked()) // break if Performance Hall is not booked
+							{
+								cout << "\nThe specified Performance Hall is not currently booked with a Performance." << endl;
+								cout << "Check your input and try again.\n" << endl;
+								break;
+							}
+							SM.CalcPerfProfit(*h, true);
+							break;
+						}
+						case 4: // selected Calculate profit of all scheduled Performances
+						{
+							cout << "View a per-performance breakdown? (y/n)" << endl;
+							char response = 'z';
+							cin >> response;
+							switch(response)
+							{
+								case 'Y':
+								case 'y':
+								{
+									SM.CalcTotalProfit(perfHallList, true); break;
+								}
+								case 'N':
+								case 'n':
+								{
+									cout << "\nTotal profit of scheduled Performances: " << SM.CalcTotalProfit(perfHallList, false); break;
+								}
+								default:
+									WarningInvalidInput();
+							}
+							break;
+						}
+						case 0:
+						{
+							req4 = 0;
+							break;
+						}
+						default:
+							WarningInvalidInput();
+					}
 				}
 				break;
 			}
@@ -906,35 +1046,27 @@ int main()
 
 	// --- TESTING ---
 	
-	cout << endl;
+/* 	cout << endl;
 	Actor* a0 = SM.FindActor(0, actorList);
-/* 	Actor* a1 = SM.FindActor(1, actorList);
-	Actor* a2 = SM.FindActor(2, actorList); */
-	cout << "Listed Actors: ";
+	cout << a0->GetIsAssigned() << endl; */
+	//SM.ModifyActorSalary(0, actorList, 72.5);
+	//cout << a0->GetSalary() << endl;
+
+	cout << endl;
+ 	cout << "Listed Actors: ";
 	SM.PrintActors(actorList);
-	cout << "\nAssigned Actors: ";
-	SM.PrintAssignedActors(actorList);
-	cout << "\nUnassigned Actors: ";
-	SM.PrintUnassignedActors(actorList);
+
+	cout << endl;
+ 	cout << "Listed Plays: ";
+	SM.PrintPlays(playList);
 
  	cout << endl;
 	Play* p0 = SM.FindPlay(0, playList);
-	//Musical* mu0 = SM.FindMusical(0, musicalList);
-	cout << "Listed Plays: ";
-	SM.PrintPlays(playList);
+	cout << p0->GetNumActors();
 
 	cout << endl;
-	SM.PrintActors(p0->GetActorRoster());
- 	cout << endl;
-/* 	cout << SM.GetActorCount() << endl;
-	cout << SM.FindActor(1, actorList)->GetIsAssigned() << endl;
-	cout << SM.FindActor(1, actorList)->GetInPerfID() << endl;
-	cout << SM.FindActor(2, actorList)->GetIsAssigned() << endl;
-	cout << SM.FindActor(2, actorList)->GetInPerfID() << endl; */
-/* 	cout << SM.FindPlay(0, playList)->GetIsScheduled() << endl;
-	cout << SM.FindPlay(1, playList)->GetIsScheduled() << endl;
-	cout << SM.FindPerfHall(0, perfHallList)->GetScheduledPerf().GetIsFullyCast() << endl;
-	cout << SM.FindPerfHall(1, perfHallList)->GetIsBooked() << endl; */
+	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
+	//Play pl = h0->GetScheduledPerf();
 
 
 	// --- END TESTING ---
@@ -1232,11 +1364,13 @@ int GetMenu4Request()
 {
 	int req = -1;
 	cout << "\nSelect an operation:" << endl;
-	cout << "---------------------------------------------------------------" << endl;
-	cout << "1 ....... Calculate profit of a scheduled Performance" << endl;
-	cout << "2 ....... Calculate total profit of all scheduled Performances " << endl;
+	cout << "--------------------------------------------------------------" << endl;
+	cout << "1 ....... Modify the salary of a Performer" << endl;
+	cout << "2 ....... Modify the ticket price of a Performance" << endl;
+	cout << "3 ....... Calculate profit of a scheduled Performance" << endl;
+	cout << "4 ....... Calculate total profit of all scheduled Performances" << endl;
 	cout << "0 ....... Return to the previous menu" << endl;
-	cout << "---------------------------------------------------------------" << endl;
+	cout << "--------------------------------------------------------------" << endl;
 	cout << "> ";
 	cin >> req;
 	if(cin.fail())
@@ -1248,6 +1382,49 @@ int GetMenu4Request()
 	}
 	return req;
 }
+
+// --- MENU4 ---
+int GetPerformerSalaryToModify()
+{
+	int req = -1;
+	cout << "\nSelect a Performer to modify their salary:" << endl;
+	cout << "------------------------------------------------" << endl;
+	cout << "1 ....... Modify the salary of a listed Actor" << endl;
+	cout << "2 ....... Modify the salary of a listed Singer" << endl;
+	cout << "3 ....... Modify the salary of a listed Musician" << endl;
+	cout << "0 ....... Return to the previous menu" << endl;
+	cout << "------------------------------------------------" << endl;
+	cout << "> ";
+	cin >> req;
+	if(cin.fail())
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		req = -1;
+		return req;
+	}
+	return req;
+}
+
+float GetNewSalary()
+{
+	cout << "Enter the new salary for the Performer:" << endl;
+	float newSalary = -1.0f;
+	cout << "> ";
+	cin >> newSalary;
+	if(cin.fail() || newSalary<0)
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		newSalary = -1.0f;
+		return newSalary;
+	}
+	return newSalary;
+}
+
+
+// ------------
+
 
 // --- MISC ---
 int GetIDRequest()

@@ -60,13 +60,14 @@ class SystemManager
 
         // --- add/remove ---
         void AddActor(vector<Actor>&);
-        void RmActor(int, vector<Actor>&);
+        void RmActor(int, vector<Actor>&, bool);
+        void RemoveActor(int, Actor&, vector<Actor>&, bool, vector<Actor>&, Play&, bool);
         void AddSinger(vector<Singer>&);
-        void RmSinger(int, vector<Singer>&);
+        void RmSinger(int, vector<Singer>&, bool);
         void AddMusician(vector<Musician>&);
-        void RmMusician(int, vector<Musician>&);
+        void RmMusician(int, vector<Musician>&, bool);
         void AddPlay(vector<Play>&);
-        void RmPlay(int, vector<Play>&);
+        void RmPlay(int, vector<Play>&); // START HERE in cpp
         void AddMusical(vector<Musical>&);
         void RmMusical(int, vector<Musical>&);
         void AddPerfHall(vector<PerformanceHall>&);
@@ -133,9 +134,17 @@ class SystemManager
         void PrintBookedHalls(vector<PerformanceHall>);
         void PrintAvailableHalls(vector<PerformanceHall>);
 
+        // modifiers
+        //void ModifyActorSalary(int, vector<Actor>&, float);
+        void ModifyActorSalary(Actor&, float);
+        void ModifySingerSalary(int, vector<Singer>&, float);
+        void ModifyMusicianSalary(int, vector<Musician>&, float);
+        void ModifyPlayTicketPrice(int, vector<Play>&, float);
+        void ModifyMusicalTicketPrice(int, vector<Musical>&, float);
+
         // calculators
-        float CalcPerfProfit(PerformanceHall);
-        float CalcTotalProfit(vector<PerformanceHall>);
+        float CalcPerfProfit(PerformanceHall, bool);
+        float CalcTotalProfit(vector<PerformanceHall>, bool);
 };
 
 #endif
