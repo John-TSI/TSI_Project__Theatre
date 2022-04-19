@@ -81,9 +81,11 @@ class SystemManager
         void AssignSinger(Singer&, Musical&);
         void AssignSinger(Singer&, Musical&, PerformanceHall&);  // overload, use if Musical scheduled
         void UnassignSinger(Singer&, Musical&);
+        void UnassignSinger(Singer&, Musical&, PerformanceHall&);
         void AssignMusician(Musician&, Musical&);
         void AssignMusician(Musician&, Musical&, PerformanceHall&);  // overload, use if Musical scheduled
         void UnassignMusician(Musician&, Musical&);
+        void UnassignMusician(Musician&, Musical&, PerformanceHall&);
         void SchedulePlay(Play&, PerformanceHall&);
         void UnschedulePlay(Play&, PerformanceHall&);
         void ScheduleMusical(Musical&, PerformanceHall&);
@@ -149,8 +151,10 @@ class SystemManager
         void ModifyMusicianSalary(Musician&, float);
         void ModifyMusicianSalary(Musician&, int, Musical&, float);
         void ModifyMusicianSalary(Musician&, int, Musical&, PerformanceHall&, float);
-        void ModifyPlayTicketPrice(int, vector<Play>&, float);
-        void ModifyMusicalTicketPrice(int, vector<Musical>&, float);
+        void ModifyPlayTicketPrice(Play&, float);
+        void ModifyPlayTicketPrice(Play&, PerformanceHall&, float); // overload, use if Play is scheduled
+        void ModifyMusicalTicketPrice(Musical&, float);
+        void ModifyMusicalTicketPrice(Musical&, PerformanceHall&, float);
 
         // calculators
         float CalcPerfProfit(PerformanceHall, bool);

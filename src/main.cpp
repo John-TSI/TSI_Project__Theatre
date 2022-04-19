@@ -22,10 +22,8 @@ using std::cout; using std::cin; using std::endl;
 // - implement an UnassignAll() function to unassign all performers in a performance?
 // - include a graphical frame around each printed menu?
 // - give user option to back out instead of forcing ID/num input
-// - menu4 idea: modify performance ticket prices using Setters() (in progress)
-// BUG: assigning/uassigning performers to a scheduled performance doesn't update profit calculation.
-//	FIXED for assigning Actors, need to fix for unassigning too
-// implement an UnassignAll() function?
+// - implement an UnassignAll() function?
+// - change calc profit output to show (ticketPrice) x (ticketsSold) = perfSales
 
 
 // ------ PROTOTYPES (get user requests) ------
@@ -46,12 +44,15 @@ int GetPerformerToUnassign();
 int GetPerformanceToSchedule();
 int GetPerformanceToUnschedule();
 
+// --- menu3 ---
 int GetMenu3Request();
 
 // --- menu4 ---
 int GetMenu4Request();
 int GetPerformerSalaryToModify();
 float GetNewSalary();
+int GetPerformanceTicketPriceToModify();
+float GetNewPrice();
 
 // --- misc ---
 int GetIDRequest();
@@ -613,15 +614,23 @@ int main()
 										if(!SM.VerifiedSingerID(idS, singerList)) { WarningUnlistedSinger(); break; }
 
 										Singer* s = SM.FindSinger(idS, singerList);
-										int idP = s->GetInPerfID();	
-										if(idP == -1) // break if Singer is not assigned to a Musical
+										int idMu = s->GetInPerfID();	
+										if(idMu == -1) // break if Singer is not assigned to a Musical
 										{
 											cout << "\nThe specified Singer is not currently assigned to a Musical." << endl;
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										Musical* mu = SM.FindMusical(idP, musicalList);
-										SM.UnassignSinger(*s, *mu);						
+										
+										// determine appropriate version of overloaded UnassignSinger() to call
+										Musical* mu = SM.FindMusical(idMu, musicalList);
+										if(mu->GetIsScheduled())
+										{
+											int hallNum = mu->GetInHallNum();
+											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+											SM.UnassignSinger(*s, *mu, *h);
+										}
+										else { SM.UnassignSinger(*s, *mu); } 
 										break;
 									}
 									case 3: // selected Unassign a Musician from a Musical
@@ -645,15 +654,23 @@ int main()
 										if(!SM.VerifiedMusicianID(idM, musicianList)) { WarningUnlistedMusician(); break; }
 
 										Musician* m = SM.FindMusician(idM, musicianList);
-										int idP = m->GetInPerfID();	
-										if(idP == -1) // break if Musician is not assigned to a Musical
+										int idMu = m->GetInPerfID();	
+										if(idMu == -1) // break if Musician is not assigned to a Musical
 										{
 											cout << "\nThe specified Musician is not currently assigned to a Musical." << endl;
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										Musical* mu = SM.FindMusical(idP, musicalList);
-										SM.UnassignMusician(*m, *mu);				
+										
+										// determine appropriate version of overloaded UnassignMusician() to call
+										Musical* mu = SM.FindMusical(idMu, musicalList);
+										if(mu->GetIsScheduled())
+										{
+											int hallNum = mu->GetInHallNum();
+											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+											SM.UnassignMusician(*m, *mu, *h);
+										}
+										else { SM.UnassignMusician(*m, *mu); } 
 										break;
 									}
 									case 0:
@@ -731,8 +748,6 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										//SM.SchedulePerformance(*p, *h);
-										//cout << "\nThe Play has been scheduled in the Performance Hall." << endl;
 										SM.SchedulePlay(*p, *h); // test
 										break;
 									}
@@ -791,8 +806,6 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										//SM.SchedulePerformance(*mu, *h);
-										//cout << "\nThe Musical has been scheduled in the Performance Hall." << endl;
 										SM.ScheduleMusical(*mu, *h);
 										break;
 									}
@@ -844,8 +857,6 @@ int main()
 											break;
 										}
 										PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
-										//SM.UnschedulePerformance(*p, *h);
-										//cout << "\nThe Play has been unscheduled." << endl;
 										SM.UnschedulePlay(*p, *h);										
 										break;
 									}
@@ -878,8 +889,6 @@ int main()
 											break;
 										}
 										PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
-										//SM.UnschedulePerformance(*mu, *h);
-										//cout << "\nThe Musical has been unscheduled." << endl;
 										SM.UnscheduleMusical(*mu, *h);										
 										break;
 									}
@@ -936,7 +945,7 @@ int main()
 								reqMP = GetPerformerSalaryToModify(); // open Menu to modify salary of a Performer (3+1 cases)
 								switch(reqMP)
 								{
-									case 1: // selected modify salary of a Actor
+									case 1: // selected Modify salary of a Actor
 									{
 										// output info to User
 										cout << "\nCurrently listed Actor IDs: { ";
@@ -980,7 +989,7 @@ int main()
 										else { SM.ModifyActorSalary(*a, newSalary); } 
 										break;
 									}
-									case 2: // selected modify salary of a Singer
+									case 2: // selected Modify salary of a Singer
 									{
 										// output info to User
 										cout << "\nCurrently listed Singer IDs: { ";
@@ -1024,7 +1033,7 @@ int main()
 										else { SM.ModifySingerSalary(*s, newSalary); } 
 										break;
 									}
-									case 3: // selected modify salary of a Musician
+									case 3: // selected Modify salary of a Musician
 									{
 										// output info to User
 										cout << "\nCurrently listed Musician IDs: { ";
@@ -1081,6 +1090,95 @@ int main()
 						}
 						case 2: // selected Modify Performance ticket price
 						{
+							int reqMP = -1;
+							while(reqMP != 0)
+							{
+								reqMP = GetPerformanceTicketPriceToModify(); // open Menu to Modify ticket price of a performance (2+1 cases)
+								switch(reqMP)
+								{
+									case 1: // selected Modify ticket price of a Play
+									{
+										// output info to User
+										cout << "\nCurrently listed Play performance IDs: { ";
+										SM.PrintPlays(playList); 
+										cout << "}" << endl;
+
+										// get User Play request
+										cout << "Enter the performance ID number of the Play to be modified:" << endl;
+										int idP = GetIDRequest();
+										
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										if(!SM.VerifiedPlayID(idP, playList)) // break if Play not listed on SystemManager
+										{
+											WarningUnlistedPlay();
+											break;
+										}
+										Play* p = SM.FindPlay(idP, playList);
+
+										// get User price request
+										float newPrice = GetNewPrice();
+
+										// break if user input is invalid
+										if(newPrice == -1.0f) { WarningInvalidInput(); break; }
+
+										// determine appropriate version of overloaded ModifyPlayTicketPrice() to call
+										if(p->GetIsScheduled())
+										{
+											int hallNum = p->GetInHallNum();
+											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+											SM.ModifyPlayTicketPrice(*p, *h, newPrice);
+										}
+										else { SM.ModifyPlayTicketPrice(*p, newPrice); }
+										break;
+									}
+									case 2: // selected modify ticket price of a Musical
+									{
+										// output info to User
+										cout << "\nCurrently listed Musical performance IDs: { ";
+										SM.PrintMusicals(musicalList); 
+										cout << "}" << endl;
+
+										// get User Musical request
+										cout << "Enter the performance ID number of the Musical to be modified:" << endl;
+										int idMu = GetIDRequest();
+										
+										// break if user input is of invalid type
+										if(idMu == -1) { WarningInvalidInput(); break; }
+
+										if(!SM.VerifiedMusicalID(idMu, musicalList)) // break if Musical not listed on SystemManager
+										{
+											WarningUnlistedMusical();
+											break;
+										}
+										Musical* mu = SM.FindMusical(idMu, musicalList);
+
+										// get User price request
+										float newPrice = GetNewPrice();
+
+										// break if user input is invalid
+										if(newPrice == -1.0f) { WarningInvalidInput(); break; }
+
+										// determine appropriate version of overloaded ModifyMusicalTicketPrice() to call
+										if(mu->GetIsScheduled())
+										{
+											int hallNum = mu->GetInHallNum();
+											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+											SM.ModifyMusicalTicketPrice(*mu, *h, newPrice);
+										}
+										else { SM.ModifyMusicalTicketPrice(*mu, newPrice); }
+										break;
+									}
+									case 0:
+									{
+										reqMP = 0;
+										break;
+									}
+									default:
+										WarningInvalidInput();
+								}
+							}
 							break;
 						}
 						case 3: // selected Calculate profit of a scheduled Performance
@@ -1165,8 +1263,8 @@ int main()
 	// --- TESTING ---
 	
 	cout << endl;
-	Actor* a0 = SM.FindActor(0, actorList);
-	cout << a0->GetSalary() << endl;
+	//Actor* a0 = SM.FindActor(0, actorList);
+	//cout << a0->GetSalary() << endl;
 	//SM.ModifyActorSalary(0, actorList, 72.5);
 	//cout << a0->GetSalary() << endl;
 
@@ -1183,7 +1281,7 @@ int main()
 /* 	vector<Actor> aList = p0->GetActorRoster();
 	Actor* a0p0 = SM.FindActor(0, aList);
 	cout << a0p0->GetSalary(); */
-	cout << p0->GetNumActors();
+	cout << p0->GetTicketPrice();
 
 /* 	cout << endl;
 	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
@@ -1195,7 +1293,7 @@ int main()
  	cout << endl;
 	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
 	Play pl = h0->GetScheduledPlay();
-	cout << pl.GetPerfCost(); 
+	cout << pl.GetTicketPrice(); 
 
 
 	// --- END TESTING ---
@@ -1237,6 +1335,7 @@ int GetMainMenuRequest()
 	return req;
 }
 
+// --- MENU1 ---
 int GetMenu1Request()
 {
 	int req = -1;
@@ -1262,7 +1361,6 @@ int GetMenu1Request()
 	return req;
 }
 
-// --- MENU1 ---
 int GetPerformerToAdd()
 {
 	int req = -1;
@@ -1352,6 +1450,7 @@ int GetPerformanceToRm()
 // ------------
 
 
+// --- MENU2 ---
 int GetMenu2Request()
 {
 	int req = -1;
@@ -1375,7 +1474,6 @@ int GetMenu2Request()
 	return req;
 } 
 
-// --- MENU2 ---
 int GetPerformerToAssign()
 {
 	int req = -1;
@@ -1465,6 +1563,7 @@ int GetPerformanceToUnschedule()
 // ------------
 
 
+// --- MENU3 ---
 int GetMenu3Request()
 {
 	int req = -1;
@@ -1489,6 +1588,10 @@ int GetMenu3Request()
 	return req;
 } 
 
+// ------------
+
+
+// --- MENU4 ---
 int GetMenu4Request()
 {
 	int req = -1;
@@ -1512,7 +1615,6 @@ int GetMenu4Request()
 	return req;
 }
 
-// --- MENU4 ---
 int GetPerformerSalaryToModify()
 {
 	int req = -1;
@@ -1551,6 +1653,42 @@ float GetNewSalary()
 	return newSalary;
 }
 
+int GetPerformanceTicketPriceToModify()
+{
+	int req = -1;
+	cout << "\nSelect a Performance to modify its ticket price:" << endl;
+	cout << "-----------------------------------------------------" << endl;
+	cout << "1 ....... Modify the ticket price of a listed Play" << endl;
+	cout << "2 ....... Modify the ticket price of a listed Musical" << endl;
+	cout << "0 ....... Return to the previous menu" << endl;
+	cout << "-----------------------------------------------------" << endl;
+	cout << "> ";
+	cin >> req;
+	if(cin.fail())
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		req = -1;
+		return req;
+	}
+	return req;
+}
+
+float GetNewPrice()
+{
+	cout << "Enter the new ticket price for the Performance:" << endl;
+	float newPrice = -1.0f;
+	cout << "> ";
+	cin >> newPrice;
+	if(cin.fail() || newPrice<0)
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		newPrice = -1.0f;
+		return newPrice;
+	}
+	return newPrice;
+}
 
 // ------------
 

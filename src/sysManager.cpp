@@ -391,6 +391,34 @@ void SystemManager::UnassignSinger(Singer& s, Musical& mu)
     ((mu.GetNumSingers() >= mu.GetReqNumSingers()) && (mu.GetNumMusicians() >= mu.GetReqNumMusicians())) ? mu.SetIsFullyCast(true) : mu.SetIsFullyCast(false);
     cout << "\nThe Singer has been removed from the Musical roster." << endl;	
 }
+void SystemManager::UnassignSinger(Singer& s, Musical& mu, PerformanceHall& h)
+{
+    // -- modify Singer attributes inherited from Performer --
+    s.SetIsAssigned(false);
+    s.SetInPerfID(-1);
+
+    // -- modify Musical attributes --
+    vector<Singer> vs = mu.GetSingerRoster();
+    RmSinger(s.GetIDNum(), vs, true);
+    mu.SetNumSingers(mu.GetNumSingers() - 1);
+
+    // -- modify Musical attributes inherited from Performance --
+    mu.SetNumPerformers(mu.GetNumPerformers() - 1);
+    mu.SetPerfCost(mu.GetPerfCost() - s.GetSalary());
+    ((mu.GetNumSingers() >= mu.GetReqNumSingers()) && (mu.GetNumMusicians() >= mu.GetReqNumMusicians())) ? mu.SetIsFullyCast(true) : mu.SetIsFullyCast(false);
+
+    // modify attributes of Musical within Performance Hall
+    Musical* muh = &(h.GetScheduledMusical());
+    vector<Singer> vsh = muh->GetSingerRoster();
+    RmSinger(s.GetIDNum(), vsh, true);
+    muh->SetNumSingers(muh->GetNumSingers() - 1);
+
+    muh->SetNumPerformers(muh->GetNumPerformers() - 1);
+    muh->SetPerfCost(muh->GetPerfCost() - s.GetSalary());
+   ((muh->GetNumSingers() >= muh->GetReqNumSingers()) && (muh->GetNumMusicians() >= muh->GetReqNumMusicians())) ? muh->SetIsFullyCast(true) : muh->SetIsFullyCast(false);
+
+    cout << "\nThe Singer has been removed from the Musical roster." << endl;
+}
 
 void SystemManager::AssignMusician(Musician& m, Musical& mu)
 {
@@ -465,6 +493,34 @@ void SystemManager::UnassignMusician(Musician& m, Musical& mu)
     mu.SetPerfCost(mu.GetPerfCost() - m.GetSalary());
     ((mu.GetNumSingers() >= mu.GetReqNumSingers()) && (mu.GetNumMusicians() >= mu.GetReqNumMusicians())) ? mu.SetIsFullyCast(true) : mu.SetIsFullyCast(false);
     cout << "\nThe Musician has been removed from the Musical roster." << endl;	
+}
+void SystemManager::UnassignMusician(Musician& m, Musical& mu, PerformanceHall& h)
+{
+    // -- modify Musician attributes inherited from Performer --
+    m.SetIsAssigned(false);
+    m.SetInPerfID(-1);
+
+    // -- modify Musical attributes --
+    vector<Musician> vm = mu.GetMusicianRoster();
+    RmMusician(m.GetIDNum(), vm, true);
+    mu.SetNumMusicians(mu.GetNumMusicians() - 1);
+
+    // -- modify Musical attributes inherited from Performance --
+    mu.SetNumPerformers(mu.GetNumPerformers() - 1);
+    mu.SetPerfCost(mu.GetPerfCost() - m.GetSalary());
+    ((mu.GetNumSingers() >= mu.GetReqNumSingers()) && (mu.GetNumMusicians() >= mu.GetReqNumMusicians())) ? mu.SetIsFullyCast(true) : mu.SetIsFullyCast(false);
+
+    // modify attributes of Musical within Performance Hall
+    Musical* muh = &(h.GetScheduledMusical());
+    vector<Musician> vmh = muh->GetMusicianRoster();
+    RmMusician(m.GetIDNum(), vmh, true);
+    muh->SetNumMusicians(muh->GetNumMusicians() - 1);
+
+    muh->SetNumPerformers(muh->GetNumPerformers() - 1);
+    muh->SetPerfCost(muh->GetPerfCost() - m.GetSalary());
+   ((muh->GetNumSingers() >= muh->GetReqNumSingers()) && (muh->GetNumMusicians() >= muh->GetReqNumMusicians())) ? muh->SetIsFullyCast(true) : muh->SetIsFullyCast(false);
+
+    cout << "\nThe Musician has been removed from the Musical roster." << endl;
 }
 
 void SystemManager::SchedulePlay(Play& p, PerformanceHall& h)
@@ -771,7 +827,7 @@ void SystemManager::ModifyActorSalary(Actor& a, int idNum, Play& p, PerformanceH
     Actor* ap = FindActor(idNum, p.GetActorRoster());
     ap->SetSalary(newSalary);
 
-    // modify Actor in PLay assigned to a Performance Hall
+    // modify Actor in Play assigned to a Performance Hall
     Play* ph = &(h.GetScheduledPlay());
     ph->SetPerfCost(ph->GetPerfCost() + diff);
     Actor* aph = FindActor(idNum, ph->GetActorRoster());
@@ -871,24 +927,50 @@ void SystemManager::ModifyMusicianSalary(Musician& m, int idNum, Musical& mu, Pe
     (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
 
-void SystemManager::ModifyPlayTicketPrice(int perfID, vector<Play>& pList, float newPrice)
+void SystemManager::ModifyPlayTicketPrice(Play& p, float newPrice)
 {
-    Play* p = FindPlay(perfID, pList);
-    float currentPrice = p->GetTicketPrice();
+    float currentPrice = p.GetTicketPrice();
     float diff = newPrice - currentPrice;
-    p->SetTicketPrice(newPrice);
-    cout << "\nThe Play's ticket price has been modified ";
-    (diff >= 0) ? cout << "(increased by " << diff << ")." : cout << "(decreased by " << -diff << ").";
+    p.SetTicketPrice(newPrice);
+    cout << "\nThe ticket price of the Play has been modified ";
+    (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
+}
+void SystemManager::ModifyPlayTicketPrice(Play& p, PerformanceHall& h, float newPrice)
+{
+    // modify Play in SystemManager list
+    float currentPrice = p.GetTicketPrice();
+    float diff = newPrice - currentPrice;
+    p.SetTicketPrice(newPrice);
+
+    // modify Play scheduled in Performance Hall
+    Play* ph = &(h.GetScheduledPlay());
+    ph->SetTicketPrice(newPrice);
+
+    cout << "\nThe ticket price of the Play has been modified ";
+    (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
 
-void SystemManager::ModifyMusicalTicketPrice(int perfID, vector<Musical>& mList, float newPrice)
+void SystemManager::ModifyMusicalTicketPrice(Musical& mu, float newPrice)
 {
-    Musical* mu = FindMusical(perfID, mList);
-    float currentPrice = mu->GetTicketPrice();
+    float currentPrice = mu.GetTicketPrice();
     float diff = newPrice - currentPrice;
-    mu->SetTicketPrice(newPrice);
+    mu.SetTicketPrice(newPrice);
     cout << "\nThe Musical's ticket price has been modified ";
-    (diff >= 0) ? cout << "(increased by " << diff << ")." : cout << "(decreased by " << -diff << ").";
+    (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
+}
+void SystemManager::ModifyMusicalTicketPrice(Musical& mu, PerformanceHall& h, float newPrice)
+{
+    // modify Musical in SystemManager list
+    float currentPrice = mu.GetTicketPrice();
+    float diff = newPrice - currentPrice;
+    mu.SetTicketPrice(newPrice);
+
+    // modify Musical scheduled in Performance Hall
+    Musical* muh = &(h.GetScheduledMusical());
+    muh->SetTicketPrice(newPrice);
+
+    cout << "\nThe ticket price of the Musical has been modified ";
+    (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
 
 
