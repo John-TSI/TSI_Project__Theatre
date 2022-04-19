@@ -15,8 +15,12 @@ int PerformanceHall::GetCapacity() { return capacity; }
 void PerformanceHall::SetCapacity(int input) { capacity = input; }
 bool PerformanceHall::GetIsBooked() { return isBooked; }
 void PerformanceHall::SetIsBooked(bool input) { isBooked = input; }
-Performance PerformanceHall::GetScheduledPerf() { return scheduledPerformance; }
-void PerformanceHall::SetScheduledPerf(Performance input) { scheduledPerformance = input; }
+bool PerformanceHall::GetHasPlay() { return hasPlay; }
+void PerformanceHall::SetHasPlay(bool input) { hasPlay = input;}
+bool PerformanceHall::GetHasMusical() { return hasMusical; }
+void PerformanceHall::SetHasMusical(bool input) { hasMusical = input;}
+Performance& PerformanceHall::GetScheduledPerf() { return scheduledPerformance; }
+void PerformanceHall::SetScheduledPerf(Performance& input) { scheduledPerformance = input; }
 // test
 Play& PerformanceHall::GetScheduledPlay() { return scheduledPlay; }
 void PerformanceHall::SetScheduledPlay(Play& input) { scheduledPlay = input; }

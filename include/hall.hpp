@@ -17,6 +17,7 @@ class PerformanceHall
         int hallNum = 0;
         int capacity = 100;
         bool isBooked = false;
+        bool hasPlay = false, hasMusical = false;
         Performance scheduledPerformance;
         //test attributes
         Play scheduledPlay;
@@ -33,8 +34,10 @@ class PerformanceHall
         void SetCapacity(int);
         bool GetIsBooked();
         void SetIsBooked(bool);
-        Performance GetScheduledPerf();
-        void SetScheduledPerf(Performance);
+        bool GetHasPlay(); bool GetHasMusical();
+        void SetHasPlay(bool); void SetHasMusical(bool);
+        Performance& GetScheduledPerf();
+        void SetScheduledPerf(Performance&);
         // test methods
         Play& GetScheduledPlay();
         void SetScheduledPlay(Play&);

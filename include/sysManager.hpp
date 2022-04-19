@@ -61,13 +61,12 @@ class SystemManager
         // --- add/remove ---
         void AddActor(vector<Actor>&);
         void RmActor(int, vector<Actor>&, bool);
-        void RemoveActor(int, Actor&, vector<Actor>&, bool, vector<Actor>&, Play&, bool);
         void AddSinger(vector<Singer>&);
         void RmSinger(int, vector<Singer>&, bool);
         void AddMusician(vector<Musician>&);
         void RmMusician(int, vector<Musician>&, bool);
         void AddPlay(vector<Play>&);
-        void RmPlay(int, vector<Play>&); // START HERE in cpp
+        void RmPlay(int, vector<Play>&);
         void AddMusical(vector<Musical>&);
         void RmMusical(int, vector<Musical>&);
         void AddPerfHall(vector<PerformanceHall>&);
@@ -75,20 +74,20 @@ class SystemManager
 
 
         // --- (un)assign/(un)schedule ---
-        void AssignActor(Actor&, vector<Actor>&, Play&);
-        void UnassignActor(Actor&, vector<Actor>&, Play&);
-        void AssignSinger(Singer&, vector<Singer>&, Musical&);
-        void UnassignSinger(Singer&, vector<Singer>&, Musical&);
-        void AssignMusician(Musician&, vector<Musician>&, Musical&);
-        void UnassignMusician(Musician&, vector<Musician>&, Musical&);
-        //void SchedulePerformance(Performance&, PerformanceHall&);
-        //void UnschedulePerformance(Performance&, PerformanceHall&);
-        // test methods
+        void AssignActor(Actor&, Play&);
+        void AssignActor(Actor&, Play&, PerformanceHall&);  // overload, use if Play scheduled
+        void UnassignActor(Actor&, Play&);
+        void UnassignActor(Actor&, Play&, PerformanceHall&);
+        void AssignSinger(Singer&, Musical&);
+        void AssignSinger(Singer&, Musical&, PerformanceHall&);  // overload, use if Musical scheduled
+        void UnassignSinger(Singer&, Musical&);
+        void AssignMusician(Musician&, Musical&);
+        void AssignMusician(Musician&, Musical&, PerformanceHall&);  // overload, use if Musical scheduled
+        void UnassignMusician(Musician&, Musical&);
         void SchedulePlay(Play&, PerformanceHall&);
         void UnschedulePlay(Play&, PerformanceHall&);
         void ScheduleMusical(Musical&, PerformanceHall&);
         void UnscheduleMusical(Musical&, PerformanceHall&);
-        // end test
 
 
         // --- verifications ---
@@ -141,10 +140,15 @@ class SystemManager
         void PrintAvailableHalls(vector<PerformanceHall>);
 
         // modifiers
-        //void ModifyActorSalary(int, vector<Actor>&, float);
         void ModifyActorSalary(Actor&, float);
-        void ModifySingerSalary(int, vector<Singer>&, float);
-        void ModifyMusicianSalary(int, vector<Musician>&, float);
+        void ModifyActorSalary(Actor&, int, Play&, float); // overload, use if Actor assigned
+        void ModifyActorSalary(Actor&, int, Play&, PerformanceHall&, float); // overload, use if Play scheduled
+        void ModifySingerSalary(Singer&, float);
+        void ModifySingerSalary(Singer&, int, Musical&, float);
+        void ModifySingerSalary(Singer&, int, Musical&, PerformanceHall&, float);
+        void ModifyMusicianSalary(Musician&, float);
+        void ModifyMusicianSalary(Musician&, int, Musical&, float);
+        void ModifyMusicianSalary(Musician&, int, Musical&, PerformanceHall&, float);
         void ModifyPlayTicketPrice(int, vector<Play>&, float);
         void ModifyMusicalTicketPrice(int, vector<Musical>&, float);
 
