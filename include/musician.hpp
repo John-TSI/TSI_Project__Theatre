@@ -11,12 +11,13 @@ using std::string; using std::vector;
 class Musician : public Performer
 {
     private:
-        vector<string> instruments = {};
+        vector<string> instruments = {}; // not currently being used
     
     public:
         // --- constructors ---
         Musician();
         Musician(int);
+        Musician(int, float);
 
         // --- getters/setters ---
         vector<string> GetInstruments();

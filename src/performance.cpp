@@ -3,6 +3,7 @@
 // --- constructors ---
 Performance::Performance() {}
 Performance::Performance(int perfID) : perfID(perfID) {}
+Performance::Performance(int perfID, float ticketPrice) : perfID(perfID), ticketPrice(ticketPrice) {}
 
 
 // --- getters/setters ---
@@ -22,7 +23,5 @@ int Performance::GetNumPerformers() { return numPerformers; }
 void Performance::SetNumPerformers(int input) { numPerformers = input; }
 float Performance::GetPerfCost() { return perfCost; }
 void Performance::SetPerfCost(float input) { perfCost = input; }
-//vector<Performer> Performance::GetPerformerRoster() { return performerRoster; }
-//void Performance::SetPerformerRoster(vector<Performer> input) { performerRoster = input; }
 bool Performance::GetIsFullyCast() { return isFullyCast; }
 void Performance::SetIsFullyCast(bool input) { isFullyCast = input; }

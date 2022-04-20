@@ -15,47 +15,49 @@ using std::cout; using std::cin; using std::endl;
 
 
 // ------ TO DO ------
-// - verify schedPerf.ticketSold <= hall.capacity
+// - verify schedPerf.ticketSold <= hall.capacity when scheduling AND modifying ticketsSold
 // - implement a user guide option in one of the menus
-// - create constructors to allow initialisation of salary, ticket price
+// - remove unnecessary constructors
 // - implement utility functions to print relevant attributes of performers/performances
 // - implement an UnassignAll() function to unassign all performers in a performance?
 // - include a graphical frame around each printed menu?
 // - give user option to back out instead of forcing ID/num input
-// - implement an UnassignAll() function?
 // - change calc profit output to show (ticketPrice) x (ticketsSold) = perfSales
+// - implement a ModifyTicketsSold() (don't need a constructor)
 
 
-// ------ PROTOTYPES (get user requests) ------
+// ------ PROTOTYPES ------
 void Welcome();
-int GetMainMenuRequest();
+void Exiting();
+float GetMainMenuRequest();
 
 // --- menu1 ---
-int GetMenu1Request();
-int GetPerformerToAdd();
-int GetPerformerToRm();
-int GetPerformanceToAdd();
-int GetPerformanceToRm();
+float GetMenu1Request();
+float GetPerformerToAdd();
+float GetPerformerToRm();
+float GetPerformanceToAdd();
+float GetPerformanceToRm();
 
 // --- menu2 ---
-int GetMenu2Request();
-int GetPerformerToAssign();
-int GetPerformerToUnassign();
-int GetPerformanceToSchedule();
-int GetPerformanceToUnschedule();
+float GetMenu2Request();
+float GetPerformerToAssign();
+float GetPerformerToUnassign();
+float GetPerformanceToSchedule();
+float GetPerformanceToUnschedule();
 
 // --- menu3 ---
-int GetMenu3Request();
+float GetMenu3Request();
 
 // --- menu4 ---
-int GetMenu4Request();
-int GetPerformerSalaryToModify();
+float GetMenu4Request();
+float GetPerformerSalaryToModify();
 float GetNewSalary();
-int GetPerformanceTicketPriceToModify();
+float GetPerformanceTicketPriceToModify();
 float GetNewPrice();
+float GetNewCapacity();
 
 // --- misc ---
-int GetIDRequest();
+float GetIDRequest();
 void WarningInvalidInput();
 void WarningUnlistedActor(); void WarningUnlistedSinger(); void WarningUnlistedMusician(); void WarningUnlistedPlay(); void WarningUnlistedMusical(); void WarningUnlistedHall();
 
@@ -80,6 +82,8 @@ int main()
 	// ------ BEGIN USER INTERACTIVITY ------
 	Welcome();
 	int mainReq = -1;
+	bool specifyMode = false; // if true require that User initialise Performer salary, 
+	                         // Performance ticket price, and Hall capacity (toggled in Utility menu)
 	while(mainReq != 0)
 	{
 		mainReq = GetMainMenuRequest(); // open MainMenu (4+1 cases)
@@ -103,17 +107,35 @@ int main()
 								{
 									case 1: // selected Add a Actor
 									{
-										SM.AddActor(actorList);
+										if(specifyMode)
+										{
+											float newSalary = GetNewSalary();
+											if(newSalary == -1.0f) { WarningInvalidInput(); break; }
+											SM.AddActor(actorList, newSalary);
+										}
+										else { SM.AddActor(actorList); }
 										break;
 									}
 									case 2: // selected Add a Singer
 									{
-										SM.AddSinger(singerList);
+										if(specifyMode)
+										{
+											float newSalary = GetNewSalary();
+											if(newSalary == -1.0f) { WarningInvalidInput(); break; }
+											SM.AddSinger(singerList, newSalary);
+										}
+										else { SM.AddSinger(singerList); }
 										break;
 									}
 									case 3: // selected Add a Musician
 									{
-										SM.AddMusician(musicianList);
+										if(specifyMode)
+										{
+											float newSalary = GetNewSalary();
+											if(newSalary == -1.0f) { WarningInvalidInput(); break; }
+											SM.AddMusician(musicianList, newSalary);
+										}
+										else { SM.AddMusician(musicianList); }
 										break;
 									}
 									case 0:
@@ -122,7 +144,7 @@ int main()
 										break;
 									}
 									default:
-										cout << "\nInvalid input, please review the input options and try again." << endl;					
+										WarningInvalidInput();					
 								}
 							}
 							break;
@@ -149,25 +171,9 @@ int main()
 										// break if user input is of invalid type
 										if(idA == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedActorID(idA, actorList)) // break if Actor not listed on SystemManager
-										{
-											cout << "\nThe specified Actor is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+										// break if Actor not listed on SystemManager
+										if(!SM.VerifiedActorID(idA, actorList)) { WarningUnlistedActor(); break; }
 										SM.RmActor(idA, actorList, false);
-
-										// TEST stuff, uncomment the above line when done
-/* 										Actor* a = SM.FindActor(idA, actorList);
-										if(a->GetIsAssigned())
-										{
-											a->SetIsAssigned(false);
-											int perfID = a->GetInPerfID();
-											Play* p = SM.FindPlay(perfID, playList);
-											vector<Actor> aList_play = p->GetActorRoster();
-											SM.UnassignActor(*a, aList_play, *p);
-										}
-										SM.RmActor(idA, actorList, false); */
 										break;
 									}
 									case 2: // selected Remove a Singer
@@ -184,12 +190,8 @@ int main()
 										// break if user input is of invalid type
 										if(idS == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedSingerID(idS, singerList))  // break if Singer not listed on SystemManager
-										{
-											cout << "\nThe specified Singer is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}										
+										// break if Singer not listed on SystemManager
+										if(!SM.VerifiedSingerID(idS, singerList)) { WarningUnlistedSinger(); break; }										
 										SM.RmSinger(idS, singerList, false);
 										break;
 									}
@@ -204,12 +206,8 @@ int main()
 										// break if user input is of invalid type
 										if(idM == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedMusicianID(idM, musicianList))  // break if Musician not listed on SystemManager
-										{
-											cout << "\nThe specified Musician is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+										 // break if Musician not listed on SystemManager
+										if(!SM.VerifiedMusicianID(idM, musicianList)) { WarningUnlistedMusician(); break; }
 										SM.RmMusician(idM, musicianList, false);
 										break;
 									}
@@ -234,12 +232,24 @@ int main()
 								{
 									case 1: // selected Add a Play
 									{
-										SM.AddPlay(playList);
+										if(specifyMode)
+										{
+											float newPrice = GetNewPrice();
+											if(newPrice == -1.0f) { WarningInvalidInput(); break; }
+											SM.AddPlay(playList, newPrice);
+										}
+										else { SM.AddPlay(playList); }
 										break;
 									}
 									case 2: // selected Add a Musical
 									{
-										SM.AddMusical(musicalList);
+										if(specifyMode)
+										{
+											float newPrice = GetNewPrice();
+											if(newPrice == -1.0f) { WarningInvalidInput(); break; }
+											SM.AddMusical(musicalList, newPrice);
+										}
+										else { SM.AddMusical(musicalList); }
 										break;
 									}
 									case 0:
@@ -275,12 +285,8 @@ int main()
 										// break if user input is of invalid type
 										if(idP == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedPlayID(idP, playList)) // break if Play not listed on SystemManager
-										{
-											cout << "\nThe specified Play is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+										// break if Play not listed on SystemManager
+										if(!SM.VerifiedPlayID(idP, playList)) { WarningUnlistedPlay(); break; }
 										SM.RmPlay(idP, playList);
 										break;
 									}
@@ -298,12 +304,8 @@ int main()
 										// break if user input is of invalid type
 										if(idP == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedMusicalID(idP, musicalList))  // break if Musical not listed on SystemManager
-										{
-											cout << "\nThe specified Musical is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+										 // break if Musical not listed on SystemManager
+										if(!SM.VerifiedMusicalID(idP, musicalList)) { WarningUnlistedMusical(); break; }
 										SM.RmMusical(idP, musicalList);
 										break;
 									}
@@ -320,7 +322,13 @@ int main()
 						}
 						case 5: // selected Add a Performance Hall to the SystemManager
 						{
-							SM.AddPerfHall(perfHallList);
+							if(specifyMode)
+							{
+								int newCapacity = GetNewCapacity();
+								if(newCapacity == -1) { WarningInvalidInput(); break; }
+								SM.AddPerfHall(perfHallList, newCapacity);
+							}
+							else { SM.AddPerfHall(perfHallList); }
 							break;
 						}
 						case 6: // selected Remove a Performance Hall from the SystemManager
@@ -337,12 +345,8 @@ int main()
 							// break if user input is of invalid type
 							if(num == -1) { WarningInvalidInput(); break; }
 
-							if(!SM.VerifiedHallNum(num, perfHallList))  // break if Performance Hall not listed on SystemManager
-							{
-								cout << "\nThe specified Performance Hall is not currently listed." << endl;
-								cout << "Check your input and try again.\n" << endl;
-								break;
-							}
+							// break if Performance Hall not listed on SystemManager
+							if(!SM.VerifiedHallNum(num, perfHallList)) { WarningUnlistedHall(); break; }
 							SM.RmPerfHall(num, perfHallList);
 							break;
 						}
@@ -748,7 +752,13 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
-										SM.SchedulePlay(*p, *h); // test
+										if(h->GetCapacity() < p->GetTicketsSold()) // break if Performance Hall has insufficient capacity
+										{
+											cout << "\nThe specified Performance Hall is unable to accommodate this Play (max capacity: " << h->GetCapacity() << ")." << endl;
+											cout << "Check your input and try again.\n" << endl;
+											break;
+										}
+										SM.SchedulePlay(*p, *h);
 										break;
 									}
 									case 2: // selected Schedule a Musical in a Performance Hall
@@ -806,6 +816,12 @@ int main()
 											cout << "Check your input and try again.\n" << endl;
 											break;
 										}
+										if(h->GetCapacity() < mu->GetTicketsSold()) // break if Performance Hall has insufficient capacity
+										{
+											cout << "\nThe specified Performance Hall is unable to accommodate this Musical (max capacity: " << h->GetCapacity() << ")." << endl;
+											cout << "Check your input and try again.\n" << endl;
+											break;
+										}
 										SM.ScheduleMusical(*mu, *h);
 										break;
 									}
@@ -815,7 +831,7 @@ int main()
 										break;
 									}
 									default:
-										cout << "\nInvalid input, please review the input options and try again." << endl;					
+										WarningInvalidInput();					
 								}
 							}
 							break;
@@ -937,7 +953,12 @@ int main()
 					req4 = GetMenu4Request(); // open Menu4 (2+1 cases)
 					switch(req4)
 					{
-						case 1: // selected Modify Performer salary
+						case 1: // selected Toggle Specify mode
+						{
+							SM.ToggleSpecifyMode(specifyMode);
+							break;
+						}
+						case 2: // selected Modify Performer salary
 						{
 							int reqMP = -1;
 							while(reqMP != 0)
@@ -959,13 +980,10 @@ int main()
 										// break if user input is of invalid type
 										if(idA == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedActorID(idA, actorList)) // break if Actor not listed on SystemManager
-										{
-											cout << "\nThe specified Actor is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+										// break if Actor not listed on SystemManager
+										if(!SM.VerifiedActorID(idA, actorList)) { WarningUnlistedActor(); break; }
 										Actor* a = SM.FindActor(idA, actorList);
+										cout << "\nThis Actor currently earns " << a->GetSalary() << " per day.";
 
 										// get User salary request
 										float newSalary = GetNewSalary();
@@ -1003,13 +1021,10 @@ int main()
 										// break if user input is of invalid type
 										if(idS == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedSingerID(idS, singerList)) // break if Singer not listed on SystemManager
-										{
-											cout << "\nThe specified Singer is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+										// break if Singer not listed on SystemManager
+										if(!SM.VerifiedSingerID(idS, singerList)) { WarningUnlistedSinger(); break; }
 										Singer* s = SM.FindSinger(idS, singerList);
+										cout << "\nThis Singer currently earns " << s->GetSalary() << " per day.";
 
 										// get User salary request
 										float newSalary = GetNewSalary();
@@ -1047,13 +1062,10 @@ int main()
 										// break if user input is of invalid type
 										if(idM == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedMusicianID(idM, musicianList)) // break if Musician not listed on SystemManager
-										{
-											cout << "\nThe specified Musician is not currently listed." << endl;
-											cout << "Check your input and try again.\n" << endl;
-											break;
-										}
+										// break if Musician not listed on SystemManager
+										if(!SM.VerifiedMusicianID(idM, musicianList)) { WarningUnlistedMusician(); break; }
 										Musician* m = SM.FindMusician(idM, musicianList);
+										cout << "\nThis Musician currently earns " << m->GetSalary() << " per day.";
 
 										// get User salary request
 										float newSalary = GetNewSalary();
@@ -1088,7 +1100,7 @@ int main()
 							}
 							break;
 						}
-						case 2: // selected Modify Performance ticket price
+						case 3: // selected Modify Performance ticket price
 						{
 							int reqMP = -1;
 							while(reqMP != 0)
@@ -1110,12 +1122,10 @@ int main()
 										// break if user input is of invalid type
 										if(idP == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedPlayID(idP, playList)) // break if Play not listed on SystemManager
-										{
-											WarningUnlistedPlay();
-											break;
-										}
+										// break if Play not listed on SystemManager
+										if(!SM.VerifiedPlayID(idP, playList)) { WarningUnlistedPlay(); break; }
 										Play* p = SM.FindPlay(idP, playList);
+										cout << "\nThis Play currently generates " << p->GetTicketPrice() << " per ticket sold.";
 
 										// get User price request
 										float newPrice = GetNewPrice();
@@ -1147,12 +1157,10 @@ int main()
 										// break if user input is of invalid type
 										if(idMu == -1) { WarningInvalidInput(); break; }
 
-										if(!SM.VerifiedMusicalID(idMu, musicalList)) // break if Musical not listed on SystemManager
-										{
-											WarningUnlistedMusical();
-											break;
-										}
+										// break if Musical not listed on SystemManager
+										if(!SM.VerifiedMusicalID(idMu, musicalList)) {WarningUnlistedMusical(); break; }
 										Musical* mu = SM.FindMusical(idMu, musicalList);
+										cout << "\nThis Musical currently generates " << mu->GetTicketPrice() << " per ticket sold.";
 
 										// get User price request
 										float newPrice = GetNewPrice();
@@ -1181,7 +1189,48 @@ int main()
 							}
 							break;
 						}
-						case 3: // selected Calculate profit of a scheduled Performance
+						case 4: // selected Modify Performance Hall capacity
+						{
+							// output info to User
+							cout << "\nCurrently listed Performance Hall numbers: { ";
+							SM.PrintHalls(perfHallList); 
+							cout << "}" << endl;
+
+							// get User Hall request
+							cout << "Enter the number of the Performance Hall to be modified:" << endl;
+							int num = GetIDRequest();
+
+							// break if user input is of invalid type
+							if(num == -1) { WarningInvalidInput(); break; }
+
+							// break if Performance Hall not listed on SystemManager
+							if(!SM.VerifiedHallNum(num, perfHallList)) { WarningUnlistedHall(); break; }
+
+							PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
+							cout << "\nThis Performance Hall can currently hold " << h->GetCapacity() << " people.";
+
+							// get User price request
+							int newCapacity = GetNewCapacity();
+
+							// break if user input is invalid
+							if(newCapacity == -1) { WarningInvalidInput(); break; }
+
+							// determine whether Hall capacity can be modified
+							if(h->GetIsBooked())
+							{
+								Performance p = h->GetScheduledPerf();
+								if(p.GetTicketsSold() > newCapacity)
+								{
+									cout << "\nThe Performance currently scheduled in this Hall has sold more tickets than there would be seats available." << endl;
+									cout << "Unschedule the Performance before modifying the Hall capacity, or enter a number >= " << p.GetTicketsSold() << ".\n";
+									break;
+								}
+								else{ SM.ModifyHallCapacity(*h, newCapacity); }
+							}
+							else { SM.ModifyHallCapacity(*h, newCapacity); }
+							break;
+						}
+						case 5: // selected Calculate profit of a scheduled Performance
 						{
 							// output info to User
 							cout << "\nCurrently listed Performance Hall numbers: { ";
@@ -1211,7 +1260,7 @@ int main()
 							SM.CalcPerfProfit(*h, true);
 							break;
 						}
-						case 4: // selected Calculate profit of all scheduled Performances
+						case 6: // selected Calculate profit of all scheduled Performances
 						{
 							cout << "View a per-performance breakdown? (y/n)" << endl;
 							char response = 'z';
@@ -1248,10 +1297,11 @@ int main()
 
 			case 0:
 			{
-/* 				cout << "\nExiting program." << endl;
-				return 0; */
-				mainReq = 0; // break out of main loop only while TESTING
-				break;
+				//cout << "\nExiting program." << endl;
+				Exiting();
+				return 0;
+				//mainReq = 0; // break out of main loop only while TESTING
+				//break;
 			}
 
 			default:
@@ -1262,26 +1312,26 @@ int main()
 
 	// --- TESTING ---
 	
-	cout << endl;
+	//cout << endl;
 	//Actor* a0 = SM.FindActor(0, actorList);
 	//cout << a0->GetSalary() << endl;
 	//SM.ModifyActorSalary(0, actorList, 72.5);
 	//cout << a0->GetSalary() << endl;
 
-	cout << endl;
- 	cout << "Listed Actors: ";
-	SM.PrintActors(actorList);
+	//cout << endl;
+ 	//cout << "Listed Actors: ";
+	//SM.PrintActors(actorList);
 
-	cout << endl;
- 	cout << "Listed Plays: ";
-	SM.PrintPlays(playList);
+	//cout << endl;
+ 	//cout << "Listed Plays: ";
+	//SM.PrintPlays(playList);
 
- 	cout << endl;
-	Play* p0 = SM.FindPlay(0, playList);
+ 	//cout << endl;
+	//Play* p0 = SM.FindPlay(0, playList);
 /* 	vector<Actor> aList = p0->GetActorRoster();
 	Actor* a0p0 = SM.FindActor(0, aList);
 	cout << a0p0->GetSalary(); */
-	cout << p0->GetTicketPrice();
+	//cout << p0->GetTicketPrice();
 
 /* 	cout << endl;
 	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
@@ -1290,10 +1340,10 @@ int main()
 	Actor* a0p0h0 = SM.FindActor(0, aL);
 	cout << a0p0h0->GetSalary(); */
 
- 	cout << endl;
+/*  	cout << endl;
 	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
 	Play pl = h0->GetScheduledPlay();
-	cout << pl.GetTicketPrice(); 
+	cout << pl.GetTicketPrice(); */ 
 
 
 	// --- END TESTING ---
@@ -1311,10 +1361,16 @@ void Welcome()
 	cout << "() Welcome to THEATRE MANAGER ()" << endl;
 	cout << "()()()()()()()()()()()()()()()()" << endl;
 }
-
-int GetMainMenuRequest()
+void Exiting()
 {
-	int req = -1;
+	cout << "\n()()()()()()()()()()()()()()()()" << endl;
+	cout << "()    Exiting the program.    ()" << endl;
+	cout << "()()()()()()()()()()()()()()()()" << endl;
+}
+
+float GetMainMenuRequest()
+{
+	float req = -1;
 	cout << "\nSelect a menu option:" << endl;
 	cout << "-------------------------------" << endl;
 	cout << "1 ....... Modify System Rosters" << endl;
@@ -1335,10 +1391,11 @@ int GetMainMenuRequest()
 	return req;
 }
 
+
 // --- MENU1 ---
-int GetMenu1Request()
+float GetMenu1Request()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect an operation:" << endl;
 	cout << "---------------------------------------------------" << endl;
 	cout << "1 ....... Add a Performer to the System" << endl;
@@ -1361,9 +1418,9 @@ int GetMenu1Request()
 	return req;
 }
 
-int GetPerformerToAdd()
+float GetPerformerToAdd()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performer to add:" << endl;
 	cout << "--------------------------------------" << endl;
 	cout << "1 ....... Add an Actor to the System" << endl;
@@ -1383,9 +1440,9 @@ int GetPerformerToAdd()
 	return req;
 }
 
-int GetPerformerToRm()
+float GetPerformerToRm()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performer to remove:" << endl;
 	cout << "-------------------------------------------" << endl;
 	cout << "1 ....... Remove an Actor from the System" << endl;
@@ -1405,9 +1462,9 @@ int GetPerformerToRm()
 	return req;
 }
 
-int GetPerformanceToAdd()
+float GetPerformanceToAdd()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performance to add:" << endl;
 	cout << "-------------------------------------" << endl;
 	cout << "1 ....... Add a Play to the System" << endl;
@@ -1426,9 +1483,9 @@ int GetPerformanceToAdd()
 	return req;
 }
 
-int GetPerformanceToRm()
+float GetPerformanceToRm()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performance to remove:" << endl;
 	cout << "------------------------------------------" << endl;
 	cout << "1 ....... Remove a Play from the System" << endl;
@@ -1451,9 +1508,9 @@ int GetPerformanceToRm()
 
 
 // --- MENU2 ---
-int GetMenu2Request()
+float GetMenu2Request()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect an operation:" << endl;
 	cout << "------------------------------------------------------" << endl;
 	cout << "1 ....... Assign a Performer to a Performance" << endl;
@@ -1474,9 +1531,9 @@ int GetMenu2Request()
 	return req;
 } 
 
-int GetPerformerToAssign()
+float GetPerformerToAssign()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performer to assign:" << endl;
 	cout << "----------------------------------------" << endl;
 	cout << "1 ....... Assign an Actor to a Play" << endl;
@@ -1496,9 +1553,9 @@ int GetPerformerToAssign()
 	return req;
 }
 
-int GetPerformerToUnassign()
+float GetPerformerToUnassign()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performer to unassign:" << endl;
 	cout << "--------------------------------------------" << endl;
 	cout << "1 ....... Unassign an Actor from a Play" << endl;
@@ -1518,9 +1575,9 @@ int GetPerformerToUnassign()
 	return req;
 }
 
-int GetPerformanceToSchedule()
+float GetPerformanceToSchedule()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performance to schedule:" << endl;
 	cout << "--------------------------------------------------" << endl;
 	cout << "1 ....... Schedule a Play in a Performance Hall" << endl;
@@ -1539,9 +1596,9 @@ int GetPerformanceToSchedule()
 	return req;
 }
 
-int GetPerformanceToUnschedule()
+float GetPerformanceToUnschedule()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performance to unschedule:" << endl;
 	cout << "-------------------------------------" << endl;
 	cout << "1 ....... Unschedule a Play" << endl;
@@ -1564,9 +1621,9 @@ int GetPerformanceToUnschedule()
 
 
 // --- MENU3 ---
-int GetMenu3Request()
+float GetMenu3Request()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect an operation:" << endl;
 	cout << "--------------------------------------------------------" << endl;
 	cout << "1 ....... Verify a Play is fully cast" << endl;
@@ -1592,15 +1649,17 @@ int GetMenu3Request()
 
 
 // --- MENU4 ---
-int GetMenu4Request()
+float GetMenu4Request()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect an operation:" << endl;
 	cout << "--------------------------------------------------------------" << endl;
-	cout << "1 ....... Modify the salary of a Performer" << endl;
-	cout << "2 ....... Modify the ticket price of a Performance" << endl;
-	cout << "3 ....... Calculate profit of a scheduled Performance" << endl;
-	cout << "4 ....... Calculate total profit of all scheduled Performances" << endl;
+	cout << "1 ....... Toggle Specify mode" << endl;
+	cout << "2 ....... Modify the salary of a Performer" << endl;
+	cout << "3 ....... Modify the ticket price of a Performance" << endl;
+	cout << "4 ....... Modify the capacity of a Performance Hall" << endl;
+	cout << "5 ....... Calculate profit of a scheduled Performance" << endl;
+	cout << "6 ....... Calculate total profit of all scheduled Performances" << endl;
 	cout << "0 ....... Return to the previous menu" << endl;
 	cout << "--------------------------------------------------------------" << endl;
 	cout << "> ";
@@ -1615,9 +1674,9 @@ int GetMenu4Request()
 	return req;
 }
 
-int GetPerformerSalaryToModify()
+float GetPerformerSalaryToModify()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performer to modify their salary:" << endl;
 	cout << "------------------------------------------------" << endl;
 	cout << "1 ....... Modify the salary of a listed Actor" << endl;
@@ -1639,7 +1698,7 @@ int GetPerformerSalaryToModify()
 
 float GetNewSalary()
 {
-	cout << "Enter the new salary for the Performer:" << endl;
+	cout << "\nEnter the new daily salary for the Performer:" << endl;
 	float newSalary = -1.0f;
 	cout << "> ";
 	cin >> newSalary;
@@ -1653,9 +1712,9 @@ float GetNewSalary()
 	return newSalary;
 }
 
-int GetPerformanceTicketPriceToModify()
+float GetPerformanceTicketPriceToModify()
 {
-	int req = -1;
+	float req = -1;
 	cout << "\nSelect a Performance to modify its ticket price:" << endl;
 	cout << "-----------------------------------------------------" << endl;
 	cout << "1 ....... Modify the ticket price of a listed Play" << endl;
@@ -1676,7 +1735,7 @@ int GetPerformanceTicketPriceToModify()
 
 float GetNewPrice()
 {
-	cout << "Enter the new ticket price for the Performance:" << endl;
+	cout << "\nEnter the new ticket price for the Performance:" << endl;
 	float newPrice = -1.0f;
 	cout << "> ";
 	cin >> newPrice;
@@ -1690,13 +1749,29 @@ float GetNewPrice()
 	return newPrice;
 }
 
+float GetNewCapacity()
+{
+	cout << "\nEnter the new capacity for the Performance Hall:" << endl;
+	float newCapacity = -1;
+	cout << "> ";
+	cin >> newCapacity;
+	if(cin.fail() || newCapacity<0)
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		newCapacity = -1;
+		return newCapacity;
+	}
+	return newCapacity;
+}
+
 // ------------
 
 
 // --- MISC ---
-int GetIDRequest()
+float GetIDRequest()
 {
-	int req = -1;
+	float req = -1;
 	cout << "> ";
 	cin >> req;
 	if(cin.fail())

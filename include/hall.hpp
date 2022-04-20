@@ -3,7 +3,6 @@
 
 #include<string>
 #include"../include/performance.hpp"
-// test includes
 #include"../include/play.hpp"
 #include"../include/musical.hpp"
 
@@ -15,19 +14,19 @@ class PerformanceHall
     private:
         string name = "Performance Hall";
         int hallNum = 0;
-        int capacity = 100;
+        int capacity = 150;
         bool isBooked = false;
         bool hasPlay = false, hasMusical = false;
         Performance scheduledPerformance;
-        //test attributes
         Play scheduledPlay;
         Musical scheduledMusical;
-        // end test
-        bool stageIsPrepared = false;
+        bool stageIsPrepared = false;  // not currently being used
 
     public:
         PerformanceHall();
-        PerformanceHall(int);
+        PerformanceHall(int); // initialise hallNum
+        PerformanceHall(int, int); // initialise hallNum and capacity
+
         int GetHallNum();
         void SetHallNum(int);
         int GetCapacity();
@@ -38,16 +37,12 @@ class PerformanceHall
         void SetHasPlay(bool); void SetHasMusical(bool);
         Performance& GetScheduledPerf();
         void SetScheduledPerf(Performance&);
-        // test methods
         Play& GetScheduledPlay();
         void SetScheduledPlay(Play&);
         Musical& GetScheduledMusical();
         void SetScheduledMusical(Musical&);
-        // end test
         bool GetStageIsPrepared();
         void SetStageIsPrepared(bool);
-
-        void PrintPerformance(Performance);
 };
 
 #endif

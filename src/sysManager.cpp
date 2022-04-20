@@ -33,14 +33,15 @@ vector<Musical>& SystemManager::GetMusicalList() { return musicalList; }
 
 
 // --- add/remove --- 
-void SystemManager::AddActor(vector<Actor>& aList)
+void SystemManager::AddActor(vector<Actor>& aList, float salary)
 {
-    aList.push_back(Actor(actorIDcount) );
+    //aList.push_back(Actor(actorIDcount) );
+    aList.push_back(Actor(actorIDcount, salary) );
     actorIDcount++;
     actorCount++;
     cout << "\nAn Actor has been added." << endl;
     cout << "System currently has " << GetActorCount() << " listed Actors.\n";
-}
+} 
 
 void SystemManager::RmActor(int idNum, vector<Actor>& aList, bool unassigning)
 {
@@ -61,9 +62,9 @@ void SystemManager::RmActor(int idNum, vector<Actor>& aList, bool unassigning)
     }
 }
 
-void SystemManager::AddSinger(vector<Singer>& sList)
+void SystemManager::AddSinger(vector<Singer>& sList, float salary)
 {
-    sList.push_back(Singer(singerIDcount) );
+    sList.push_back(Singer(singerIDcount, salary) );
     singerIDcount++;
     singerCount++;
     cout << "\nA Singer has been added." << endl;
@@ -91,9 +92,9 @@ void SystemManager::RmSinger(int idNum, vector<Singer>& sList, bool unassigning)
     }
 }
 
-void SystemManager::AddMusician(vector<Musician>& mList)
+void SystemManager::AddMusician(vector<Musician>& mList, float salary)
 {
-    mList.push_back(Musician(musicianIDcount) );
+    mList.push_back(Musician(musicianIDcount, salary) );
     musicianIDcount++;
     musicianCount++;
     cout << "\nA Musician has been added." << endl;
@@ -121,9 +122,9 @@ void SystemManager::RmMusician(int idNum, vector<Musician>& mList, bool unassign
     }
 }
 
-void SystemManager::AddPlay(vector<Play>& pList)
+void SystemManager::AddPlay(vector<Play>& pList, float ticketPrice)
 {
-    pList.push_back((playIDcount) );
+    pList.push_back(Play(playIDcount, ticketPrice) );
     playIDcount++;
     playCount++;
     cout << "\nA Play has been added." << endl;
@@ -163,9 +164,9 @@ void SystemManager::RmPlay(int perfID, vector<Play>& pList)
     }
 }
 
-void SystemManager::AddMusical(vector<Musical>& mList)
+void SystemManager::AddMusical(vector<Musical>& mList, float ticketPrice)
 {
-    mList.push_back(Musical(musicalIDcount) );
+    mList.push_back(Musical(musicalIDcount, ticketPrice) );
     musicalIDcount++;
     musicalCount++;
     cout << "\nA Musical has been added." << endl;
@@ -194,9 +195,9 @@ void SystemManager::RmMusical(int perfID, vector<Musical>& mList)
     }
 }
 
-void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList)
+void SystemManager::AddPerfHall(vector<PerformanceHall>& pHList, int capacity)
 {
-    pHList.push_back(PerformanceHall(hallNumCount) );
+    pHList.push_back(PerformanceHall(hallNumCount, capacity) );
     hallNumCount++;
     hallCount++;
     cout << "\nA Performance Hall has been added." << endl;
@@ -792,6 +793,12 @@ void SystemManager::PrintAvailableHalls(vector<PerformanceHall> vec)
 
 
 //modifiers
+void SystemManager::ToggleSpecifyMode(bool& currentSetting) 
+{ 
+    currentSetting = !currentSetting;
+    (currentSetting) ? cout << "\nSpecify mode has been enabled.\n" : cout << "\nSpecify mode has been disabled.\n";
+}
+
 void SystemManager::ModifyActorSalary(Actor& a, float newSalary)
 {
     float currentSalary = a.GetSalary();
@@ -955,7 +962,7 @@ void SystemManager::ModifyMusicalTicketPrice(Musical& mu, float newPrice)
     float currentPrice = mu.GetTicketPrice();
     float diff = newPrice - currentPrice;
     mu.SetTicketPrice(newPrice);
-    cout << "\nThe Musical's ticket price has been modified ";
+    cout << "\nThe ticket price of the Musical has been modified ";
     (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
 void SystemManager::ModifyMusicalTicketPrice(Musical& mu, PerformanceHall& h, float newPrice)
@@ -973,6 +980,14 @@ void SystemManager::ModifyMusicalTicketPrice(Musical& mu, PerformanceHall& h, fl
     (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
 
+void SystemManager::ModifyHallCapacity(PerformanceHall& h, int newCapacity)
+{
+    int currentCapacity = h.GetCapacity();
+    int diff = newCapacity - currentCapacity;
+    h.SetCapacity(newCapacity);
+    cout << "\nThe capacity of the Performance Hall has been modified ";
+    (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
+}
 
 // calculators
 float SystemManager::CalcPerfProfit(PerformanceHall h, bool printOutput = false)

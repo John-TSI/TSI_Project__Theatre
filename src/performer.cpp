@@ -4,6 +4,7 @@
 // --- constructors ---
 Performer::Performer(){}
 Performer::Performer(int idNum) : Employee(idNum) {}
+Performer::Performer(int idNum, float salary) : Employee(idNum, salary) {}
 
 // --- getters/setters ---
 bool Performer::GetIsAssigned() { return isAssigned; }

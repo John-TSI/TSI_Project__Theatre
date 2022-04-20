@@ -4,6 +4,7 @@
 // --- constructors ---
 Employee::Employee() {}
 Employee::Employee(int idNum) : idNum(idNum) {}
+Employee::Employee(int idNum, float salary) : idNum(idNum), salary(salary) {}
 
 
 // --- getters/setters ---

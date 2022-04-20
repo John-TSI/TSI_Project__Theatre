@@ -59,17 +59,17 @@ class SystemManager
 
 
         // --- add/remove ---
-        void AddActor(vector<Actor>&);
+        void AddActor(vector<Actor>&, float = 120.00f);
         void RmActor(int, vector<Actor>&, bool);
-        void AddSinger(vector<Singer>&);
+        void AddSinger(vector<Singer>&, float = 120.00f);
         void RmSinger(int, vector<Singer>&, bool);
-        void AddMusician(vector<Musician>&);
+        void AddMusician(vector<Musician>&, float = 120.00f);
         void RmMusician(int, vector<Musician>&, bool);
-        void AddPlay(vector<Play>&);
+        void AddPlay(vector<Play>&, float = 15.0f);
         void RmPlay(int, vector<Play>&);
-        void AddMusical(vector<Musical>&);
+        void AddMusical(vector<Musical>&, float = 15.0f);
         void RmMusical(int, vector<Musical>&);
-        void AddPerfHall(vector<PerformanceHall>&);
+        void AddPerfHall(vector<PerformanceHall>&, int = 150);
         void RmPerfHall(int, vector<PerformanceHall>&);
 
 
@@ -142,6 +142,8 @@ class SystemManager
         void PrintAvailableHalls(vector<PerformanceHall>);
 
         // modifiers
+        void ToggleSpecifyMode(bool&);
+
         void ModifyActorSalary(Actor&, float);
         void ModifyActorSalary(Actor&, int, Play&, float); // overload, use if Actor assigned
         void ModifyActorSalary(Actor&, int, Play&, PerformanceHall&, float); // overload, use if Play scheduled
@@ -155,6 +157,7 @@ class SystemManager
         void ModifyPlayTicketPrice(Play&, PerformanceHall&, float); // overload, use if Play is scheduled
         void ModifyMusicalTicketPrice(Musical&, float);
         void ModifyMusicalTicketPrice(Musical&, PerformanceHall&, float);
+        void ModifyHallCapacity(PerformanceHall&, int);
 
         // calculators
         float CalcPerfProfit(PerformanceHall, bool);

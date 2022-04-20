@@ -12,22 +12,23 @@ using std::vector;
 class Performance
 {
     private:
-        string name = "Performance";
+        string name = "Performance"; // not currently being used
         int perfID = 0;
         bool isScheduled = false;
         int inHallNum = -1;
-        float ticketPrice = 12.0f;
+        float ticketPrice = 15.0f;
         int ticketsSold = 80;
         int numPerformers = 0;
         float perfCost = 0.0f;
-        //vector<Performer> performerRoster = {};
-        bool isFullyCast = false;
+        bool isFullyCast = false; // not currently being used
 
     protected:
-        Performance(int); // allow derived classes to initialise Performance.perfID
+        Performance(int); // allow derived classes to initialise perfID
+        Performance(int, float); // allow derived classes to initialise perfID and ticketPrice 
     
     public:
         Performance();
+
         string GetName();
         void SetName(string);
         int GetPerfID();
@@ -44,11 +45,8 @@ class Performance
         void SetNumPerformers(int);
         float GetPerfCost();
         void SetPerfCost(float);
-        //vector<Performer> GetPerformerRoster();
-        //void SetPerformerRoster(vector<Performer>);
         bool GetIsFullyCast();
         void SetIsFullyCast(bool);
-
 };
 
 #endif

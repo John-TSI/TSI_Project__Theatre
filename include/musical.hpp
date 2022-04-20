@@ -9,18 +9,20 @@
 class Musical : public Performance
 {
     private:
-        string style;
+        string style; // not currently being used
         int numSingers = 0;
         int reqNumSingers = 1;
         vector<Singer> singerRoster;
-        vector<string> requiredInstruments;
+        vector<string> requiredInstruments;  // not currently being used
         int numMusicians = 0;
         int reqNumMusicians = 1;
         vector<Musician> musicianRoster;
 
     public:
         Musical();
-        Musical(int);
+        Musical(int); // initialise Performance.perfID
+        Musical(int, float); // initialise Performance.perfID, Performance.ticketPrice
+
         string GetStyle();
         void SetStyle(string);
         int GetNumSingers();

@@ -6,13 +6,15 @@
 
 
 class Performer : public Employee
-{
-     protected: // allow derived classes to instantiate Employee.idNum
-        Performer(int); 
+{ 
     private:
         bool isAssigned = false;
         int inPerfID = -1;
-        //bool costumed = false;
+        //bool costumed = false; // not currently being used
+    
+    protected:
+        Performer(int); // allow derived classes to initialise Employee.idNum
+        Performer(int, float); // allow derived classes to initialise Employee.idNum and Employee.salary  
 
     public:
         Performer();
