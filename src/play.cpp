@@ -5,6 +5,7 @@ using std::cout; using std::endl;
 
 
 // --- constructors ---
+Play::Play() {}
 Play::Play(int perfID) : Performance(perfID) {}
 Play::Play(int perfID, float ticketPrice) : Performance(perfID, ticketPrice) {}
 

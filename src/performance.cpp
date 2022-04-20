@@ -1,6 +1,7 @@
 #include"../include/performance.hpp"
 
 // --- constructors ---
+Performance::Performance() {}
 Performance::Performance(int perfID) : perfID(perfID) {}
 Performance::Performance(int perfID, float ticketPrice) : perfID(perfID), ticketPrice(ticketPrice) {}
 

@@ -19,6 +19,7 @@ class Musical : public Performance
         vector<Musician> musicianRoster;
 
     public:
+        Musical();
         Musical(int); // initialise Performance.perfID
         Musical(int, float); // initialise Performance.perfID, Performance.ticketPrice
 

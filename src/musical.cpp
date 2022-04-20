@@ -4,6 +4,7 @@
 using std::cout; using std::endl;
 
 // --- constructors ---
+Musical::Musical() {}
 Musical::Musical(int perfID) : Performance(perfID) {}
 Musical::Musical(int perfID, float ticketPrice) : Performance(perfID, ticketPrice) {}
 
