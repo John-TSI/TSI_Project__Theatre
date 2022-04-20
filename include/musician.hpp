@@ -15,9 +15,8 @@ class Musician : public Performer
     
     public:
         // --- constructors ---
-        Musician();
-        Musician(int);
-        Musician(int, float);
+        Musician(int);  // initialise Employee.idNum
+        Musician(int, float); // initialise Employee.idNum, Employee.salary
 
         // --- getters/setters ---
         vector<string> GetInstruments();

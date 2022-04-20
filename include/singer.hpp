@@ -15,9 +15,8 @@ class Singer : public Performer
 
     public:
         // --- constructors ---
-        Singer();
-        Singer(int);
-        Singer(int, float);
+        Singer(int);  // initialise Employee.idNum
+        Singer(int, float); // initialise Employee.idNum, Employee.salary
 
         // --- getters/setters ---
         vector<string> GetStyles();

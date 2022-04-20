@@ -4,7 +4,6 @@
 using std::cout; using std::endl;
 
 // --- constructors ---
-PerformanceHall::PerformanceHall() {}
 PerformanceHall::PerformanceHall(int hallNum) : hallNum(hallNum) {}
 PerformanceHall::PerformanceHall(int hallNum, int capacity) : hallNum(hallNum), capacity(capacity) {}
 

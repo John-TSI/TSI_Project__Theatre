@@ -4,7 +4,6 @@
 using std::cout; using std::endl;
 
 // --- constructors ---
-Musical::Musical() {}
 Musical::Musical(int perfID) : Performance(perfID) {}
 Musical::Musical(int perfID, float ticketPrice) : Performance(perfID, ticketPrice) {}
 
@@ -26,25 +25,3 @@ int Musical::GetReqNumMusicians() { return reqNumMusicians; }
 void Musical::SetReqNumMusicians(int input) { reqNumMusicians = input; }
 vector<Musician>& Musical::GetMusicianRoster() { return musicianRoster; }
 void Musical::SetMusicianRoster(vector<Musician> input) { musicianRoster = input; }
-
-
-// --- utility ---
-void Musical::PrintSingers(vector<Singer> sList)
-{
-    for(Singer s : sList) { cout << s.GetIDNum() << " "; }
-}
-void Musical::CastSinger(Singer s, vector<Singer>& singerRoster)
-{
-    singerRoster.push_back(s);
-    numSingers++;
-} 
-
-void Musical::PrintMusicians(vector<Musician> mList)
-{
-    for(Musician m : mList) { cout << m.GetIDNum() << " "; }
-}
-void Musical::CastMusician(Musician m, vector<Musician>& musicianRoster)
-{
-    musicianRoster.push_back(m);
-    numMusicians++;
-} 

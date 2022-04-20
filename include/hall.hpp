@@ -23,7 +23,6 @@ class PerformanceHall
         bool stageIsPrepared = false;  // not currently being used
 
     public:
-        PerformanceHall();
         PerformanceHall(int); // initialise hallNum
         PerformanceHall(int, int); // initialise hallNum and capacity
 

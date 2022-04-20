@@ -27,8 +27,6 @@ class Performance
         Performance(int, float); // allow derived classes to initialise perfID and ticketPrice 
     
     public:
-        Performance();
-
         string GetName();
         void SetName(string);
         int GetPerfID();

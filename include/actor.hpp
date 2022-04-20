@@ -16,7 +16,6 @@ class Actor : public Performer
 
     public:
         // --- constructors ---
-        Actor();
         Actor(int); // initialise Employee.idNum
         Actor(int, float); // initialise Employee.idNum, Employee.salary
         //Actor(int, string);

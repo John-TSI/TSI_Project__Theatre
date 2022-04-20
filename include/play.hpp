@@ -16,7 +16,6 @@ class Play : public Performance
         vector<Actor> actorRoster = {}; 
 
     public:
-        Play();
         Play(int); // initialise Performance.perfID
         Play(int, float); // initialise Performance.perfID, Performance.ticketPrice
 

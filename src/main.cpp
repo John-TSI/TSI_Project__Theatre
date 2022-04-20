@@ -15,17 +15,16 @@ using std::cout; using std::cin; using std::endl;
 
 
 // ------ TO DO ------
-// - implement a user guide option in one of the menus
-// - remove unnecessary constructors
-// - implement utility functions to print relevant attributes of performers/performances
-// - implement an UnassignAll() function to unassign all performers in a performance?
-// - give user option to back out instead of forcing ID/num input
+// - implement utility functions to print relevant attributes of performers/performances / menu3
+// - implement an UnassignAll() method to unassign all performers from a performance
+// - give User option to back out instead of forcing ID/num input
 
 
 // ------ PROTOTYPES ------
 void Welcome();
 void Exiting();
 float GetMainMenuRequest();
+void Help();
 
 // --- menu1 ---
 float GetMenu1Request();
@@ -1394,6 +1393,13 @@ int main()
 			}
 
 
+			case 5:
+			{
+				Help();
+				break;	
+			}
+
+
 			case 0:
 			{
 				//cout << "\nExiting program." << endl;
@@ -1476,6 +1482,7 @@ float GetMainMenuRequest()
 	cout << "2 ....... Assignment/Scheduling" << endl;
 	cout << "3 ....... Verification" << endl;
 	cout << "4 ....... Utility" << endl;
+	cout << "5 ....... Help" << endl;
 	cout << "0 ....... Exit the program" << endl;
 	cout << "-------------------------------" << endl;
 	cout << "> ";
@@ -1488,6 +1495,27 @@ float GetMainMenuRequest()
 		return req;
 	}
 	return req;
+}
+
+void Help()
+{
+	cout << "\nOption 1: Modify System Rosters" << endl;
+	cout << "-------------------------------" << endl;
+	cout << "Use this menu to add/remove Performers, Performances, and Performance Halls to/from the System lists.\n" << endl;
+	cout << "Option 2: Assignment/Scheduling" << endl;
+	cout << "-------------------------------" << endl;
+	cout << "Use this menu to assign/unassign Performers to/from Performances, and to schedule/unschedule Performances.\n" << endl;
+	cout << "Option 3: Verification" << endl;
+	cout << "----------------------" << endl;
+	cout << "Use this menu to check the status of listed Performances and Performance Halls.\n" << endl;
+	cout << "Option 4: Utility" << endl;
+	cout << "-----------------" << endl;
+	cout << "Use this menu to modify Performer salaries, Performance ticket sales, and Hall capacities." << endl; 
+	cout << "Also used to calculate expected profits from all scheduled Performances." << endl;
+	cout << "\nWhen \'Specify mode\' is enabled from this menu, the following conditions apply:\n";
+	cout << "- User must specify a daily salary when adding a Performer to the system (default 120.00)." << endl;
+	cout << "- User must specify a ticket price when adding a Performance to the system (default 15.00)." << endl;
+	cout << "- User must specify a capacity when adding a Performance Hall to the system (default 150).\n" << endl;
 }
 
 

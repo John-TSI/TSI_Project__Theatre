@@ -19,7 +19,6 @@ class Musical : public Performance
         vector<Musician> musicianRoster;
 
     public:
-        Musical();
         Musical(int); // initialise Performance.perfID
         Musical(int, float); // initialise Performance.perfID, Performance.ticketPrice
 
@@ -39,11 +38,6 @@ class Musical : public Performance
         void SetReqNumMusicians(int);
         vector<Musician>& GetMusicianRoster();
         void SetMusicianRoster(vector<Musician>);
-
-        void PrintSingers(vector<Singer>);
-        void CastSinger(Singer, vector<Singer>&);
-        void PrintMusicians(vector<Musician>);
-        void CastMusician(Musician, vector<Musician>&);
 };
 
 #endif
