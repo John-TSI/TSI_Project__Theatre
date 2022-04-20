@@ -15,15 +15,11 @@ using std::cout; using std::cin; using std::endl;
 
 
 // ------ TO DO ------
-// - verify schedPerf.ticketSold <= hall.capacity when scheduling AND modifying ticketsSold
 // - implement a user guide option in one of the menus
 // - remove unnecessary constructors
 // - implement utility functions to print relevant attributes of performers/performances
 // - implement an UnassignAll() function to unassign all performers in a performance?
-// - include a graphical frame around each printed menu?
 // - give user option to back out instead of forcing ID/num input
-// - change calc profit output to show (ticketPrice) x (ticketsSold) = perfSales
-// - implement a ModifyTicketsSold() (don't need a constructor)
 
 
 // ------ PROTOTYPES ------
@@ -54,6 +50,8 @@ float GetPerformerSalaryToModify();
 float GetNewSalary();
 float GetPerformanceTicketPriceToModify();
 float GetNewPrice();
+float GetPerformanceTicketSalesToModify();
+float GetNewSales();
 float GetNewCapacity();
 
 // --- misc ---
@@ -749,13 +747,13 @@ int main()
 										{
 											int perfID = h->GetScheduledPerf().GetPerfID();
 											cout << "\nThe specified Performance Hall is already booked with a Performance (ID " << perfID << ")." << endl;
-											cout << "Check your input and try again.\n" << endl;
+											cout << "Check your input and try again." << endl;
 											break;
 										}
 										if(h->GetCapacity() < p->GetTicketsSold()) // break if Performance Hall has insufficient capacity
 										{
 											cout << "\nThe specified Performance Hall is unable to accommodate this Play (max capacity: " << h->GetCapacity() << ")." << endl;
-											cout << "Check your input and try again.\n" << endl;
+											cout << "Check your input and try again." << endl;
 											break;
 										}
 										SM.SchedulePlay(*p, *h);
@@ -813,13 +811,13 @@ int main()
 										{
 											int perfID = h->GetScheduledPerf().GetPerfID();
 											cout << "\nThe specified Performance Hall is already booked with a Performance (ID " << perfID << ")." << endl;
-											cout << "Check your input and try again.\n" << endl;
+											cout << "Check your input and try again." << endl;
 											break;
 										}
 										if(h->GetCapacity() < mu->GetTicketsSold()) // break if Performance Hall has insufficient capacity
 										{
 											cout << "\nThe specified Performance Hall is unable to accommodate this Musical (max capacity: " << h->GetCapacity() << ")." << endl;
-											cout << "Check your input and try again.\n" << endl;
+											cout << "Check your input and try again." << endl;
 											break;
 										}
 										SM.ScheduleMusical(*mu, *h);
@@ -1189,7 +1187,108 @@ int main()
 							}
 							break;
 						}
-						case 4: // selected Modify Performance Hall capacity
+						case 4: // selected Modify Performance ticket sales
+						{
+							int reqMP = -1;
+							while(reqMP != 0)
+							{
+								reqMP = GetPerformanceTicketSalesToModify(); // open Menu to Modify ticket sales of a performance (2+1 cases)
+								switch(reqMP)
+								{
+									case 1: // selected Modify ticket sales of a Play
+									{
+										// output info to User
+										cout << "\nCurrently listed Play performance IDs: { ";
+										SM.PrintPlays(playList); 
+										cout << "}" << endl;
+
+										// get User Play request
+										cout << "Enter the performance ID number of the Play to be modified:" << endl;
+										int idP = GetIDRequest();
+										
+										// break if user input is of invalid type
+										if(idP == -1) { WarningInvalidInput(); break; }
+
+										// break if Play not listed on SystemManager
+										if(!SM.VerifiedPlayID(idP, playList)) { WarningUnlistedPlay(); break; }
+										Play* p = SM.FindPlay(idP, playList);
+										cout << "\nThis Play has currently sold " << p->GetTicketsSold() << " tickets.";
+
+										// get User sales request
+										int newSales = GetNewSales();
+
+										// break if user input is invalid
+										if(newSales == -1) { WarningInvalidInput(); break; }
+
+										// determine appropriate version of overloaded ModifyPlayTicketsSold() to call
+										if(p->GetIsScheduled())
+										{
+											int hallNum = p->GetInHallNum();
+											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+											if(h->GetCapacity() < newSales)
+											{
+												cout << "\nThis Play is currently scheduled in a Performance Hall with an insufficient capacity." << endl;
+												cout << "Unschedule the Play before modifying its ticket sales, or enter a number <= " << h->GetCapacity() << ".\n";
+												break;
+											}
+											SM.ModifyPlayTicketsSold(*p, *h, newSales);
+										}
+										else { SM.ModifyPlayTicketsSold(*p, newSales); }
+										break;
+									}
+									case 2: // selected modify ticket sales of a Musical
+									{
+										// output info to User
+										cout << "\nCurrently listed Musical performance IDs: { ";
+										SM.PrintMusicals(musicalList); 
+										cout << "}" << endl;
+
+										// get User Musical request
+										cout << "Enter the performance ID number of the Musical to be modified:" << endl;
+										int idM = GetIDRequest();
+										
+										// break if user input is of invalid type
+										if(idM == -1) { WarningInvalidInput(); break; }
+
+										// break if Musical not listed on SystemManager
+										if(!SM.VerifiedMusicalID(idM, musicalList)) { WarningUnlistedMusical(); break; }
+										Musical* mu = SM.FindMusical(idM, musicalList);
+										cout << "\nThis Musical has currently sold " << mu->GetTicketsSold() << " tickets.";
+
+										// get User sales request
+										int newSales = GetNewSales();
+
+										// break if user input is invalid
+										if(newSales == -1) { WarningInvalidInput(); break; }
+
+										// determine appropriate version of overloaded ModifyMusicalTicketsSold() to call
+										if(mu->GetIsScheduled())
+										{
+											int hallNum = mu->GetInHallNum();
+											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+											if(h->GetCapacity() < newSales)
+											{
+												cout << "\nThis Musical is currently scheduled in a Performance Hall with an insufficient capacity." << endl;
+												cout << "Unschedule the Musical before modifying its ticket sales, or enter a number <= " << h->GetCapacity() << ".\n";
+												break;
+											}
+											SM.ModifyMusicalTicketsSold(*mu, *h, newSales);
+										}
+										else { SM.ModifyMusicalTicketsSold(*mu, newSales); }
+										break;
+									}
+									case 0:
+									{
+										reqMP = 0;
+										break;
+									}
+									default:
+										WarningInvalidInput();
+								}
+							}
+							break;
+						}
+						case 5: // selected Modify Performance Hall capacity
 						{
 							// output info to User
 							cout << "\nCurrently listed Performance Hall numbers: { ";
@@ -1230,7 +1329,7 @@ int main()
 							else { SM.ModifyHallCapacity(*h, newCapacity); }
 							break;
 						}
-						case 5: // selected Calculate profit of a scheduled Performance
+						case 6: // selected Calculate profit of a scheduled Performance
 						{
 							// output info to User
 							cout << "\nCurrently listed Performance Hall numbers: { ";
@@ -1260,7 +1359,7 @@ int main()
 							SM.CalcPerfProfit(*h, true);
 							break;
 						}
-						case 6: // selected Calculate profit of all scheduled Performances
+						case 7: // selected Calculate profit of all scheduled Performances
 						{
 							cout << "View a per-performance breakdown? (y/n)" << endl;
 							char response = 'z';
@@ -1657,9 +1756,10 @@ float GetMenu4Request()
 	cout << "1 ....... Toggle Specify mode" << endl;
 	cout << "2 ....... Modify the salary of a Performer" << endl;
 	cout << "3 ....... Modify the ticket price of a Performance" << endl;
-	cout << "4 ....... Modify the capacity of a Performance Hall" << endl;
-	cout << "5 ....... Calculate profit of a scheduled Performance" << endl;
-	cout << "6 ....... Calculate total profit of all scheduled Performances" << endl;
+	cout << "4 ....... Modify the ticket sales of a Performance" << endl;
+	cout << "5 ....... Modify the capacity of a Performance Hall" << endl;
+	cout << "6 ....... Calculate profit of a scheduled Performance" << endl;
+	cout << "7 ....... Calculate total profit of all scheduled Performances" << endl;
 	cout << "0 ....... Return to the previous menu" << endl;
 	cout << "--------------------------------------------------------------" << endl;
 	cout << "> ";
@@ -1749,6 +1849,43 @@ float GetNewPrice()
 	return newPrice;
 }
 
+float GetPerformanceTicketSalesToModify()
+{
+	float req = -1;
+	cout << "\nSelect a Performance to modify its ticket sales:" << endl;
+	cout << "-----------------------------------------------------" << endl;
+	cout << "1 ....... Modify the ticket sales of a listed Play" << endl;
+	cout << "2 ....... Modify the ticket sales of a listed Musical" << endl;
+	cout << "0 ....... Return to the previous menu" << endl;
+	cout << "-----------------------------------------------------" << endl;
+	cout << "> ";
+	cin >> req;
+	if(cin.fail())
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		req = -1;
+		return req;
+	}
+	return req;
+}
+
+float GetNewSales()
+{
+	cout << "\nEnter the new number of tickets sold for the Performance:" << endl;
+	float newSales = -1.0f;
+	cout << "> ";
+	cin >> newSales;
+	if(cin.fail() || newSales<0)
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		newSales = -1.0f;
+		return newSales;
+	}
+	return newSales;
+}
+
 float GetNewCapacity()
 {
 	cout << "\nEnter the new capacity for the Performance Hall:" << endl;
@@ -1784,6 +1921,7 @@ float GetIDRequest()
 	return req;
 }
 
+// WARNINGS
 void WarningInvalidInput() { cout << "\nInvalid input, please review the input options and try again." << endl; }
 
 void WarningUnlistedActor() { cout << "\nThe specified Actor is not currently listed.\nCheck your input and try again.\n" << endl; }

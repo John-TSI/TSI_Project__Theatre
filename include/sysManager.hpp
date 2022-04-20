@@ -145,8 +145,8 @@ class SystemManager
         void ToggleSpecifyMode(bool&);
 
         void ModifyActorSalary(Actor&, float);
-        void ModifyActorSalary(Actor&, int, Play&, float); // overload, use if Actor assigned
-        void ModifyActorSalary(Actor&, int, Play&, PerformanceHall&, float); // overload, use if Play scheduled
+        void ModifyActorSalary(Actor&, int, Play&, float); // overload, used if Actor assigned
+        void ModifyActorSalary(Actor&, int, Play&, PerformanceHall&, float); // overload, used if Play scheduled
         void ModifySingerSalary(Singer&, float);
         void ModifySingerSalary(Singer&, int, Musical&, float);
         void ModifySingerSalary(Singer&, int, Musical&, PerformanceHall&, float);
@@ -154,9 +154,13 @@ class SystemManager
         void ModifyMusicianSalary(Musician&, int, Musical&, float);
         void ModifyMusicianSalary(Musician&, int, Musical&, PerformanceHall&, float);
         void ModifyPlayTicketPrice(Play&, float);
-        void ModifyPlayTicketPrice(Play&, PerformanceHall&, float); // overload, use if Play is scheduled
+        void ModifyPlayTicketPrice(Play&, PerformanceHall&, float); // overload, used if Play is scheduled
+        void ModifyPlayTicketsSold(Play&, int);
+        void ModifyPlayTicketsSold(Play&, PerformanceHall&, int); // overload, used if Play is scheduled
         void ModifyMusicalTicketPrice(Musical&, float);
         void ModifyMusicalTicketPrice(Musical&, PerformanceHall&, float);
+        void ModifyMusicalTicketsSold(Musical&, int);
+        void ModifyMusicalTicketsSold(Musical&, PerformanceHall&, int);
         void ModifyHallCapacity(PerformanceHall&, int);
 
         // calculators
