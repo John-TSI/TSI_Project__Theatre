@@ -15,13 +15,12 @@ using std::cout; using std::cin; using std::endl;
 
 
 // ------ TO DO ------
-// - implement utility functions to print relevant attributes of performers/performances / menu3
 // - implement an UnassignAll() method to unassign all performers from a performance
 // - give User option to back out instead of forcing ID/num input
 // - implement a ModifyReqActors() for a Play, similarly for Musical
 //		- implement a CheckIfFullyCast() when calculating, issue warning and omit if false
 // - implement a check when modifying salary: if assigned/when assigning, issue warning if newSalary costs more than ticket sales
-// - change Verification to Utility/Verification and Utility to Modify/Calculate ?
+
 
 // ------ PROTOTYPES ------
 void Welcome();
@@ -932,7 +931,7 @@ int main()
 			}
 
 
-			case 3: //  selected Menu3 : Check status
+			case 3: // selected Menu3 : Check status
 			{
 				int req3 = -1;
 				while(req3 != 0)
@@ -942,14 +941,17 @@ int main()
 					{
 						case 1: // selected Check status of all listed Actors
 						{
+							SM.CheckActorsStatus(actorList);
 							break;
 						}
 						case 2: // selected Check status of all listed Singers
 						{
+							SM.CheckSingersStatus(singerList);
 							break;
 						}
 						case 3: // selected check status of all listed Musicians
 						{
+							SM.CheckMusiciansStatus(musicianList);
 							break;
 						}
 						case 4: // selected check status of all listed Plays
@@ -959,7 +961,7 @@ int main()
 						}
 						case 5: // selected check status of all listed Musicals
 						{
-							//SM.CheckMusicalsStatus(musicalList);
+							SM.CheckMusicalsStatus(musicalList);
 							break;
 						}
 						case 6: // selected check status of all listed Performance Halls
@@ -1431,7 +1433,7 @@ int main()
 			}
 
 
-			case 5:
+			case 5: // selected Help
 			{
 				Help();
 				break;	
@@ -1465,9 +1467,9 @@ void Welcome()
 }
 void Exiting()
 {
-	cout << "\n()()()()()()()()()()()()()()()()" << endl;
-	cout << "()    Exiting the program.    ()" << endl;
-	cout << "()()()()()()()()()()()()()()()()" << endl;
+	cout << "\n()()()()()()()()()()()()()()()" << endl;
+	cout << "()    Exited the program    ()" << endl;
+	cout << "()()()()()()()()()()()()()()()" << endl;
 }
 
 float GetMainMenuRequest()
@@ -1477,8 +1479,8 @@ float GetMainMenuRequest()
 	cout << "-------------------------------" << endl;
 	cout << "1 ....... Modify System Rosters" << endl;
 	cout << "2 ....... Assignment/Scheduling" << endl;
-	cout << "3 ....... Verification" << endl;
-	cout << "4 ....... Utility" << endl;
+	cout << "3 ....... Utility" << endl;
+	cout << "4 ....... Modify/Calculate" << endl;
 	cout << "5 ....... Help" << endl;
 	cout << "0 ....... Exit the program" << endl;
 	cout << "-------------------------------" << endl;
@@ -1502,13 +1504,13 @@ void Help()
 	cout << "Option 2: Assignment/Scheduling" << endl;
 	cout << "-------------------------------" << endl;
 	cout << "Use this menu to assign/unassign Performers to/from Performances, and to schedule/unschedule Performances.\n" << endl;
-	cout << "Option 3: Verification" << endl;
+	cout << "Option 3: Utility" << endl;
 	cout << "----------------------" << endl;
-	cout << "Use this menu to check the status of listed Performances and Performance Halls.\n" << endl;
-	cout << "Option 4: Utility" << endl;
+	cout << "Use this menu to check the status of all listed Performers, Performances, and Performance Halls.\n" << endl;
+	cout << "Option 4: Modify/Calculate" << endl;
 	cout << "-----------------" << endl;
 	cout << "Use this menu to modify Performer salaries, Performance ticket sales, and Hall capacities." << endl; 
-	cout << "Also used to calculate expected profits from all scheduled Performances." << endl;
+	cout << "Use also to calculate expected profits from all scheduled Performances." << endl;
 	cout << "\nWhen \'Specify mode\' is enabled from this menu, the following conditions apply:\n";
 	cout << "- User must specify a daily salary when adding a Performer to the system (default 120.00)." << endl;
 	cout << "- User must specify a ticket price when adding a Performance to the system (default 15.00)." << endl;

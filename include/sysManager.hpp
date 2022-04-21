@@ -94,17 +94,14 @@ class SystemManager
 
         // --- utility/verification ---
         // check status
-        bool IsFullyCast(Play&);
-        bool IsFullyCast(Musical&);
-        bool IsBooked(PerformanceHall&);
-        //bool StageIsPrepared(PerformanceHall&);
         bool AllPerfsReady(vector<PerformanceHall>&);
 
-        // test methods
+        void CheckActorsStatus(vector<Actor>);
+        void CheckSingersStatus(vector<Singer>);
+        void CheckMusiciansStatus(vector<Musician>);
         void CheckPlaysStatus(vector<Play>);
         void CheckMusicalsStatus(vector<Musical>);
         void CheckHallsStatus(vector<PerformanceHall>);
-        // end test
 
         // ID verifiers
         bool VerifiedActorID(int, vector<Actor>);

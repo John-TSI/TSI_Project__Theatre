@@ -582,10 +582,77 @@ void SystemManager::UnscheduleMusical(Musical& mu, PerformanceHall& h)
 
 // --- utility/verification ---
 // check status
-bool SystemManager::IsFullyCast(Play& p) { return p.GetIsFullyCast(); }
-bool SystemManager::IsFullyCast(Musical& m) { return m.GetIsFullyCast(); }
-bool SystemManager::IsBooked(PerformanceHall& h) { return h.GetIsBooked(); }
-//bool SystemManager::StageIsPrepared(PerformanceHall& h) { return h.GetStagePrepared(); }
+void SystemManager::CheckActorsStatus(vector<Actor> aList)
+{
+    if(actorCount == 0) { cout << "\nNo Actors are currently listed on the system." << endl; }
+    else
+    {
+        for(Actor a : aList)
+        {
+            int idNum =  a.GetIDNum();
+            int inPerfID = a.GetInPerfID();
+            float salary = a.GetSalary();
+
+            cout << "\nActor with ID number " << idNum << " earns a salary of " << salary << " per day." << endl;
+            if(a.GetIsAssigned())
+            {
+                cout << "This Actor is currently assigned to the Play with Performance ID " << inPerfID << "." << endl;
+            }
+            else
+            {
+                cout << "This Actor is not currently assigned to a Performance.\n" << endl;
+            }
+        }
+    }
+}
+
+void SystemManager::CheckSingersStatus(vector<Singer> sList)
+{
+    if(singerCount == 0) { cout << "\nNo Singers are currently listed on the system." << endl; }
+    else
+    {
+        for(Singer s : sList)
+        {
+            int idNum =  s.GetIDNum();
+            int inPerfID = s.GetInPerfID();
+            float salary = s.GetSalary();
+
+            cout << "\nSinger with ID number " << idNum << " earns a salary of " << salary << " per day." << endl;
+            if(s.GetIsAssigned())
+            {
+                cout << "This Singer is currently assigned to the Musical with Performance ID " << inPerfID << "." << endl;
+            }
+            else
+            {
+                cout << "This Singer is not currently assigned to a Performance.\n" << endl;
+            }
+        }
+    }
+}
+
+void SystemManager::CheckMusiciansStatus(vector<Musician> mList)
+{
+    if(musicianCount == 0) { cout << "\nNo Musicians are currently listed on the system." << endl; }
+    else
+    {
+        for(Musician m : mList)
+        {
+            int idNum =  m.GetIDNum();
+            int inPerfID = m.GetInPerfID();
+            float salary = m.GetSalary();
+
+            cout << "\nMusician with ID number " << idNum << " earns a salary of " << salary << " per day." << endl;
+            if(m.GetIsAssigned())
+            {
+                cout << "This Musician is currently assigned to the Musical with Performance ID " << inPerfID << "." << endl;
+            }
+            else
+            {
+                cout << "This Musician is not currently assigned to a Performance.\n" << endl;
+            }
+        }
+    }
+}
 
 void SystemManager::CheckPlaysStatus(vector<Play> pList)
 {
@@ -608,6 +675,34 @@ void SystemManager::CheckPlaysStatus(vector<Play> pList)
             else
             {
                 cout << "This Play is not currently scheduled in a Performance Hall.\n" << endl;
+            }
+        }
+    }
+}
+
+void SystemManager::CheckMusicalsStatus(vector<Musical> mList)
+{
+    if(musicalCount == 0) { cout << "\nNo Musicals are currently listed on the system." << endl; }
+    else
+    {
+        for(Musical m : mList)
+        {
+            int perfID =  m.GetPerfID();
+            int numSingers = m.GetNumSingers(), reqNumSingers = m.GetReqNumSingers();
+            int numMusicians = m.GetNumMusicians(), reqNumMusicians = m.GetReqNumMusicians();
+            int ticketsSold = m.GetTicketsSold();
+            float ticketPrice = m.GetTicketPrice();
+
+            cout << "\nMusical with Performance ID " << perfID << " currently has " << numSingers << " of required " << reqNumSingers << " assigned Singers." << endl;
+            cout << "\nMusical with Performance ID " << perfID << " currently has " << numMusicians << " of required " << reqNumMusicians << " assigned Musicians." << endl;
+            cout << "This Musical has currently sold " << ticketsSold << " tickets at " << ticketPrice << " each." << endl;
+            if(m.GetIsScheduled())
+            {
+                cout << "This Musical is currently scheduled in Performance Hall number " << m.GetInHallNum() << "." << endl;
+            }
+            else
+            {
+                cout << "This Musical is not currently scheduled in a Performance Hall.\n" << endl;
             }
         }
     }
