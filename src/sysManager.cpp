@@ -1,6 +1,7 @@
 
 #include<iostream>
 #include<algorithm>
+#include<iomanip>
 #include"../include/sysManager.hpp"
 
 using std::cout; using std::endl;
@@ -579,24 +580,83 @@ void SystemManager::UnscheduleMusical(Musical& mu, PerformanceHall& h)
 }
 
 
-// --- verifications ---
+// --- utility/verification ---
+// check status
 bool SystemManager::IsFullyCast(Play& p) { return p.GetIsFullyCast(); }
 bool SystemManager::IsFullyCast(Musical& m) { return m.GetIsFullyCast(); }
 bool SystemManager::IsBooked(PerformanceHall& h) { return h.GetIsBooked(); }
 //bool SystemManager::StageIsPrepared(PerformanceHall& h) { return h.GetStagePrepared(); }
 
-void SystemManager::CheckHallsStatus(vector<PerformanceHall>& hList)
+void SystemManager::CheckPlaysStatus(vector<Play> pList)
 {
-    for(PerformanceHall h : hList)
-	{	
-        int hallNum = h.GetHallNum();
-		int perfNum =  h.GetScheduledPerf().GetPerfID();
-		(h.GetIsBooked()) ? cout << "Hall number " << hallNum << " is booked with performance number " << perfNum << "." << endl : cout << "Hall number " << hallNum << " is not booked." << endl;
-		if(h.GetIsBooked())
+    if(playCount == 0) { cout << "\nNo Plays are currently listed on the system." << endl; }
+    else
+    {
+        for(Play p : pList)
         {
-            (h.GetScheduledPerf().GetIsFullyCast()) ? cout << "Scheduled performance is fully cast!\n" << endl : cout << "Scheduled performance has insufficient performers!\n" << endl;
+            int perfID =  p.GetPerfID();
+            int numActors = p.GetNumActors(), reqNumActors = p.GetReqNumActors();
+            int ticketsSold = p.GetTicketsSold();
+            float ticketPrice = p.GetTicketPrice();
+
+            cout << "\nPlay with Performance ID " << perfID << " currently has " << numActors << " of required " << reqNumActors << " assigned Actors." << endl;
+            cout << "This Play has currently sold " << ticketsSold << " tickets at " << ticketPrice << " each." << endl;
+            if(p.GetIsScheduled())
+            {
+                cout << "This Play is currently scheduled in Performance Hall number " << p.GetInHallNum() << "." << endl;
+            }
+            else
+            {
+                cout << "This Play is not currently scheduled in a Performance Hall.\n" << endl;
+            }
         }
-	}
+    }
+}
+
+void SystemManager::CheckHallsStatus(vector<PerformanceHall> hList)
+{
+    if(hallCount == 0) { cout << "\nNo Performance Halls are currently listed on the system." << endl; }
+    else
+    {
+        for(PerformanceHall h : hList)
+        {	
+            int hallNum = h.GetHallNum();
+            int capacity = h.GetCapacity();
+            if(h.GetHasPlay())
+            {
+                Play p = h.GetScheduledPlay();
+                int perfID =  p.GetPerfID();
+                int numActors = p.GetNumActors(), reqNumActors = p.GetReqNumActors();
+                int ticketsSold = p.GetTicketsSold();
+                float ticketPrice = p.GetTicketPrice();
+
+                cout << "\nPerformance Hall number " << hallNum << " is currently booked with a Play (Performance ID: " << perfID << ")." << endl;
+                cout << "The scheduled Play currently has " << numActors << " of required " << reqNumActors << " assigned Actors." << endl;
+                cout << "The scheduled Play has currently sold " << ticketsSold << " tickets at " << ticketPrice << " each." << endl;
+                cout << "This Performance Hall has an audience capacity of " << capacity << ".\n" << endl;
+            }
+            else if(h.GetHasMusical())
+            {
+                Musical mu = h.GetScheduledMusical();
+                int perfID =  mu.GetPerfID();
+                int numSingers = mu.GetNumSingers(), reqNumSingers = mu.GetReqNumSingers();
+                int numMusicians = mu.GetNumMusicians(), reqNumMusicians = mu.GetReqNumMusicians();
+                int ticketsSold = mu.GetTicketsSold();
+                float ticketPrice = mu.GetTicketPrice();
+
+                cout << "\nPerformance Hall number " << hallNum << " is currently booked with a Musical (Performance ID: " << perfID << ")." << endl;
+                cout << "The scheduled Musical currently has " << numSingers << " of required " << reqNumSingers << " assigned Singers." << endl;
+                cout << "The scheduled Musical currently has " << numMusicians << " of required " << reqNumMusicians << " assigned Musicians." << endl;
+                cout << "The scheduled Musical has currently sold " << ticketsSold << " tickets at " << ticketPrice << " each." << endl;
+                cout << "This Performance Hall has an audience capacity of " << capacity << ".\n" << endl;
+            }
+            else
+            {
+                cout << "\nPerformance Hall number " << hallNum << " is not currently booked with a Performance." << endl;
+                cout << "It has an audience capacity of " << capacity << ".\n" << endl;
+            }
+        }
+    }
 }
 
 bool SystemManager::AllPerfsReady(vector<PerformanceHall>& hList)
@@ -611,6 +671,7 @@ bool SystemManager::AllPerfsReady(vector<PerformanceHall>& hList)
 	}
     return allPerfsReady;
 }
+
 
 // ID verifiers
 bool SystemManager::VerifiedActorID(int idNum, vector<Actor> aList)
@@ -674,7 +735,7 @@ bool SystemManager::VerifiedHallNum(int hallNum, vector<PerformanceHall> hList)
 }
 
 
-// --- utility ---
+// finders
 Actor* SystemManager::FindActor(int idNum, vector<Actor>& aList)
 {
     auto a_it = std::find_if(aList.begin(), aList.end(), [idNum](Actor& a) {return a.GetIDNum() == idNum;});
@@ -792,7 +853,8 @@ void SystemManager::PrintAvailableHalls(vector<PerformanceHall> vec)
 }
 
 
-//modifiers
+// --- modify/calculate ---
+// modify
 void SystemManager::ToggleSpecifyMode(bool& currentSetting) 
 { 
     currentSetting = !currentSetting;
@@ -1035,6 +1097,7 @@ void SystemManager::ModifyHallCapacity(PerformanceHall& h, int newCapacity)
     (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
 
+
 // calculators
 float SystemManager::CalcPerfProfit(PerformanceHall h, bool printOutput = false)
 {
@@ -1045,10 +1108,33 @@ float SystemManager::CalcPerfProfit(PerformanceHall h, bool printOutput = false)
     if(printOutput)
     {
         cout << "\nPerformance Hall number " << h.GetHallNum() << ":" << endl;
-        cout << "-------------------------------------------------" << endl;
-        cout << "Total amount generated by ticket sales: " << p.GetTicketPrice() << " x " << p.GetTicketsSold() << " tickets = " << perfSales << endl;
-        cout << "Total cost of Performer salaries: " << perfCost << endl;
-        cout << "Profit generated by this Performance: " << perfProfit << endl;
+        cout << "------------------------------------------------------------------" << endl;
+        cout << "Total takings generated by ticket sales:   " << p.GetTicketPrice() << " x " << p.GetTicketsSold() << " tickets = " << perfSales << endl;       
+        if(h.GetHasPlay())
+        {
+            cout << "\nSalaries of assigned Actors:" << endl;
+            for(Actor a : (vector<Actor>) h.GetScheduledPlay().GetActorRoster())
+            {
+                cout << "Actor " << a.GetIDNum() << ":                             " << a.GetSalary() << endl;
+            }
+        }
+        if(h.GetHasMusical())
+        {
+            cout << "\nSalaries of assigned Singers:" << endl;
+            for(Singer s : (vector<Singer>) h.GetScheduledMusical().GetSingerRoster())
+            {
+                cout << "Singer " << s.GetIDNum() << ":                            " << s.GetSalary() << endl;
+            }
+            cout << "\nSalaries of assigned Musicians:" << endl;
+            for(Musician m : (vector<Musician>) h.GetScheduledMusical().GetMusicianRoster())
+            {
+                cout << "Musician " << m.GetIDNum() << ":                          " << m.GetSalary() << endl;
+            }
+        }
+        cout << "                                   ----- " << endl;
+        cout << "Total cost of Performer salaries: " << std::setw(6) << perfCost << endl;
+        cout << "------------------------------------------------------------------" << endl;
+        cout << "Profit generated by this Performance:   " << perfProfit << "\n" << endl;
     } 
     return perfProfit;
 }

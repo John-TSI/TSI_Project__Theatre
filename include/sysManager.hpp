@@ -92,14 +92,19 @@ class SystemManager
         void UnscheduleMusical(Musical&, PerformanceHall&);
 
 
-        // --- verifications ---
+        // --- utility/verification ---
+        // check status
         bool IsFullyCast(Play&);
         bool IsFullyCast(Musical&);
         bool IsBooked(PerformanceHall&);
         //bool StageIsPrepared(PerformanceHall&);
-
-        void CheckHallsStatus(vector<PerformanceHall>&);
         bool AllPerfsReady(vector<PerformanceHall>&);
+
+        // test methods
+        void CheckPlaysStatus(vector<Play>);
+        void CheckMusicalsStatus(vector<Musical>);
+        void CheckHallsStatus(vector<PerformanceHall>);
+        // end test
 
         // ID verifiers
         bool VerifiedActorID(int, vector<Actor>);
@@ -109,8 +114,6 @@ class SystemManager
         bool VerifiedMusicalID(int, vector<Musical>);
         bool VerifiedHallNum(int, vector<PerformanceHall>);
 
-
-        // --- utility ---
         // finders
         Actor* FindActor(int, vector<Actor>&);
         Singer* FindSinger(int, vector<Singer>&);
@@ -129,19 +132,19 @@ class SystemManager
         void PrintMusicians(vector<Musician>);
         void PrintAssignedMusicians(vector<Musician>);
         void PrintUnassignedMusicians(vector<Musician>);
-
         void PrintPlays(vector<Play>);
         void PrintScheduledPlays(vector<Play>);
         void PrintUnscheduledPlays(vector<Play>);
         void PrintMusicals(vector<Musical>);
         void PrintScheduledMusicals(vector<Musical>);
         void PrintUnscheduledMusicals(vector<Musical>);
-
         void PrintHalls(vector<PerformanceHall>);
         void PrintBookedHalls(vector<PerformanceHall>);
         void PrintAvailableHalls(vector<PerformanceHall>);
 
-        // modifiers
+
+        // --- modify/calculate ---
+        // modify
         void ToggleSpecifyMode(bool&);
 
         void ModifyActorSalary(Actor&, float);
@@ -163,7 +166,7 @@ class SystemManager
         void ModifyMusicalTicketsSold(Musical&, PerformanceHall&, int);
         void ModifyHallCapacity(PerformanceHall&, int);
 
-        // calculators
+        // --- calculators ---
         float CalcPerfProfit(PerformanceHall, bool);
         float CalcTotalProfit(vector<PerformanceHall>, bool);
 };

@@ -18,7 +18,10 @@ using std::cout; using std::cin; using std::endl;
 // - implement utility functions to print relevant attributes of performers/performances / menu3
 // - implement an UnassignAll() method to unassign all performers from a performance
 // - give User option to back out instead of forcing ID/num input
-
+// - implement a ModifyReqActors() for a Play, similarly for Musical
+//		- implement a CheckIfFullyCast() when calculating, issue warning and omit if false
+// - implement a check when modifying salary: if assigned/when assigning, issue warning if newSalary costs more than ticket sales
+// - change Verification to Utility/Verification and Utility to Modify/Calculate ?
 
 // ------ PROTOTYPES ------
 void Welcome();
@@ -929,14 +932,49 @@ int main()
 			}
 
 
-			case 3: //  selected Menu3 : Check/Verify
+			case 3: //  selected Menu3 : Check status
 			{
 				int req3 = -1;
 				while(req3 != 0)
 				{
-					req3 = GetMenu3Request();
-					// insert switch here
-					cout << req3 << endl;
+					req3 = GetMenu3Request(); // open Menu3 (6+1 cases)
+					switch(req3)
+					{
+						case 1: // selected Check status of all listed Actors
+						{
+							break;
+						}
+						case 2: // selected Check status of all listed Singers
+						{
+							break;
+						}
+						case 3: // selected check status of all listed Musicians
+						{
+							break;
+						}
+						case 4: // selected check status of all listed Plays
+						{
+							SM.CheckPlaysStatus(playList);
+							break;
+						}
+						case 5: // selected check status of all listed Musicals
+						{
+							//SM.CheckMusicalsStatus(musicalList);
+							break;
+						}
+						case 6: // selected check status of all listed Performance Halls
+						{
+							SM.CheckHallsStatus(perfHallList);
+							break;
+						}
+						case 0:
+						{
+							req3 = 0;
+							break;
+						}
+						default:
+							WarningInvalidInput();
+					}
 				}
 				break;
 			}
@@ -1402,11 +1440,8 @@ int main()
 
 			case 0:
 			{
-				//cout << "\nExiting program." << endl;
 				Exiting();
 				return 0;
-				//mainReq = 0; // break out of main loop only while TESTING
-				//break;
 			}
 
 			default:
@@ -1415,47 +1450,9 @@ int main()
 	}
 
 
-	// --- TESTING ---
-	
-	//cout << endl;
-	//Actor* a0 = SM.FindActor(0, actorList);
-	//cout << a0->GetSalary() << endl;
-	//SM.ModifyActorSalary(0, actorList, 72.5);
-	//cout << a0->GetSalary() << endl;
-
-	//cout << endl;
- 	//cout << "Listed Actors: ";
-	//SM.PrintActors(actorList);
-
-	//cout << endl;
- 	//cout << "Listed Plays: ";
-	//SM.PrintPlays(playList);
-
- 	//cout << endl;
-	//Play* p0 = SM.FindPlay(0, playList);
-/* 	vector<Actor> aList = p0->GetActorRoster();
-	Actor* a0p0 = SM.FindActor(0, aList);
-	cout << a0p0->GetSalary(); */
-	//cout << p0->GetTicketPrice();
-
-/* 	cout << endl;
-	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
-	Play& p0h0 = h0->GetScheduledPlay();
-	vector<Actor> aL = p0h0.GetActorRoster();
-	Actor* a0p0h0 = SM.FindActor(0, aL);
-	cout << a0p0h0->GetSalary(); */
-
-/*  	cout << endl;
-	PerformanceHall* h0 = SM.FindPerfHall(0, perfHallList);
-	Play pl = h0->GetScheduledPlay();
-	cout << pl.GetTicketPrice(); */ 
-
-
-	// --- END TESTING ---
-
 
 	return 0;
-}
+} // end main
 
 
 
@@ -1752,14 +1749,15 @@ float GetMenu3Request()
 {
 	float req = -1;
 	cout << "\nSelect an operation:" << endl;
-	cout << "--------------------------------------------------------" << endl;
-	cout << "1 ....... Verify a Play is fully cast" << endl;
-	cout << "2 ....... Verify a Musical is fully cast" << endl;
-	cout << "3 ....... Check whether a Performance Hall is booked" << endl;
-	cout << "4 ....... Check status of all Performance Halls" << endl;
-	cout << "5 ....... Verify all scheduled Performances are prepared" << endl;
+	cout << "------------------------------------------------------" << endl;
+	cout << "1 ....... Check status of all listed Actors" << endl;
+	cout << "2 ....... Check status of all listed Singers" << endl;
+	cout << "3 ....... Check status of all listed Musicians" << endl;
+	cout << "4 ....... Check status of all listed Plays" << endl;
+	cout << "5 ....... Check status of all listed Musicals" << endl;
+	cout << "6 ....... Check status of all listed Performance Halls" << endl;
 	cout << "0 ....... Return to the previous menu" << endl;
-	cout << "--------------------------------------------------------" << endl;
+	cout << "------------------------------------------------------" << endl;
 	cout << "> ";
 	cin >> req;
 	if(cin.fail())
