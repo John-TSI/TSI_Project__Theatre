@@ -15,11 +15,13 @@ using std::cout; using std::cin; using std::endl;
 
 
 // ------ TO DO ------
+// - implement a ClearScreen() after receiving user menu request
 // - implement an UnassignAll() method to unassign all performers from a performance
 // - give User option to back out instead of forcing ID/num input
 // - implement a ModifyReqActors() for a Play, similarly for Musical
 //		- implement a CheckIfFullyCast() when calculating, issue warning and omit if false
 // - implement a check when modifying salary: if assigned/when assigning, issue warning if newSalary costs more than ticket sales
+// - remove unused attributes and methods
 
 
 // ------ PROTOTYPES ------
@@ -931,7 +933,7 @@ int main()
 			}
 
 
-			case 3: // selected Menu3 : Check status
+			case 3: // selected Menu3 : Utility
 			{
 				int req3 = -1;
 				while(req3 != 0)
@@ -939,32 +941,37 @@ int main()
 					req3 = GetMenu3Request(); // open Menu3 (6+1 cases)
 					switch(req3)
 					{
-						case 1: // selected Check status of all listed Actors
+						case 1: // selected Toggle Specify mode
+						{
+							SM.ToggleSpecifyMode(specifyMode);
+							break;
+						}
+						case 2: // selected Check status of all listed Actors
 						{
 							SM.CheckActorsStatus(actorList);
 							break;
 						}
-						case 2: // selected Check status of all listed Singers
+						case 3: // selected Check status of all listed Singers
 						{
 							SM.CheckSingersStatus(singerList);
 							break;
 						}
-						case 3: // selected check status of all listed Musicians
+						case 4: // selected check status of all listed Musicians
 						{
 							SM.CheckMusiciansStatus(musicianList);
 							break;
 						}
-						case 4: // selected check status of all listed Plays
+						case 5: // selected check status of all listed Plays
 						{
 							SM.CheckPlaysStatus(playList);
 							break;
 						}
-						case 5: // selected check status of all listed Musicals
+						case 6: // selected check status of all listed Musicals
 						{
 							SM.CheckMusicalsStatus(musicalList);
 							break;
 						}
-						case 6: // selected check status of all listed Performance Halls
+						case 7: // selected check status of all listed Performance Halls
 						{
 							SM.CheckHallsStatus(perfHallList);
 							break;
@@ -982,7 +989,7 @@ int main()
 			}
 
 
-			case 4: // selected Menu4 : Utility
+			case 4: // selected Menu4 : Modify/Calculate
 			{
 				int req4 = -1;
 				while(req4 != 0)
@@ -990,12 +997,7 @@ int main()
 					req4 = GetMenu4Request(); // open Menu4 (2+1 cases)
 					switch(req4)
 					{
-						case 1: // selected Toggle Specify mode
-						{
-							SM.ToggleSpecifyMode(specifyMode);
-							break;
-						}
-						case 2: // selected Modify Performer salary
+						case 1: // selected Modify Performer salary
 						{
 							int reqMP = -1;
 							while(reqMP != 0)
@@ -1137,7 +1139,7 @@ int main()
 							}
 							break;
 						}
-						case 3: // selected Modify Performance ticket price
+						case 2: // selected Modify Performance ticket price
 						{
 							int reqMP = -1;
 							while(reqMP != 0)
@@ -1226,7 +1228,7 @@ int main()
 							}
 							break;
 						}
-						case 4: // selected Modify Performance ticket sales
+						case 3: // selected Modify Performance ticket sales
 						{
 							int reqMP = -1;
 							while(reqMP != 0)
@@ -1327,7 +1329,7 @@ int main()
 							}
 							break;
 						}
-						case 5: // selected Modify Performance Hall capacity
+						case 4: // selected Modify Performance Hall capacity
 						{
 							// output info to User
 							cout << "\nCurrently listed Performance Hall numbers: { ";
@@ -1368,7 +1370,7 @@ int main()
 							else { SM.ModifyHallCapacity(*h, newCapacity); }
 							break;
 						}
-						case 6: // selected Calculate profit of a scheduled Performance
+						case 5: // selected Calculate profit of a scheduled Performance
 						{
 							// output info to User
 							cout << "\nCurrently listed Performance Hall numbers: { ";
@@ -1398,7 +1400,7 @@ int main()
 							SM.CalcPerfProfit(*h, true);
 							break;
 						}
-						case 7: // selected Calculate profit of all scheduled Performances
+						case 6: // selected Calculate profit of all scheduled Performances
 						{
 							cout << "View a per-performance breakdown? (y/n)" << endl;
 							char response = 'z';
@@ -1433,14 +1435,14 @@ int main()
 			}
 
 
-			case 5: // selected Help
+			case 5: // requested Help
 			{
 				Help();
 				break;	
 			}
 
 
-			case 0:
+			case 0: // requested Exit program
 			{
 				Exiting();
 				return 0;
@@ -1505,16 +1507,16 @@ void Help()
 	cout << "-------------------------------" << endl;
 	cout << "Use this menu to assign/unassign Performers to/from Performances, and to schedule/unschedule Performances.\n" << endl;
 	cout << "Option 3: Utility" << endl;
-	cout << "----------------------" << endl;
-	cout << "Use this menu to check the status of all listed Performers, Performances, and Performance Halls.\n" << endl;
-	cout << "Option 4: Modify/Calculate" << endl;
 	cout << "-----------------" << endl;
-	cout << "Use this menu to modify Performer salaries, Performance ticket sales, and Hall capacities." << endl; 
-	cout << "Use also to calculate expected profits from all scheduled Performances." << endl;
-	cout << "\nWhen \'Specify mode\' is enabled from this menu, the following conditions apply:\n";
+	cout << "Use this menu to check the status of all listed Performers, Performances, and Performance Halls.\n" << endl;
+	cout << "When \'Specify mode\' is enabled from this menu, the following conditions apply:\n";
 	cout << "- User must specify a daily salary when adding a Performer to the system (default 120.00)." << endl;
 	cout << "- User must specify a ticket price when adding a Performance to the system (default 15.00)." << endl;
 	cout << "- User must specify a capacity when adding a Performance Hall to the system (default 150).\n" << endl;
+	cout << "Option 4: Modify/Calculate" << endl;
+	cout << "--------------------------" << endl;
+	cout << "Use this menu to modify Performer salaries, Performance ticket sales, and Hall capacities." << endl; 
+	cout << "Use also to calculate expected profits from all scheduled Performances." << endl;
 }
 
 
@@ -1752,12 +1754,13 @@ float GetMenu3Request()
 	float req = -1;
 	cout << "\nSelect an operation:" << endl;
 	cout << "------------------------------------------------------" << endl;
-	cout << "1 ....... Check status of all listed Actors" << endl;
-	cout << "2 ....... Check status of all listed Singers" << endl;
-	cout << "3 ....... Check status of all listed Musicians" << endl;
-	cout << "4 ....... Check status of all listed Plays" << endl;
-	cout << "5 ....... Check status of all listed Musicals" << endl;
-	cout << "6 ....... Check status of all listed Performance Halls" << endl;
+	cout << "1 ....... Toggle Specify mode" << endl;
+	cout << "2 ....... Check status of all listed Actors" << endl;
+	cout << "3 ....... Check status of all listed Singers" << endl;
+	cout << "4 ....... Check status of all listed Musicians" << endl;
+	cout << "5 ....... Check status of all listed Plays" << endl;
+	cout << "6 ....... Check status of all listed Musicals" << endl;
+	cout << "7 ....... Check status of all listed Performance Halls" << endl;
 	cout << "0 ....... Return to the previous menu" << endl;
 	cout << "------------------------------------------------------" << endl;
 	cout << "> ";
@@ -1781,13 +1784,12 @@ float GetMenu4Request()
 	float req = -1;
 	cout << "\nSelect an operation:" << endl;
 	cout << "--------------------------------------------------------------" << endl;
-	cout << "1 ....... Toggle Specify mode" << endl;
-	cout << "2 ....... Modify the salary of a Performer" << endl;
-	cout << "3 ....... Modify the ticket price of a Performance" << endl;
-	cout << "4 ....... Modify the ticket sales of a Performance" << endl;
-	cout << "5 ....... Modify the capacity of a Performance Hall" << endl;
-	cout << "6 ....... Calculate profit of a scheduled Performance" << endl;
-	cout << "7 ....... Calculate total profit of all scheduled Performances" << endl;
+	cout << "1 ....... Modify the salary of a Performer" << endl;
+	cout << "2 ....... Modify the ticket price of a Performance" << endl;
+	cout << "3 ....... Modify the ticket sales of a Performance" << endl;
+	cout << "4 ....... Modify the capacity of a Performance Hall" << endl;
+	cout << "5 ....... Calculate profit of a scheduled Performance" << endl;
+	cout << "6 ....... Calculate total profit of all scheduled Performances" << endl;
 	cout << "0 ....... Return to the previous menu" << endl;
 	cout << "--------------------------------------------------------------" << endl;
 	cout << "> ";

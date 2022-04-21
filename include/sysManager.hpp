@@ -94,7 +94,7 @@ class SystemManager
 
         // --- utility/verification ---
         // check status
-        bool AllPerfsReady(vector<PerformanceHall>&);
+        bool AllPerfsReady(vector<PerformanceHall>&); // remove?
 
         void CheckActorsStatus(vector<Actor>);
         void CheckSingersStatus(vector<Singer>);
@@ -145,14 +145,18 @@ class SystemManager
         void ToggleSpecifyMode(bool&);
 
         void ModifyActorSalary(Actor&, float);
-        void ModifyActorSalary(Actor&, int, Play&, float); // overload, used if Actor assigned
-        void ModifyActorSalary(Actor&, int, Play&, PerformanceHall&, float); // overload, used if Play scheduled
+        void ModifyActorSalary(Actor&, int, Play&, float); // overload, used if Actor is assigned
+        void ModifyActorSalary(Actor&, int, Play&, PerformanceHall&, float); // overload, used if Play is scheduled
         void ModifySingerSalary(Singer&, float);
         void ModifySingerSalary(Singer&, int, Musical&, float);
         void ModifySingerSalary(Singer&, int, Musical&, PerformanceHall&, float);
         void ModifyMusicianSalary(Musician&, float);
         void ModifyMusicianSalary(Musician&, int, Musical&, float);
         void ModifyMusicianSalary(Musician&, int, Musical&, PerformanceHall&, float);
+        // TEST methods
+        void ModifyReqNumActors(Play&, int);
+        void ModifyReqNumActors(Play&, PerformanceHall&, int); // overload, used if Play is scheduled
+        // END TEST
         void ModifyPlayTicketPrice(Play&, float);
         void ModifyPlayTicketPrice(Play&, PerformanceHall&, float); // overload, used if Play is scheduled
         void ModifyPlayTicketsSold(Play&, int);
