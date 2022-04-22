@@ -1039,9 +1039,9 @@ int main()
 											{
 												int hallNum = p->GetInHallNum();
 												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-												SM.ModifyActorSalary(*a, idA, *p, *h, newSalary);
+												SM.ModifyActorSalary(*a, *p, *h, newSalary);
 											}
-											else{ SM.ModifyActorSalary(*a, idA, *p, newSalary); }
+											else{ SM.ModifyActorSalary(*a, *p, newSalary); }
 										}
 										else { SM.ModifyActorSalary(*a, newSalary); } 
 										break;
@@ -1080,9 +1080,9 @@ int main()
 											{
 												int hallNum = mu->GetInHallNum();
 												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-												SM.ModifySingerSalary(*s, idS, *mu, *h, newSalary);
+												SM.ModifySingerSalary(*s, *mu, *h, newSalary);
 											}
-											else{ SM.ModifySingerSalary(*s, idS, *mu, newSalary); }
+											else{ SM.ModifySingerSalary(*s, *mu, newSalary); }
 										}
 										else { SM.ModifySingerSalary(*s, newSalary); } 
 										break;
@@ -1121,9 +1121,9 @@ int main()
 											{
 												int hallNum = mu->GetInHallNum();
 												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-												SM.ModifyMusicianSalary(*m, idM, *mu, *h, newSalary);
+												SM.ModifyMusicianSalary(*m, *mu, *h, newSalary);
 											}
-											else{ SM.ModifyMusicianSalary(*m, idM, *mu, newSalary); }
+											else{ SM.ModifyMusicianSalary(*m, *mu, newSalary); }
 										}
 										else { SM.ModifyMusicianSalary(*m, newSalary); } 
 										break;
@@ -1516,7 +1516,7 @@ void Help()
 	cout << "Option 4: Modify/Calculate" << endl;
 	cout << "--------------------------" << endl;
 	cout << "Use this menu to modify Performer salaries, Performance ticket sales, and Hall capacities." << endl; 
-	cout << "Use also to calculate expected profits from all scheduled Performances." << endl;
+	cout << "Use also to calculate expected profits from all scheduled Performances.\n" << endl;
 }
 
 

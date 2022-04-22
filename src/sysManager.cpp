@@ -137,17 +137,6 @@ void SystemManager::RmPlay(int perfID, vector<Play>& pList)
     Play* p = FindPlay(perfID, pList); 
     if(p->GetNumActors() > 0)
     {
-        // unassign actors
-/*         vector<Actor>& aList = p->GetActorRoster();
-        for(Actor& a : aList) 
-        { 
-            //UnassignActor(a, aList, *p);
-            int idNum = a.GetIDNum();
-            vector<Actor>& aList = GetActorList();
-            Actor* a_sys = FindActor(idNum, aList);
-            a_sys->SetIsAssigned(false);
-            a_sys->SetInPerfID(-1); 
-        } */
         cout << "\nThe specified Play currently has " << p->GetNumActors() << " Actor(s) assigned to it." << endl;
         cout << "Unassign all Performers from the Play before removing it from the System." << endl;
     }
@@ -582,6 +571,12 @@ void SystemManager::UnscheduleMusical(Musical& mu, PerformanceHall& h)
 
 // --- utility/verification ---
 // check status
+void SystemManager::ToggleSpecifyMode(bool& currentSetting) 
+{ 
+    currentSetting = !currentSetting;
+    (currentSetting) ? cout << "\nSpecify mode has been enabled.\n" : cout << "\nSpecify mode has been disabled.\n";
+}
+
 void SystemManager::CheckActorsStatus(vector<Actor> aList)
 {
     if(actorCount == 0) { cout << "\nNo Actors are currently listed on the system." << endl; }
@@ -950,12 +945,6 @@ void SystemManager::PrintAvailableHalls(vector<PerformanceHall> vec)
 
 // --- modify/calculate ---
 // modify
-void SystemManager::ToggleSpecifyMode(bool& currentSetting) 
-{ 
-    currentSetting = !currentSetting;
-    (currentSetting) ? cout << "\nSpecify mode has been enabled.\n" : cout << "\nSpecify mode has been disabled.\n";
-}
-
 void SystemManager::ModifyActorSalary(Actor& a, float newSalary)
 {
     float currentSalary = a.GetSalary();
@@ -964,7 +953,7 @@ void SystemManager::ModifyActorSalary(Actor& a, float newSalary)
     cout << "\nThe Actor's salary has been modified ";
     (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
-void SystemManager::ModifyActorSalary(Actor& a, int idNum, Play& p, float newSalary)
+void SystemManager::ModifyActorSalary(Actor& a, Play& p, float newSalary)
 {
     // modify Actor in SystemManager list
     float currentSalary = a.GetSalary();
@@ -973,13 +962,14 @@ void SystemManager::ModifyActorSalary(Actor& a, int idNum, Play& p, float newSal
     p.SetPerfCost(p.GetPerfCost() + diff);
 
     // modify Actor assigned to a Play
+    int idNum = a.GetIDNum();
     Actor* ap = FindActor(idNum, p.GetActorRoster());
     ap->SetSalary(newSalary);
 
     cout << "\nThe Actor's salary has been modified ";
     (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
-void SystemManager::ModifyActorSalary(Actor& a, int idNum, Play& p, PerformanceHall& h, float newSalary)
+void SystemManager::ModifyActorSalary(Actor& a, Play& p, PerformanceHall& h, float newSalary)
 {
     // modify Actor in SystemManager list
     float currentSalary = a.GetSalary();
@@ -988,6 +978,7 @@ void SystemManager::ModifyActorSalary(Actor& a, int idNum, Play& p, PerformanceH
     p.SetPerfCost(p.GetPerfCost() + diff);
 
     // modify Actor assigned to a Play
+    int idNum = a.GetIDNum();
     Actor* ap = FindActor(idNum, p.GetActorRoster());
     ap->SetSalary(newSalary);
 
@@ -1009,7 +1000,7 @@ void SystemManager::ModifySingerSalary(Singer& s, float newSalary)
     cout << "\nThe Singer's salary has been modified ";
     (diff >= 0) ? cout << "(increased by " << diff << ")." : cout << "(decreased by " << -diff << ").";
 }
-void SystemManager::ModifySingerSalary(Singer& s, int idNum, Musical& mu, float newSalary)
+void SystemManager::ModifySingerSalary(Singer& s, Musical& mu, float newSalary)
 {
     // modify Singer in SystemManager list
     float currentSalary = s.GetSalary();
@@ -1018,13 +1009,14 @@ void SystemManager::ModifySingerSalary(Singer& s, int idNum, Musical& mu, float 
     mu.SetPerfCost(mu.GetPerfCost() + diff);
 
     // modify Singer assigned to a Musical
+    int idNum = s.GetIDNum();
     Singer* smu = FindSinger(idNum, mu.GetSingerRoster());
     smu->SetSalary(newSalary);
 
     cout << "\nThe Singer's salary has been modified ";
     (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
-void SystemManager::ModifySingerSalary(Singer& s, int idNum, Musical& mu, PerformanceHall& h, float newSalary)
+void SystemManager::ModifySingerSalary(Singer& s, Musical& mu, PerformanceHall& h, float newSalary)
 {
     // modify Singer in SystemManager list
     float currentSalary = s.GetSalary();
@@ -1033,6 +1025,7 @@ void SystemManager::ModifySingerSalary(Singer& s, int idNum, Musical& mu, Perfor
     mu.SetPerfCost(mu.GetPerfCost() + diff);
 
     // modify Singer assigned to a Musical
+    int idNum = s.GetIDNum();
     Singer* smu = FindSinger(idNum, mu.GetSingerRoster());
     smu->SetSalary(newSalary);
 
@@ -1054,7 +1047,7 @@ void SystemManager::ModifyMusicianSalary(Musician& m, float newSalary)
     cout << "\nThe Musician's salary has been modified ";
     (diff >= 0) ? cout << "(increased by " << diff << ")." : cout << "(decreased by " << -diff << ").";
 }
-void SystemManager::ModifyMusicianSalary(Musician& m, int idNum, Musical& mu, float newSalary)
+void SystemManager::ModifyMusicianSalary(Musician& m, Musical& mu, float newSalary)
 {
     // modify Musician in SystemManager list
     float currentSalary = m.GetSalary();
@@ -1063,13 +1056,14 @@ void SystemManager::ModifyMusicianSalary(Musician& m, int idNum, Musical& mu, fl
     mu.SetPerfCost(mu.GetPerfCost() + diff);
 
     // modify Musician assigned to a Musical
+    int idNum = m.GetIDNum();
     Musician* mmu = FindMusician(idNum, mu.GetMusicianRoster());
     mmu->SetSalary(newSalary);
 
     cout << "\nThe Musician's salary has been modified ";
     (diff >= 0) ? cout << "(increased by " << diff << ").\n" : cout << "(decreased by " << -diff << ").\n";
 }
-void SystemManager::ModifyMusicianSalary(Musician& m, int idNum, Musical& mu, PerformanceHall& h, float newSalary)
+void SystemManager::ModifyMusicianSalary(Musician& m, Musical& mu, PerformanceHall& h, float newSalary)
 {
     // modify Musician in SystemManager list
     float currentSalary = m.GetSalary();
@@ -1078,6 +1072,7 @@ void SystemManager::ModifyMusicianSalary(Musician& m, int idNum, Musical& mu, Pe
      mu.SetPerfCost(mu.GetPerfCost() + diff);
 
     // modify Musician assigned to a Musical
+    int idNum = m.GetIDNum();
     Musician* mmu = FindMusician(idNum, mu.GetMusicianRoster());
     mmu->SetSalary(newSalary);
 
