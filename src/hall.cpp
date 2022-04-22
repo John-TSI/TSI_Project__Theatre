@@ -20,10 +20,10 @@ void PerformanceHall::SetHasPlay(bool input) { hasPlay = input;}
 bool PerformanceHall::GetHasMusical() { return hasMusical; }
 void PerformanceHall::SetHasMusical(bool input) { hasMusical = input;}
 Performance& PerformanceHall::GetScheduledPerf() { return scheduledPerformance; }
-void PerformanceHall::SetScheduledPerf(Performance& input) { scheduledPerformance = input; }
+void PerformanceHall::SetScheduledPerf(Performance input) { scheduledPerformance = input; }
 Play& PerformanceHall::GetScheduledPlay() { return scheduledPlay; }
-void PerformanceHall::SetScheduledPlay(Play& input) { scheduledPlay = input; }
+void PerformanceHall::SetScheduledPlay(Play input) { scheduledPlay = input; }
 Musical& PerformanceHall::GetScheduledMusical() { return scheduledMusical; }
-void PerformanceHall::SetScheduledMusical(Musical& input) { scheduledMusical = input; }
+void PerformanceHall::SetScheduledMusical(Musical input) { scheduledMusical = input; }
 bool PerformanceHall::GetStageIsPrepared() {return stageIsPrepared; }
 void PerformanceHall::SetStageIsPrepared(bool input) { stageIsPrepared = input; }

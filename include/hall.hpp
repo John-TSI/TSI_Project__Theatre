@@ -35,11 +35,11 @@ class PerformanceHall
         bool GetHasPlay(); bool GetHasMusical();
         void SetHasPlay(bool); void SetHasMusical(bool);
         Performance& GetScheduledPerf();
-        void SetScheduledPerf(Performance&);
+        void SetScheduledPerf(Performance);
         Play& GetScheduledPlay();
-        void SetScheduledPlay(Play&);
+        void SetScheduledPlay(Play);
         Musical& GetScheduledMusical();
-        void SetScheduledMusical(Musical&);
+        void SetScheduledMusical(Musical);
         bool GetStageIsPrepared();
         void SetStageIsPrepared(bool);
 };

@@ -1397,7 +1397,7 @@ int main()
 								cout << "Check your input and try again.\n" << endl;
 								break;
 							}
-							SM.CalcPerfProfit(*h, true);
+							SM.CalcPerformanceProfit(*h, true);
 							break;
 						}
 						case 6: // selected Calculate profit of all scheduled Performances

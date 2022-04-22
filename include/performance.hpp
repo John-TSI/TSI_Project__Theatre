@@ -18,7 +18,7 @@ class Performance
         int inHallNum = -1;
         float ticketPrice = 15.0f;
         int ticketsSold = 80;
-        int numPerformers = 0;
+        int numPerformers = 0; // is updated when (un)assigning, but not currently used
         float perfCost = 0.0f;
         bool isFullyCast = false; // not currently being used
 

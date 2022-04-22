@@ -1120,7 +1120,7 @@ void SystemManager::ModifyPlayTicketsSold(Play& p, int newSold)
 void SystemManager::ModifyPlayTicketsSold(Play& p, PerformanceHall& h, int newSold)
 {
     // modify Play in SystemManager list
-    int currentSold = p.GetTicketPrice();
+    int currentSold = p.GetTicketsSold();
     int diff = newSold - currentSold;
     p.SetTicketsSold(newSold);
 
@@ -1166,7 +1166,7 @@ void SystemManager::ModifyMusicalTicketsSold(Musical& mu, int newSold)
 void SystemManager::ModifyMusicalTicketsSold(Musical& mu, PerformanceHall& h, int newSold)
 {
     // modify Musical in SystemManager list
-    int currentSold = mu.GetTicketPrice();
+    int currentSold = mu.GetTicketsSold();
     int diff = newSold - currentSold;
     mu.SetTicketsSold(newSold);
 
@@ -1189,7 +1189,7 @@ void SystemManager::ModifyHallCapacity(PerformanceHall& h, int newCapacity)
 
 
 // calculators
-float SystemManager::CalcPerfProfit(PerformanceHall h, bool printOutput = false)
+float SystemManager::CalcPerformanceProfit(PerformanceHall h, bool printOutput = false)
 {
     Performance p = (h.GetHasPlay()) ? (Performance) h.GetScheduledPlay() : (Performance) h.GetScheduledMusical(); 
     float perfSales = (p.GetTicketPrice())*(p.GetTicketsSold()); 
@@ -1234,7 +1234,7 @@ float SystemManager::CalcTotalProfit(vector<PerformanceHall> hList, bool printOu
     float totalProfit = 0.0f;
     for(PerformanceHall h : hList)
     {
-        if(h.GetIsBooked()) { totalProfit += CalcPerfProfit(h, printOutput); }
+        if(h.GetIsBooked()) { totalProfit += CalcPerformanceProfit(h, printOutput); }
     }
     return totalProfit;
 }

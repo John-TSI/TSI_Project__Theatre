@@ -17,8 +17,6 @@ class Employee
         Employee(int, float); // derived classes can initialise idNum and salary
 
     public:
-        Employee();
-
         string GetName();
         void SetName(string);
         int GetIDNum();

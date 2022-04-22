@@ -27,7 +27,6 @@ class SystemManager
         vector<Actor> actorList;
         vector<Singer> singerList;
         vector<Musician> musicianList;
-        // technician stuff
         vector<Play> playList;
         vector<Musical> musicalList;
         vector<PerformanceHall> perfHallList;
@@ -167,7 +166,7 @@ class SystemManager
         void ModifyHallCapacity(PerformanceHall&, int);
 
         // --- calculators ---
-        float CalcPerfProfit(PerformanceHall, bool);
+        float CalcPerformanceProfit(PerformanceHall, bool);
         float CalcTotalProfit(vector<PerformanceHall>, bool);
 };
 
