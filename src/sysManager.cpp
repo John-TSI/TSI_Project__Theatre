@@ -1195,6 +1195,8 @@ float SystemManager::CalcPerformanceProfit(PerformanceHall h, bool printOutput =
     float perfSales = (p.GetTicketPrice())*(p.GetTicketsSold()); 
     float perfCost = p.GetPerfCost(); 
     float perfProfit = perfSales - perfCost;
+
+    if(!p.GetIsFullyCast()) { cout << "\nWarning: the Performance scheduled in Hall number " << h.GetHallNum() << " is not fully cast." << endl; }
     if(printOutput)
     {
         cout << "\nPerformance Hall number " << h.GetHallNum() << ":" << endl;

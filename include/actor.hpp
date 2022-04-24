@@ -11,17 +11,17 @@ using std::string; using std::vector;
 class Actor : public Performer
 {
     private:
-        string genre; // remove? 
+        string genre; // not currently being used 
         vector<string> genres = {};
 
     public:
         // --- constructors ---
         Actor(int); // initialise Employee.idNum
         Actor(int, float); // initialise Employee.idNum, Employee.salary
-        //Actor(int, string);
 
         // --- getters/setters ---
-        vector<string> GetGenres();
+        string GetGenre();
+        void SetGenre(string);
 };
 
 #endif

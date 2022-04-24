@@ -8,4 +8,5 @@ Actor::Actor(int idNum, float salary) : Performer(idNum, salary) {}
 
 
 // ---getters/setters ---
-vector<string> Actor::GetGenres() { return genres; }
+string Actor::GetGenre() { return genre; }
+void Actor::SetGenre(string input) { genre = input; }

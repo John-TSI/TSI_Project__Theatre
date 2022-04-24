@@ -19,7 +19,6 @@ using std::cout; using std::cin; using std::endl;
 // - implement an UnassignAll() method to unassign all performers from a performance
 // - give User option to back out instead of forcing ID/num input
 // - implement a ModifyReqActors() for a Play, similarly for Musical
-//		- implement a CheckIfFullyCast() when calculating, issue warning and omit if false
 // - implement a check when modifying salary: if assigned/when assigning, issue warning if newSalary costs more than ticket sales
 // - remove unused attributes and methods
 
