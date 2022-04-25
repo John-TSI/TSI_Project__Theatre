@@ -15,11 +15,14 @@ using std::cout; using std::cin; using std::endl;
 
 
 // ------ TO DO ------
+// --- UTILITY ---
 // - implement a ClearScreen() after receiving user menu request
 // - implement an UnassignAll() method to unassign all performers from a performance
 // - give User option to back out instead of forcing ID/num input
+// --- FEATURES ---
 // - implement a ModifyReqActors() for a Play, similarly for Musical
 // - implement a check when modifying salary: if assigned/when assigning, issue warning if newSalary costs more than ticket sales
+// - implement genre attibute for Play/Actor, instruments for Musical/Musician
 
 
 // ------ PROTOTYPES ------
@@ -76,6 +79,7 @@ int main()
 	vector<Play> playList = SM.GetPlayList();
 	vector<Musical> musicalList = SM.GetMusicalList();
 	vector<PerformanceHall> perfHallList = SM.GetPerfHallList();
+
 
 
 	// ------ BEGIN USER INTERACTIVITY ------

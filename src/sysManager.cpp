@@ -36,7 +36,6 @@ vector<Musical>& SystemManager::GetMusicalList() { return musicalList; }
 // --- add/remove --- 
 void SystemManager::AddActor(vector<Actor>& aList, float salary)
 {
-    //aList.push_back(Actor(actorIDcount) );
     aList.push_back(Actor(actorIDcount, salary) );
     actorIDcount++;
     actorCount++;
