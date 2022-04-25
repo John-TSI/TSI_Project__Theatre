@@ -5,6 +5,3 @@
 // --- constructors ---
 Musician::Musician(int idNum) : Performer(idNum) {}
 Musician::Musician(int idNum, float salary) : Performer(idNum, salary) {}
-
-// ---other methods ---
-vector<string> Musician::GetInstruments() { return instruments; }

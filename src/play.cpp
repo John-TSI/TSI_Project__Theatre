@@ -11,8 +11,6 @@ Play::Play(int perfID, float ticketPrice) : Performance(perfID, ticketPrice) {}
 
 
 // --- getters/setters ---
-string Play::GetGenre() { return genre; }
-void Play::SetGenre(string input) { genre = input; }
 int Play::GetNumActors() { return numActors; }
 void Play::SetNumActors(int input) { numActors = input; }
 int Play::GetReqNumActors() { return reqNumActors; }

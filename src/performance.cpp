@@ -7,8 +7,6 @@ Performance::Performance(int perfID, float ticketPrice) : perfID(perfID), ticket
 
 
 // --- getters/setters ---
-string Performance::GetName() { return name; }
-void Performance::SetName(string input) { name = input; }
 int Performance::GetPerfID() { return perfID; }
 void Performance::SetPerfID(int input) { perfID = input; }
 bool Performance::GetIsScheduled() { return isScheduled; }

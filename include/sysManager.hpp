@@ -93,8 +93,6 @@ class SystemManager
 
         // --- utility/verification ---
         // check status
-        bool AllPerfsReady(vector<PerformanceHall>&); // remove?
-
         void ToggleSpecifyMode(bool&);
         void CheckActorsStatus(vector<Actor>);
         void CheckSingersStatus(vector<Singer>);
@@ -102,6 +100,7 @@ class SystemManager
         void CheckPlaysStatus(vector<Play>);
         void CheckMusicalsStatus(vector<Musical>);
         void CheckHallsStatus(vector<PerformanceHall>);
+        bool AllPerfsReady(vector<PerformanceHall>&); // not currently being used
 
         // ID verifiers
         bool VerifiedActorID(int, vector<Actor>);

@@ -10,7 +10,6 @@
 class Play : public Performance
 {
     private:
-        string genre;  // not currently being used
         int numActors = 0;
         int reqNumActors = 1;
         vector<Actor> actorRoster = {}; 
@@ -20,8 +19,6 @@ class Play : public Performance
         Play(int); // initialise Performance.perfID
         Play(int, float); // initialise Performance.perfID, Performance.ticketPrice
 
-        string GetGenre();
-        void SetGenre(string);
         int GetNumActors();
         void SetNumActors(int);
         int GetReqNumActors();

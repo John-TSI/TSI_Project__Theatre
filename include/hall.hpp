@@ -12,7 +12,6 @@ using std::string;
 class PerformanceHall
 {
     private:
-        string name = "Performance Hall";
         int hallNum = 0;
         int capacity = 150;
         bool isBooked = false;
@@ -20,7 +19,7 @@ class PerformanceHall
         Performance scheduledPerformance;
         Play scheduledPlay;
         Musical scheduledMusical;
-        bool stageIsPrepared = false;  // not currently being used
+        //bool stageIsPrepared = false;  // not currently being used
 
     public:
         PerformanceHall(int); // initialise hallNum
@@ -40,8 +39,8 @@ class PerformanceHall
         void SetScheduledPlay(Play);
         Musical& GetScheduledMusical();
         void SetScheduledMusical(Musical);
-        bool GetStageIsPrepared();
-        void SetStageIsPrepared(bool);
+        //bool GetStageIsPrepared();
+        //void SetStageIsPrepared(bool);
 };
 
 #endif

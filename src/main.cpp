@@ -20,7 +20,6 @@ using std::cout; using std::cin; using std::endl;
 // - give User option to back out instead of forcing ID/num input
 // - implement a ModifyReqActors() for a Play, similarly for Musical
 // - implement a check when modifying salary: if assigned/when assigning, issue warning if newSalary costs more than ticket sales
-// - remove unused attributes and methods
 
 
 // ------ PROTOTYPES ------

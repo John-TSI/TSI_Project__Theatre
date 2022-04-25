@@ -8,7 +8,6 @@ using std::string;
 class Employee
 {
     private:
-        string name = "Employee"; // not currently being used
         int idNum = 0;
         float salary = 120.0f;
 
@@ -17,8 +16,6 @@ class Employee
         Employee(int, float); // derived classes can initialise idNum and salary
 
     public:
-        string GetName();
-        void SetName(string);
         int GetIDNum();
         void SetIDNum(int);
         float GetSalary();

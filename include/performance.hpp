@@ -12,7 +12,6 @@ using std::vector;
 class Performance
 {
     private:
-        string name = "Performance"; // not currently being used
         int perfID = 0;
         bool isScheduled = false;
         int inHallNum = -1;
@@ -20,7 +19,7 @@ class Performance
         int ticketsSold = 80;
         int numPerformers = 0; // is updated when (un)assigning, but not currently used
         float perfCost = 0.0f;
-        bool isFullyCast = false; // not currently being used
+        bool isFullyCast = false;
 
     protected:
         Performance(int); // allow derived classes to initialise perfID
@@ -29,8 +28,6 @@ class Performance
     public:
         Performance();
 
-        string GetName();
-        void SetName(string);
         int GetPerfID();
         void SetPerfID(int);
         bool GetIsScheduled();

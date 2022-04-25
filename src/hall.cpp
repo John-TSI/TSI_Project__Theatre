@@ -25,5 +25,5 @@ Play& PerformanceHall::GetScheduledPlay() { return scheduledPlay; }
 void PerformanceHall::SetScheduledPlay(Play input) { scheduledPlay = input; }
 Musical& PerformanceHall::GetScheduledMusical() { return scheduledMusical; }
 void PerformanceHall::SetScheduledMusical(Musical input) { scheduledMusical = input; }
-bool PerformanceHall::GetStageIsPrepared() {return stageIsPrepared; }
-void PerformanceHall::SetStageIsPrepared(bool input) { stageIsPrepared = input; }
+//bool PerformanceHall::GetStageIsPrepared() {return stageIsPrepared; }
+//void PerformanceHall::SetStageIsPrepared(bool input) { stageIsPrepared = input; }

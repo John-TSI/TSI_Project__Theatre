@@ -10,16 +10,12 @@ Musical::Musical(int perfID, float ticketPrice) : Performance(perfID, ticketPric
 
 
 //--- getters/setters ---
-string Musical::GetStyle() { return style; }
-void Musical::SetStyle(string input) { style = input; }
 int Musical::GetNumSingers() {return numSingers; }
 void Musical::SetNumSingers(int input) { numSingers = input; }
 int Musical::GetReqNumSingers() { return reqNumSingers; }
 void Musical::SetReqNumSingers(int input) { reqNumSingers = input; }
 vector<Singer>& Musical::GetSingerRoster() { return singerRoster; }
 void Musical::SetSingerRoster(vector<Singer> input) { singerRoster = input; }
-vector<string> Musical::GetRequiredInstruments() { return requiredInstruments; }
-void Musical::SetRequiredInstruments(vector<string> input) { requiredInstruments = input; }
 int Musical::GetNumMusicians() {return numMusicians; }
 void Musical::SetNumMusicians(int input) { numMusicians = input; }
 int Musical::GetReqNumMusicians() { return reqNumMusicians; }
