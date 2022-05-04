@@ -52,6 +52,28 @@ const char* InvalidOperation::ScheduledMusical::what() const noexcept
     return msg.c_str();
 }
 
+InvalidOperation::BookedHall::BookedHall(int perfID) : msg
+    (
+        std::string("\nThe specified Performance Hall is already booked with a Performance (ID ") 
+        + std::to_string(perfID) + std::string(").\nCheck your input and try again.\n")
+    ) {}
+const char* InvalidOperation::BookedHall::what() const noexcept
+{
+    return msg.c_str();
+}
+
+ // Performance Hall has insufficient capacity
+ InvalidOperation::InsufficientCapacity::InsufficientCapacity(int capacity) : msg
+    (
+        std::string("\nThe specified Performance Hall is unable to accommodate this Performance (max capacity: ") 
+        + std::to_string(capacity) + std::string(").\nCheck your input and try again.\n")
+    ) {}
+const char* InvalidOperation::InsufficientCapacity::what() const noexcept
+{
+    return msg.c_str();
+}
+
+
 // --- object is not assigned/scheduled ---
 const char* InvalidOperation::UnassignedActor::what() const noexcept
 {

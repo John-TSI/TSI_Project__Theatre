@@ -6,7 +6,7 @@
 
 namespace InvalidOperation
 {
-    // object already assigned/scheduled
+    // --- object already assigned/scheduled/booked ---
     class AssignedActor : public std::exception
     {
         std::string msg;
@@ -42,8 +42,24 @@ namespace InvalidOperation
             explicit ScheduledMusical(int);
             virtual const char* what() const noexcept;
     };
+    class BookedHall : public std::exception
+    {
+        std::string msg;
+        public:
+            explicit BookedHall(int);
+            virtual const char* what() const noexcept;
+    };
 
-    // object is not assigned/scheduled
+    // Performance Hall has insufficient capacity
+    class InsufficientCapacity : public std::exception
+    {
+        std::string msg;
+        public:
+            explicit InsufficientCapacity(int);
+            virtual const char* what() const noexcept;
+    };
+
+    // --- object is not assigned/scheduled ---
     class UnassignedActor : public std::exception
     {
         virtual const char* what() const noexcept;
