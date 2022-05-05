@@ -50,12 +50,30 @@ namespace InvalidOperation
             virtual const char* what() const noexcept;
     };
 
-    // Performance Hall has insufficient capacity
+    // Performance Hall has insufficient capacity to book a given Performance
     class InsufficientCapacity : public std::exception
     {
         std::string msg;
         public:
             explicit InsufficientCapacity(int);
+            virtual const char* what() const noexcept;
+    };
+
+    // Performance has oversold tickets for its booked Hall capacity
+    class OversoldTickets : public std::exception
+    {
+        std::string msg;
+        public:
+            explicit OversoldTickets(int);
+            virtual const char* what() const noexcept;
+    };
+
+    // Performance Hall capacity cannot be reduced below tickets sold
+    class CannotReduceCapacity : public std::exception
+    {
+        std::string msg;
+        public:
+            explicit CannotReduceCapacity(int);
             virtual const char* what() const noexcept;
     };
 

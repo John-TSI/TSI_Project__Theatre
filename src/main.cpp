@@ -30,7 +30,7 @@ using std::cout; using std::cin; using std::endl;
 // - implement a check when modifying salary: if assigned/when assigning, issue warning if newSalary costs more than ticket sales
 // - implement genre attibute for Play/Actor, instruments for Musical/Musician
 
-// - continue implementing exception handling, resume at menu3 : Utility
+// - continue implementing exception handling, resume at menu4 case5
 
 
 // ------ PROTOTYPES ------
@@ -87,6 +87,15 @@ int main()
 	vector<Play> playList = SM.GetPlayList();
 	vector<Musical> musicalList = SM.GetMusicalList();
 	vector<PerformanceHall> perfHallList = SM.GetPerfHallList();
+
+
+	/*
+	catch(const std::exception& ex)
+	{
+		cout << "\nException thrown:   " << typeid(ex).name() << endl;
+		cout  << "Message: " << ex.what() << endl;
+	}
+	*/
 
 
 
@@ -1176,35 +1185,43 @@ int main()
 										// get User Actor request
 										cout << "Enter the ID number of the Actor to be modified:" << endl;
 										int idA = GetIDRequest();
-										
-										// break if user input is of invalid type
-										if(idA == -1) { WarningInvalidInput(); break; }
 
-										// break if Actor not listed on SystemManager
-										if(!SM.VerifiedActorID(idA, actorList)) { WarningUnlistedActor(); break; }
-										Actor* a = SM.FindActor(idA, actorList);
-										cout << "\nThis Actor currently earns " << a->GetSalary() << " per day.";
-
-										// get User salary request
-										float newSalary = GetNewSalary();
-
-										// break if user input is invalid
-										if(newSalary == -1.0f) { WarningInvalidInput(); break; }
- 
-										// determine appropriate version of overloaded ModifyActorSalary() to call
-										if(a->GetIsAssigned())
+										try
 										{
-											int perfID = a->GetInPerfID();
-											Play* p = SM.FindPlay(perfID, playList);
-											if(p->GetIsScheduled())
+											// throw exception if user input is of invalid type
+											if(idA == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// throw exception if Actor not listed on SystemManager
+											if(!SM.VerifiedActorID(idA, actorList)) { throw UnlistedObject::UnlistedActor(); }
+											Actor* a = SM.FindActor(idA, actorList);
+											cout << "\nThis Actor currently earns " << a->GetSalary() << " per day.";
+
+											// get User salary request
+											float newSalary = GetNewSalary();
+
+											// throw exception if user input is invalid
+											if(newSalary == -1.0f) { throw InvalidInput::excInvalidInput(); }
+	
+											// determine appropriate version of overloaded ModifyActorSalary() to call
+											if(a->GetIsAssigned())
 											{
-												int hallNum = p->GetInHallNum();
-												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-												SM.ModifyActorSalary(*a, *p, *h, newSalary);
+												int perfID = a->GetInPerfID();
+												Play* p = SM.FindPlay(perfID, playList);
+												if(p->GetIsScheduled())
+												{
+													int hallNum = p->GetInHallNum();
+													PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+													SM.ModifyActorSalary(*a, *p, *h, newSalary);
+												}
+												else{ SM.ModifyActorSalary(*a, *p, newSalary); }
 											}
-											else{ SM.ModifyActorSalary(*a, *p, newSalary); }
+											else { SM.ModifyActorSalary(*a, newSalary); }
 										}
-										else { SM.ModifyActorSalary(*a, newSalary); } 
+										catch(const std::exception& ex)
+										{
+											cout << "\nException thrown:   " << typeid(ex).name() << endl;
+											cout  << "Message: " << ex.what() << endl;
+										} 
 										break;
 									}
 									case 2: // selected Modify salary of a Singer
@@ -1217,35 +1234,43 @@ int main()
 										// get User Singer request
 										cout << "Enter the ID number of the Singer to be modified:" << endl;
 										int idS = GetIDRequest();
-										
-										// break if user input is of invalid type
-										if(idS == -1) { WarningInvalidInput(); break; }
 
-										// break if Singer not listed on SystemManager
-										if(!SM.VerifiedSingerID(idS, singerList)) { WarningUnlistedSinger(); break; }
-										Singer* s = SM.FindSinger(idS, singerList);
-										cout << "\nThis Singer currently earns " << s->GetSalary() << " per day.";
-
-										// get User salary request
-										float newSalary = GetNewSalary();
-
-										// break if user input is invalid
-										if(newSalary == -1.0f) { WarningInvalidInput(); break; }
- 
-										// determine appropriate version of overloaded ModifySingerSalary() to call
-										if(s->GetIsAssigned())
+										try
 										{
-											int perfID = s->GetInPerfID();
-											Musical* mu = SM.FindMusical(perfID, musicalList);
-											if(mu->GetIsScheduled())
+											// throw exception if user input is of invalid type
+											if(idS == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// throw exception if Singer not listed on SystemManager
+											if(!SM.VerifiedSingerID(idS, singerList)) { throw UnlistedObject::UnlistedSinger(); }
+											Singer* s = SM.FindSinger(idS, singerList);
+											cout << "\nThis Singer currently earns " << s->GetSalary() << " per day.";
+
+											// get User salary request
+											float newSalary = GetNewSalary();
+
+											// throw exception if user input is invalid
+											if(newSalary == -1.0f) { throw InvalidInput::excInvalidInput(); }
+	
+											// determine appropriate version of overloaded ModifySingerSalary() to call
+											if(s->GetIsAssigned())
 											{
-												int hallNum = mu->GetInHallNum();
-												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-												SM.ModifySingerSalary(*s, *mu, *h, newSalary);
+												int perfID = s->GetInPerfID();
+												Musical* mu = SM.FindMusical(perfID, musicalList);
+												if(mu->GetIsScheduled())
+												{
+													int hallNum = mu->GetInHallNum();
+													PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+													SM.ModifySingerSalary(*s, *mu, *h, newSalary);
+												}
+												else{ SM.ModifySingerSalary(*s, *mu, newSalary); }
 											}
-											else{ SM.ModifySingerSalary(*s, *mu, newSalary); }
+											else { SM.ModifySingerSalary(*s, newSalary); }
 										}
-										else { SM.ModifySingerSalary(*s, newSalary); } 
+										catch(const std::exception& ex)
+										{
+											cout << "\nException thrown:   " << typeid(ex).name() << endl;
+											cout  << "Message: " << ex.what() << endl;
+										} 
 										break;
 									}
 									case 3: // selected Modify salary of a Musician
@@ -1258,35 +1283,43 @@ int main()
 										// get User Musician request
 										cout << "Enter the ID number of the Musician to be modified:" << endl;
 										int idM = GetIDRequest();
-										
-										// break if user input is of invalid type
-										if(idM == -1) { WarningInvalidInput(); break; }
 
-										// break if Musician not listed on SystemManager
-										if(!SM.VerifiedMusicianID(idM, musicianList)) { WarningUnlistedMusician(); break; }
-										Musician* m = SM.FindMusician(idM, musicianList);
-										cout << "\nThis Musician currently earns " << m->GetSalary() << " per day.";
-
-										// get User salary request
-										float newSalary = GetNewSalary();
-
-										// break if user input is invalid
-										if(newSalary == -1.0f) { WarningInvalidInput(); break; }
- 
-										// determine appropriate version of overloaded ModifyMusicianSalary() to call
-										if(m->GetIsAssigned())
+										try
 										{
-											int perfID = m->GetInPerfID();
-											Musical* mu = SM.FindMusical(perfID, musicalList);
-											if(mu->GetIsScheduled())
+											// throw exception if user input is of invalid type
+											if(idM == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// throw exception if Musician not listed on SystemManager
+											if(!SM.VerifiedMusicianID(idM, musicianList)) { throw UnlistedObject::UnlistedMusician(); }
+											Musician* m = SM.FindMusician(idM, musicianList);
+											cout << "\nThis Musician currently earns " << m->GetSalary() << " per day.";
+
+											// get User salary request
+											float newSalary = GetNewSalary();
+
+											// throw exception if user input is invalid
+											if(newSalary == -1.0f) { throw InvalidInput::excInvalidInput(); }
+	
+											// determine appropriate version of overloaded ModifyMusicianSalary() to call
+											if(m->GetIsAssigned())
 											{
-												int hallNum = mu->GetInHallNum();
-												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-												SM.ModifyMusicianSalary(*m, *mu, *h, newSalary);
+												int perfID = m->GetInPerfID();
+												Musical* mu = SM.FindMusical(perfID, musicalList);
+												if(mu->GetIsScheduled())
+												{
+													int hallNum = mu->GetInHallNum();
+													PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+													SM.ModifyMusicianSalary(*m, *mu, *h, newSalary);
+												}
+												else{ SM.ModifyMusicianSalary(*m, *mu, newSalary); }
 											}
-											else{ SM.ModifyMusicianSalary(*m, *mu, newSalary); }
+											else { SM.ModifyMusicianSalary(*m, newSalary); } 
 										}
-										else { SM.ModifyMusicianSalary(*m, newSalary); } 
+										catch(const std::exception& ex)
+										{
+											cout << "\nException thrown:   " << typeid(ex).name() << endl;
+											cout  << "Message: " << ex.what() << endl;
+										}
 										break;
 									}
 									case 0:
@@ -1318,29 +1351,37 @@ int main()
 										// get User Play request
 										cout << "Enter the performance ID number of the Play to be modified:" << endl;
 										int idP = GetIDRequest();
-										
-										// break if user input is of invalid type
-										if(idP == -1) { WarningInvalidInput(); break; }
 
-										// break if Play not listed on SystemManager
-										if(!SM.VerifiedPlayID(idP, playList)) { WarningUnlistedPlay(); break; }
-										Play* p = SM.FindPlay(idP, playList);
-										cout << "\nThis Play currently generates " << p->GetTicketPrice() << " per ticket sold.";
-
-										// get User price request
-										float newPrice = GetNewPrice();
-
-										// break if user input is invalid
-										if(newPrice == -1.0f) { WarningInvalidInput(); break; }
-
-										// determine appropriate version of overloaded ModifyPlayTicketPrice() to call
-										if(p->GetIsScheduled())
+										try
 										{
-											int hallNum = p->GetInHallNum();
-											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-											SM.ModifyPlayTicketPrice(*p, *h, newPrice);
+											// throw exception if user input is of invalid type
+											if(idP == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// throw exception if Play not listed on SystemManager
+											if(!SM.VerifiedPlayID(idP, playList)) { throw UnlistedObject::UnlistedPlay(); }
+											Play* p = SM.FindPlay(idP, playList);
+											cout << "\nThis Play currently generates " << p->GetTicketPrice() << " per ticket sold.";
+
+											// get User price request
+											float newPrice = GetNewPrice();
+
+											// throw exception if user input is invalid
+											if(newPrice == -1.0f) { throw InvalidInput::excInvalidInput(); }
+
+											// determine appropriate version of overloaded ModifyPlayTicketPrice() to call
+											if(p->GetIsScheduled())
+											{
+												int hallNum = p->GetInHallNum();
+												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+												SM.ModifyPlayTicketPrice(*p, *h, newPrice);
+											}
+											else { SM.ModifyPlayTicketPrice(*p, newPrice); }
 										}
-										else { SM.ModifyPlayTicketPrice(*p, newPrice); }
+										catch(const std::exception& ex)
+										{
+											cout << "\nException thrown:   " << typeid(ex).name() << endl;
+											cout  << "Message: " << ex.what() << endl;
+										}
 										break;
 									}
 									case 2: // selected modify ticket price of a Musical
@@ -1353,29 +1394,37 @@ int main()
 										// get User Musical request
 										cout << "Enter the performance ID number of the Musical to be modified:" << endl;
 										int idMu = GetIDRequest();
-										
-										// break if user input is of invalid type
-										if(idMu == -1) { WarningInvalidInput(); break; }
 
-										// break if Musical not listed on SystemManager
-										if(!SM.VerifiedMusicalID(idMu, musicalList)) {WarningUnlistedMusical(); break; }
-										Musical* mu = SM.FindMusical(idMu, musicalList);
-										cout << "\nThis Musical currently generates " << mu->GetTicketPrice() << " per ticket sold.";
-
-										// get User price request
-										float newPrice = GetNewPrice();
-
-										// break if user input is invalid
-										if(newPrice == -1.0f) { WarningInvalidInput(); break; }
-
-										// determine appropriate version of overloaded ModifyMusicalTicketPrice() to call
-										if(mu->GetIsScheduled())
+										try
 										{
-											int hallNum = mu->GetInHallNum();
-											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-											SM.ModifyMusicalTicketPrice(*mu, *h, newPrice);
+											// throw exception if user input is of invalid type
+											if(idMu == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// throw exception if Musical not listed on SystemManager
+											if(!SM.VerifiedMusicalID(idMu, musicalList)) { throw UnlistedObject::UnlistedMusical(); }
+											Musical* mu = SM.FindMusical(idMu, musicalList);
+											cout << "\nThis Musical currently generates " << mu->GetTicketPrice() << " per ticket sold.";
+
+											// get User price request
+											float newPrice = GetNewPrice();
+
+											// throw exception if user input is invalid
+											if(newPrice == -1.0f) { throw InvalidInput::excInvalidInput(); }
+
+											// determine appropriate version of overloaded ModifyMusicalTicketPrice() to call
+											if(mu->GetIsScheduled())
+											{
+												int hallNum = mu->GetInHallNum();
+												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+												SM.ModifyMusicalTicketPrice(*mu, *h, newPrice);
+											}
+											else { SM.ModifyMusicalTicketPrice(*mu, newPrice); }
 										}
-										else { SM.ModifyMusicalTicketPrice(*mu, newPrice); }
+										catch(const std::exception& ex)
+										{
+											cout << "\nException thrown:   " << typeid(ex).name() << endl;
+											cout  << "Message: " << ex.what() << endl;
+										}
 										break;
 									}
 									case 0:
@@ -1407,35 +1456,39 @@ int main()
 										// get User Play request
 										cout << "Enter the performance ID number of the Play to be modified:" << endl;
 										int idP = GetIDRequest();
-										
-										// break if user input is of invalid type
-										if(idP == -1) { WarningInvalidInput(); break; }
 
-										// break if Play not listed on SystemManager
-										if(!SM.VerifiedPlayID(idP, playList)) { WarningUnlistedPlay(); break; }
-										Play* p = SM.FindPlay(idP, playList);
-										cout << "\nThis Play has currently sold " << p->GetTicketsSold() << " tickets.";
-
-										// get User sales request
-										int newSales = GetNewSales();
-
-										// break if user input is invalid
-										if(newSales == -1) { WarningInvalidInput(); break; }
-
-										// determine appropriate version of overloaded ModifyPlayTicketsSold() to call
-										if(p->GetIsScheduled())
+										try
 										{
-											int hallNum = p->GetInHallNum();
-											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-											if(h->GetCapacity() < newSales)
+											// throw exception if user input is of invalid type
+											if(idP == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// throw exception if Play not listed on SystemManager
+											if(!SM.VerifiedPlayID(idP, playList)) { throw UnlistedObject::UnlistedPlay(); }
+											Play* p = SM.FindPlay(idP, playList);
+											cout << "\nThis Play has currently sold " << p->GetTicketsSold() << " tickets.";
+
+											// get User sales request
+											int newSales = GetNewSales();
+
+											// throw exception if user input is invalid
+											if(newSales == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// determine appropriate version of overloaded ModifyPlayTicketsSold() to call
+											if(p->GetIsScheduled())
 											{
-												cout << "\nThis Play is currently scheduled in a Performance Hall with an insufficient capacity." << endl;
-												cout << "Unschedule the Play before modifying its ticket sales, or enter a number <= " << h->GetCapacity() << ".\n";
-												break;
+												int hallNum = p->GetInHallNum();
+												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+												// throw exception if tickets sold > capacity of booked Hall
+												if(h->GetCapacity() < newSales) { throw InvalidOperation::OversoldTickets(h->GetCapacity()); }
+												SM.ModifyPlayTicketsSold(*p, *h, newSales);
 											}
-											SM.ModifyPlayTicketsSold(*p, *h, newSales);
+											else { SM.ModifyPlayTicketsSold(*p, newSales); }
 										}
-										else { SM.ModifyPlayTicketsSold(*p, newSales); }
+										catch(const std::exception& ex)
+										{
+											cout << "\nException thrown:   " << typeid(ex).name() << endl;
+											cout  << "Message: " << ex.what() << endl;
+										}
 										break;
 									}
 									case 2: // selected modify ticket sales of a Musical
@@ -1448,35 +1501,39 @@ int main()
 										// get User Musical request
 										cout << "Enter the performance ID number of the Musical to be modified:" << endl;
 										int idM = GetIDRequest();
-										
-										// break if user input is of invalid type
-										if(idM == -1) { WarningInvalidInput(); break; }
 
-										// break if Musical not listed on SystemManager
-										if(!SM.VerifiedMusicalID(idM, musicalList)) { WarningUnlistedMusical(); break; }
-										Musical* mu = SM.FindMusical(idM, musicalList);
-										cout << "\nThis Musical has currently sold " << mu->GetTicketsSold() << " tickets.";
-
-										// get User sales request
-										int newSales = GetNewSales();
-
-										// break if user input is invalid
-										if(newSales == -1) { WarningInvalidInput(); break; }
-
-										// determine appropriate version of overloaded ModifyMusicalTicketsSold() to call
-										if(mu->GetIsScheduled())
+										try
 										{
-											int hallNum = mu->GetInHallNum();
-											PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
-											if(h->GetCapacity() < newSales)
+											// throw exception if user input is of invalid type
+											if(idM == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// throw exception if Musical not listed on SystemManager
+											if(!SM.VerifiedMusicalID(idM, musicalList)) { throw UnlistedObject::UnlistedMusical(); }
+											Musical* mu = SM.FindMusical(idM, musicalList);
+											cout << "\nThis Musical has currently sold " << mu->GetTicketsSold() << " tickets.";
+
+											// get User sales request
+											int newSales = GetNewSales();
+
+											// throw exception if user input is invalid
+											if(newSales == -1) { throw InvalidInput::excInvalidInput(); }
+
+											// determine appropriate version of overloaded ModifyMusicalTicketsSold() to call
+											if(mu->GetIsScheduled())
 											{
-												cout << "\nThis Musical is currently scheduled in a Performance Hall with an insufficient capacity." << endl;
-												cout << "Unschedule the Musical before modifying its ticket sales, or enter a number <= " << h->GetCapacity() << ".\n";
-												break;
+												int hallNum = mu->GetInHallNum();
+												PerformanceHall* h = SM.FindPerfHall(hallNum, perfHallList);
+												// throw exception if tickets sold > capacity of booked Hall
+												if(h->GetCapacity() < newSales) { throw InvalidOperation::OversoldTickets(h->GetCapacity()); }
+												SM.ModifyMusicalTicketsSold(*mu, *h, newSales);
 											}
-											SM.ModifyMusicalTicketsSold(*mu, *h, newSales);
+											else { SM.ModifyMusicalTicketsSold(*mu, newSales); }
 										}
-										else { SM.ModifyMusicalTicketsSold(*mu, newSales); }
+										catch(const std::exception& ex)
+										{
+											cout << "\nException thrown:   " << typeid(ex).name() << endl;
+											cout  << "Message: " << ex.what() << endl;
+										}
 										break;
 									}
 									case 0:
@@ -1501,34 +1558,38 @@ int main()
 							cout << "Enter the number of the Performance Hall to be modified:" << endl;
 							int num = GetIDRequest();
 
-							// break if user input is of invalid type
-							if(num == -1) { WarningInvalidInput(); break; }
-
-							// break if Performance Hall not listed on SystemManager
-							if(!SM.VerifiedHallNum(num, perfHallList)) { WarningUnlistedHall(); break; }
-
-							PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
-							cout << "\nThis Performance Hall can currently hold " << h->GetCapacity() << " people.";
-
-							// get User price request
-							int newCapacity = GetNewCapacity();
-
-							// break if user input is invalid
-							if(newCapacity == -1) { WarningInvalidInput(); break; }
-
-							// determine whether Hall capacity can be modified
-							if(h->GetIsBooked())
+							try
 							{
-								Performance p = h->GetScheduledPerf();
-								if(p.GetTicketsSold() > newCapacity)
+								// throw exception if user input is of invalid type
+								if(num == -1) { throw InvalidInput::excInvalidInput(); }
+
+								// throw exception if Performance Hall not listed on SystemManager
+								if(!SM.VerifiedHallNum(num, perfHallList)) { throw UnlistedObject::UnlistedHall(); }
+
+								PerformanceHall* h = SM.FindPerfHall(num, perfHallList);
+								cout << "\nThis Performance Hall can currently hold " << h->GetCapacity() << " people.";
+
+								// get User price request
+								int newCapacity = GetNewCapacity();
+
+								// throw exception if user input is invalid
+								if(newCapacity == -1) { throw InvalidInput::excInvalidInput(); }
+
+								// determine whether Hall capacity can be modified
+								if(h->GetIsBooked())
 								{
-									cout << "\nThe Performance currently scheduled in this Hall has sold more tickets than there would be seats available." << endl;
-									cout << "Unschedule the Performance before modifying the Hall capacity, or enter a number >= " << p.GetTicketsSold() << ".\n";
-									break;
+									Performance p = h->GetScheduledPerf();
+									// throw exception if capacity cannot be reduced due to scheduled Performance
+									if(p.GetTicketsSold() > newCapacity) { throw InvalidOperation::CannotReduceCapacity(p.GetTicketsSold()); }
+									else{ SM.ModifyHallCapacity(*h, newCapacity); }
 								}
-								else{ SM.ModifyHallCapacity(*h, newCapacity); }
+								else { SM.ModifyHallCapacity(*h, newCapacity); }
 							}
-							else { SM.ModifyHallCapacity(*h, newCapacity); }
+							catch(const std::exception& ex)
+							{
+								cout << "\nException thrown:   " << typeid(ex).name() << endl;
+								cout  << "Message: " << ex.what() << endl;
+							}
 							break;
 						}
 						case 5: // selected Calculate profit of a scheduled Performance

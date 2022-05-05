@@ -62,13 +62,37 @@ const char* InvalidOperation::BookedHall::what() const noexcept
     return msg.c_str();
 }
 
- // Performance Hall has insufficient capacity
+ // Performance Hall has insufficient capacity to book a given Performance
  InvalidOperation::InsufficientCapacity::InsufficientCapacity(int capacity) : msg
     (
         std::string("\nThe specified Performance Hall is unable to accommodate this Performance (max capacity: ") 
         + std::to_string(capacity) + std::string(").\nCheck your input and try again.\n")
     ) {}
 const char* InvalidOperation::InsufficientCapacity::what() const noexcept
+{
+    return msg.c_str();
+}
+
+ // Performance has oversold tickets for its booked Hall capacity
+ InvalidOperation::OversoldTickets::OversoldTickets(int capacity) : msg
+    (
+        std::string("\nThis Performance is currently scheduled in a Performance Hall with an insufficient capacity.")
+        + std::string("\nUnschedule the Musical before modifying its ticket sales, or enter a number <= ") 
+        + std::to_string(capacity) + std::string(".\n")
+    ) {}
+const char* InvalidOperation::OversoldTickets::what() const noexcept
+{
+    return msg.c_str();
+}
+
+ // Performance Hall capacity cannot be reduced below tickets sold
+ InvalidOperation::CannotReduceCapacity::CannotReduceCapacity(int ticketsSold) : msg
+    (
+        std::string("\nThe Performance currently scheduled in this Hall has sold more tickets than there would be seats available.")
+        + std::string("\nUnschedule the Performance before modifying the Hall capacity, or enter a number >= ") 
+        + std::to_string(ticketsSold) + std::string(".\n")
+    ) {}
+const char* InvalidOperation::CannotReduceCapacity::what() const noexcept
 {
     return msg.c_str();
 }
